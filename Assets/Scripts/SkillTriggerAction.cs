@@ -39,15 +39,13 @@ public class SkillTriggerAction : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        PhotonView pv = owner.GetComponent<PhotonView>();
+        if (!pv.isMine) {
+            return;
+        }
         if (other.tag == target) {
-            if (target == "Enemy")
-            {
-                other.GetComponent<EnemyController>().GetHit(damage);
-            }
-            if (target == "Player")
-            {
-                other.GetComponent<PlayerController>().GetHit(damage);
-            }
+            int id = pv.ownerId;
+            other.GetComponent<PhotonView>().RPC("GetHit", PhotonTargets.All, damage,id);
         }      
     }
 
