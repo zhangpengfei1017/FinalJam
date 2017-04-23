@@ -33,6 +33,25 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+
+        if ( null == hpBar)
+        {
+            hpBar = GameObject.FindGameObjectWithTag("UIRoot").GetComponent<VariableDataForNetworking>().hpBar;
+        }
+        if (null == mpBar)
+        {
+            mpBar = GameObject.FindGameObjectWithTag("UIRoot").GetComponent<VariableDataForNetworking>().mpbar;
+        }
+        if (null == restart)
+        {
+            restart = GameObject.FindGameObjectWithTag("UIRoot").GetComponent<VariableDataForNetworking>().Restart;
+        }
+        if ( null == cam)
+        {
+            cam = Camera.main.gameObject;
+        }
+
+
         //
         isActive = true;
         isRunable = true;
@@ -67,15 +86,15 @@ public class PlayerController : MonoBehaviour
                 restart.SetActive(true);
             }
         }
-        //
+
         ResetAnimation();
         ResetState();
         hpBar.GetComponent<UIProgressBar>().value = (float)curhp / (float)maxhp;
         mpBar.GetComponent<UIProgressBar>().value = (float)curmp / (float)maxmp;
         if (isActive)
         {//is alive
-            curmp = Mathf.Clamp(curmp + 10*Time.deltaTime, 0, 100);
-            curhp = Mathf.Clamp(curhp + 2*Time.deltaTime, 0, 100);
+            curmp = Mathf.Clamp(curmp + 10 * Time.deltaTime, 0, 100);
+            curhp = Mathf.Clamp(curhp + 2 * Time.deltaTime, 0, 100);
             if (isRollable)
             {//can use dodge
                 Dodge();
@@ -128,7 +147,7 @@ public class PlayerController : MonoBehaviour
         {
             //attack
             ani.SetBool("isAttack", true);
-            if (ani.GetInteger("attackNum") == 0&&curmp>=20)
+            if (ani.GetInteger("attackNum") == 0 && curmp >= 20)
             {
                 ani.SetInteger("attackNum", 1);
                 attackTimer = 0;
@@ -139,23 +158,24 @@ public class PlayerController : MonoBehaviour
             else if (attackState == 1 && attackTimer >= (0.7 * 1.263f) && curmp >= 20)
             {
                 ani.SetInteger("attackNum", 2);
-                
+
             }
             else if (attackState == 2 && attackTimer >= (0.7 * 0.71f) && curmp >= 20)
             {
                 ani.SetInteger("attackNum", 3);
-                
+
             }
 
         }
 
     }
-    void CostMp(float i) {
+    void CostMp(float i)
+    {
         curmp -= i;
     }
     void Dodge()
     {
-       
+
         float ro = 0;
         if (Input.GetKey(KeyCode.A) && Input.GetKeyDown(KeyCode.Space))
         {
@@ -165,7 +185,7 @@ public class PlayerController : MonoBehaviour
         {
             ro = 90;
         }
-        if (ro != 0&&curmp>=30)
+        if (ro != 0 && curmp >= 30)
         {
             ani.SetBool("isRoll", true);
             ani.SetBool("isRun", false);
@@ -175,7 +195,7 @@ public class PlayerController : MonoBehaviour
             curmp -= 30;
             ani.SetBool("isGethit", false);
         }
-        
+
 
     }
 
@@ -200,11 +220,11 @@ public class PlayerController : MonoBehaviour
         {
             damage = 20;
         }
-            GameObject go = Instantiate(skillTrigger, transform.position + transform.up * 2, Quaternion.identity) as GameObject;
-            go.GetComponent<SkillTriggerAction>().damage = damage;
-            go.GetComponent<SkillTriggerAction>().SetOwner(gameObject);
-            go.transform.forward = transform.forward;
-            allTrigger.Add(go);
+        GameObject go = Instantiate(skillTrigger, transform.position + transform.up * 2, Quaternion.identity) as GameObject;
+        go.GetComponent<SkillTriggerAction>().damage = damage;
+        go.GetComponent<SkillTriggerAction>().SetOwner(gameObject);
+        go.transform.forward = transform.forward;
+        allTrigger.Add(go);
     }
 
 
@@ -219,7 +239,7 @@ public class PlayerController : MonoBehaviour
     public void GetHit(int damage)
     {
         if (isRollable)
-        {           
+        {
             CancelSkill();
             curhp = Mathf.Clamp(curhp - damage, 0, 100);
             ani.SetBool("isGethit", true);
@@ -238,9 +258,9 @@ public class PlayerController : MonoBehaviour
     void ResetState()
     {
         AnimatorStateInfo asi = ani.GetCurrentAnimatorStateInfo(0);
-        isActive = !asi.IsTag("die")&&(!ani.GetBool("isDie"));
-        isRollable = isActive && (!asi.IsTag("roll"))&&(!ani.GetBool("isRoll"));
-        isAttackable = isRollable && (!asi.IsTag("gethit"))&&(!ani.GetBool("isGethit"));
+        isActive = !asi.IsTag("die") && (!ani.GetBool("isDie"));
+        isRollable = isActive && (!asi.IsTag("roll")) && (!ani.GetBool("isRoll"));
+        isAttackable = isRollable && (!asi.IsTag("gethit")) && (!ani.GetBool("isGethit"));
         isRunable = isAttackable && (!asi.IsTag("attack")) && (!ani.GetBool("isRoll"));
     }
 
