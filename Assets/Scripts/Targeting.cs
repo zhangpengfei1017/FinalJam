@@ -9,7 +9,7 @@ using UnityEngine;
 public class Targeting : MonoBehaviour
 {
     //Private Variables
-    private GameManager gm;
+    //private GameManager gm;
 
 
     /// <summary>
@@ -17,7 +17,7 @@ public class Targeting : MonoBehaviour
     /// </summary>
     void Start ()
     {
-        gm = GameManager.Instance;
+        //gm = GameManager.Instance;
 	}
 
 
