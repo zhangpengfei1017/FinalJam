@@ -7,8 +7,11 @@ public class Skill : MonoBehaviour
     #region SkillInformation
     public enum SkillName
     {
-        Attack,
-        Skill
+        S_Skill1,
+        S_Skill2,
+        S_Skill3,
+        S_Skill4,
+        S_Skill5,
     }
 
 
@@ -19,16 +22,13 @@ public class Skill : MonoBehaviour
         Channeled
     };
 
-    public enum TargetType
-    {
-        Enemy,
-        Teammate,
-        AOE
-    };
 
-    public SkillName skillName = SkillName.Attack;
+
+    public SkillName skillName = SkillName.S_Skill1;
 
     public GameObject icon;
+
+    public int animationIndex;
 
     public SkillType skillType = SkillType.Instant;
 
@@ -40,17 +40,19 @@ public class Skill : MonoBehaviour
 
     private float channelTimer;
 
+    public float distance;
+
     public float channelInterval;
 
     public bool isMovingCast;
 
-    public TargetType targetType = TargetType.Enemy;
+    public GameCharacter.CharacterType targetType = GameCharacter.CharacterType.Monster;
 
     public int mpCost;
 
-    public float CDtime;
+    public float CDTime;
 
-    private float CDtimer;
+    public float CDTimer;
 
     public int pctDamage;
 
@@ -66,13 +68,7 @@ public class Skill : MonoBehaviour
 
     public Buff[] buffs;
 
-    public GameObject[] FXs;
-
-    public void SkillEnter() { }
-
-    public void Interrupted() { }
-
-    public void SkillExit() { }
+    public GameObject effect;
 
     public float GetCastingProgress() {
         return (castTimer / castTime);

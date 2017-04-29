@@ -319,7 +319,6 @@ public class PlayerController : Photon.MonoBehaviour, IPunObservable
         {
             ani.SetBool("isRun", false);
         }
-
     }
 
     void ResetAnimation()
