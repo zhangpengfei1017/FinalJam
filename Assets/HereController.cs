@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HereController : MonoBehaviour
 {
@@ -12,6 +13,15 @@ public class HereController : MonoBehaviour
         Priest,
         Archer,
     };
+
+    public enum TargetCheckResult
+    {
+        Available,
+        NoTarget,
+        TooFar,
+        NotFaced,
+        UnknowError
+    }
 
     //Character Status
 
@@ -63,6 +73,10 @@ public class HereController : MonoBehaviour
     private float channeledTimer;
 
     private float channeledInterval;
+
+    private bool isInstant;
+
+    private float instantTimer;
 
     //Property ratios
 
@@ -119,7 +133,9 @@ public class HereController : MonoBehaviour
     //Skill
 
     [SerializeField]
-    private Skill[] skills;
+    private Skill[] skillPrefabs;
+
+    private List<Skill> skills;
 
     private Skill curCastSkill;
 
@@ -127,14 +143,21 @@ public class HereController : MonoBehaviour
 
     private List<Buff> buffs;
 
-    private List<GameObject> skillEffects =new List<GameObject>();
+    private List<GameObject> skillEffects = new List<GameObject>();
 
-
+    void Awake()
+    {
+        skills = new List<Skill>();
+        foreach (Skill s in skillPrefabs)
+        {
+            GameObject skill = Instantiate(s.gameObject, transform) as GameObject;
+            skills.Add(skill.GetComponent<Skill>());
+        }
+    }
 
     #endregion
 
     #region UnityFunctions
-    // Use this for initialization
     void Start()
     {
         charCtrl = GetComponent<CharacterController>();
@@ -147,17 +170,19 @@ public class HereController : MonoBehaviour
         finalDefense = defense;
         finalMaxHP = maxHP;
         finalMaxMP = maxMP;
-
-
-        //skill
         castTimer = 0;
         channeledInterval = 0;
         channeledTimer = 0;
+        instantTimer = 0;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
+        GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
+        GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
+        GameObject.Find("CD4").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(3) * 100).ToString() + "%";
+        GameObject.Find("CD5").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(4) * 100).ToString() + "%";
         UpdateState();
         ResetAnimator();
         if (!isDead)
@@ -180,7 +205,7 @@ public class HereController : MonoBehaviour
     }
     #endregion
 
-    #region move
+
     void DetectMove()
     {
         Vector3 dir = Vector3.zero;
@@ -238,7 +263,7 @@ public class HereController : MonoBehaviour
         {
             animator.SetBool("isRun", true);
             animator.SetInteger("moveDir", d);
-            if (curCastSkill != null)
+            if (curCastSkill != null && curCastSkill.skillType != Skill.SkillType.Instant)
             {
                 if (!curCastSkill.isMovingCast)
                 {
@@ -252,7 +277,6 @@ public class HereController : MonoBehaviour
             animator.SetInteger("moveDir", 0);
         }
     }
-    #endregion
 
 
     void DetectAttack()
@@ -278,92 +302,80 @@ public class HereController : MonoBehaviour
         {
             attackIndex = 4;
         }
-        if (attackIndex != -1 && globalCDTimer <= 0)
+        if (attackIndex != -1)
         {
-            prepareAttack(attackIndex);
-            globalCDTimer = globalCDTime;
+            if (globalCDTimer > 0 || skills[attackIndex].CDTimer > 0)
+            {
+
+            }
+            else
+            {
+                prepareAttack(attackIndex);
+            }
+
         }
     }
-
-    #region class attack
 
     void prepareAttack(int i)
     {
         Skill skill = skills[i];
-        if (skill.skillType == Skill.SkillType.Instant)
+        if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
         {
-            if (CheckTarget(skill.targetType, skill.distance))
+            switch (skill.skillType)
             {
-                curCastSkill = skill;
-                CastSkill(skill);
-                animator.Play("Idle");
-                animator.SetInteger("attackIndex", skill.animationIndex);
+                case Skill.SkillType.Instant:
+                    StartInstant(skill);
+                    break;
+                case Skill.SkillType.Cast:
+                    StartCasting(skill);
+                    break;
+                case Skill.SkillType.Channeled:
+                    StartChanneling(skill);
+                    break;
             }
+            animator.Play("Idle");
+            animator.SetInteger("attackIndex", skill.animationIndex);
+            globalCDTimer = globalCDTime;
         }
-        else if (skill.skillType == Skill.SkillType.Cast)
+        else
         {
-            if (CheckTarget(skill.targetType, skill.distance))
-            {
-                animator.Play("Idle");
-                StartCasting(skill);
-                animator.SetInteger("attackIndex", skill.animationIndex);
-            }
-        }
-        else if (skill.skillType == Skill.SkillType.Channeled)
-        {
-            if (CheckTarget(skill.targetType, skill.distance))
-            {
-                StartChanneling(skill);
-                animator.Play("Idle");
-                animator.SetInteger("attackIndex", skill.animationIndex);
-            }
+            print("wrong target");
         }
     }
-
-    #endregion
 
     void CastSkill(Skill skill)
     {
         //instant skill
-
         if (skill.targetType == GameCharacter.CharacterType.Monster)
         {
             MonsterController mc = target.GetComponent<MonsterController>();
             mc.TakeSkill(finalAttack, skill);
         }
-        //animation
-        animator.SetInteger("attackIndex", skill.animationIndex);
-
-
     }
 
-    bool CheckTarget(GameCharacter.CharacterType t, float distance)
+    TargetCheckResult CheckTarget(GameCharacter.CharacterType t, float distance)
     {
         if (target == null)
         {
-            return false;
+            return TargetCheckResult.NoTarget;
         }
 
         if (target.GetComponent<GameCharacter>().characterType != t)
         {
-            return false;
+            return TargetCheckResult.UnknowError;
         }
 
         if (Vector3.Distance(transform.position, target.transform.position) > distance)
         {
-            return false;
+            return TargetCheckResult.TooFar;
         }
 
         Vector3 offest = target.transform.position - transform.position;
         if (Vector3.Angle(transform.forward, offest) > 80)
         {
-            return false;
+            return TargetCheckResult.NotFaced;
         }
-        //distance
-        //direction
-        //isDead?
-        //
-        return true;
+        return TargetCheckResult.Available;
     }
 
     void UpdateBuff()
@@ -378,10 +390,16 @@ public class HereController : MonoBehaviour
     {
         if (globalCDTimer > 0)
         {
-            globalCDTimer -= Time.deltaTime;
-            //print(globalCDTimer);
+            globalCDTimer = Mathf.Clamp(globalCDTimer - Time.deltaTime, 0, globalCDTime);
         }
 
+        foreach (Skill s in skills)
+        {
+            if (s.CDTimer > 0)
+            {
+                s.CDTimer = Mathf.Clamp(s.CDTimer - Time.deltaTime, 0, s.CDTime);
+            }
+        }
 
         if (isCasting)
         {
@@ -404,11 +422,29 @@ public class HereController : MonoBehaviour
             channeledTimer = 0;
             channeledInterval = 0;
         }
+        if (isInstant)
+        {
+            instantTimer += Time.deltaTime;
+            UpdateInstanct();
+        }
+        else
+        {
+            instantTimer = 0;
+        }
+    }
+
+    void UpdateInstanct()
+    {
+        if (instantTimer >= curCastSkill.instantDelayTime)
+        {
+            CastSkill(curCastSkill);
+            EndInstant();
+        }
     }
 
     void UpdateCast()
     {
-        if (CheckTarget(curCastSkill.targetType, curCastSkill.distance))
+        if (CheckTarget(curCastSkill.targetType, curCastSkill.distance) == TargetCheckResult.Available)
         {
             if (castTimer >= curCastSkill.castTime)
             {
@@ -424,7 +460,7 @@ public class HereController : MonoBehaviour
 
     void UpdateChanneled()
     {
-        if (CheckTarget(curCastSkill.targetType, curCastSkill.distance))
+        if (CheckTarget(curCastSkill.targetType, curCastSkill.distance) == TargetCheckResult.Available)
         {
             if (channeledInterval >= curCastSkill.channelInterval)
             {
@@ -469,6 +505,19 @@ public class HereController : MonoBehaviour
         //}
     }
 
+    void StartInstant(Skill skill)
+    {
+        curCastSkill = skill;
+        isInstant = true;
+    }
+
+    void EndInstant()
+    {
+        curCastSkill.CDTimer = curCastSkill.CDTime;
+        curCastSkill = null;
+        isInstant = false;
+    }
+
     void StartCasting(Skill skill)
     {
         isCasting = true;
@@ -477,6 +526,7 @@ public class HereController : MonoBehaviour
 
     void EndCasting()
     {
+        curCastSkill.CDTimer = curCastSkill.CDTime;
         isCasting = false;
         curCastSkill = null;
     }
@@ -489,6 +539,7 @@ public class HereController : MonoBehaviour
 
     void EndChanneling()
     {
+        curCastSkill.CDTimer = curCastSkill.CDTime;
         isChanneling = false;
         curCastSkill = null;
     }
@@ -598,19 +649,23 @@ public class HereController : MonoBehaviour
         finalDefense += Mathf.FloorToInt(ratio * defense) + amount;
     }
 
+    #endregion
+
     public void CreateSkillEffect()
     {
         if (curCastSkill != null)
-        {           
+        {
             GameObject effect = curCastSkill.effect;
-            if (effect == null) {
+            if (effect == null)
+            {
                 return;
             }
 
             SkillEffect e = effect.GetComponent<SkillEffect>();
             GameObject newEffect;
             Vector3 offset = e.offset;
-            switch (e.skillEffectType) {
+            switch (e.skillEffectType)
+            {
                 case SkillEffect.SkillEffectType.mine:
 
                     newEffect = Instantiate(effect, transform.position + offset, transform.rotation) as GameObject;
@@ -622,8 +677,8 @@ public class HereController : MonoBehaviour
                     skillEffects.Add(newEffect);
                     break;
                 case SkillEffect.SkillEffectType.line:
-                    
-                    newEffect = Instantiate(effect, transform.position + offset.x*transform.right+offset.y*transform.up+offset.z*transform.forward, transform.rotation) as GameObject;
+
+                    newEffect = Instantiate(effect, transform.position + offset.x * transform.right + offset.y * transform.up + offset.z * transform.forward, transform.rotation) as GameObject;
                     skillEffects.Add(newEffect);
                     newEffect.GetComponent<SkillEffect>().SetLine(gameObject, target);
                     break;
@@ -634,8 +689,23 @@ public class HereController : MonoBehaviour
                     skillEffects.Add(newEffect);
                     newEffect.GetComponent<SkillEffect>().SetLine(gameObject, target);
                     break;
-            }                 
+            }
         }
     }
-    #endregion
+
+    public float GetCDProgress(int i)
+    {
+        float pGlobal = globalCDTimer / globalCDTime;
+        float pSelf;
+        if (skills[i].CDTime != 0)
+        {
+            pSelf = skills[i].CDTimer / skills[i].CDTime;
+        }
+        else
+        {
+            pSelf = 0;
+        }
+
+        return pGlobal > pSelf ? pGlobal : pSelf;
+    }
 }

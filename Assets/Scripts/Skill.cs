@@ -30,7 +30,13 @@ public class Skill : MonoBehaviour
 
     public int animationIndex;
 
+    public GameCharacter.CharacterType targetType = GameCharacter.CharacterType.Monster;
+
+    public float distance;
+
     public SkillType skillType = SkillType.Instant;
+
+    public float instantDelayTime;
 
     public float castTime;
 
@@ -40,13 +46,9 @@ public class Skill : MonoBehaviour
 
     private float channelTimer;
 
-    public float distance;
-
     public float channelInterval;
 
-    public bool isMovingCast;
-
-    public GameCharacter.CharacterType targetType = GameCharacter.CharacterType.Monster;
+    public bool isMovingCast;   
 
     public int mpCost;
 
@@ -72,10 +74,6 @@ public class Skill : MonoBehaviour
 
     public float GetCastingProgress() {
         return (castTimer / castTime);
-    }
-
-    public void Copy(Skill other) {
-
     }
 
     #endregion
