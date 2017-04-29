@@ -4,6 +4,8 @@ using System;
 
 public class EnemyController : Photon.MonoBehaviour, IPunObservable
 {
+    public Vector3 pos1;
+
     public float speed;
     public int maxhp;
     public int curhp;
@@ -57,23 +59,27 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         myHpBar.SetActive(false);
         skillTrigger = new ArrayList();
         pv = GetComponent<PhotonView>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
         //myHpBar.GetComponent<UIProgressBar>().value = (float)curhp / (float)maxhp;
-        //if (!pv.isMine) {
+        //if (!pv.isMine)
+        //{
         //    return;
         //}
-        //if (attackTimer<3) {
+        //if (attackTimer < 3)
+        //{
         //    attackTimer += Time.deltaTime;
         //}
-        //if (ani.GetCurrentAnimatorStateInfo(0).IsName("gethit")&&ani.GetBool("isGethit"))
+        //if (ani.GetCurrentAnimatorStateInfo(0).IsName("gethit") && ani.GetBool("isGethit"))
         //{
         //    ani.SetBool("isGethit", false);
         //}
-        //else {
+        //else
+        //{
         //    isGettingHit = false;
         //}
         //if (!ani.GetCurrentAnimatorStateInfo(0).IsName("die"))
@@ -86,16 +92,22 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         //    {
         //        //in attack
         //        //first look at player, then go to his position, if the position is ok, attack over time, if not, chase the player, if can't catch player in a certain time, come back
-        //        if (!isGettingHit) {
+        //        if (!isGettingHit)
+        //        {
         //            Attack();
-        //        }                
+        //        }
         //    }
         //}
-        //if (ani.GetCurrentAnimatorStateInfo(0).IsName("die")) {
+        //if (ani.GetCurrentAnimatorStateInfo(0).IsName("die"))
+        //{
         //    ani.SetBool("isDie", false);
         //}
 
-        Wander();
+        if(Input.GetMouseButton(0))
+        {
+            Flee();
+            //Seek(player.transform.position);
+        }
 
     }
     [PunRPC]
@@ -260,14 +272,33 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         if (nextMove < Time.time)
         {
             nextMove = Time.time + (1 / moveRate);
-            
+
             wanderTarget += new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f) * wanderJitter, 0.0f, UnityEngine.Random.Range(-1.0f, 1.0f) * wanderJitter);
             dir = (wanderTarget - transform.position).normalized;
-
-            transform.forward = dir; 
+            dir = new Vector3(dir.x, 0.0f, dir.z);
+            transform.forward = dir;
         }
 
         cc.SimpleMove(dir * speed * Time.deltaTime);
+    }
+
+    void Seek(Vector3 targetPosition)
+    {
+        Vector3 seekDirection = (targetPosition - transform.position).normalized;
+        seekDirection = new Vector3(seekDirection.x, 0.0f, seekDirection.z);
+        transform.forward = seekDirection;
+
+        cc.SimpleMove(seekDirection * speed * Time.deltaTime);
+    }
+
+    void Flee()
+    {
+        Vector3 fleeDirection = (transform.position - player.transform.position).normalized;
+        fleeDirection = new Vector3(fleeDirection.x, 0.0f, fleeDirection.z);
+
+        transform.forward = (fleeDirection);
+
+        cc.SimpleMove(fleeDirection * speed * Time.deltaTime);
     }
 
     void SpellSkill(int damage)
