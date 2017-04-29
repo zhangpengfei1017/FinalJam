@@ -7,7 +7,7 @@ public class SkillEffect : MonoBehaviour
     public enum SkillEffectType
     {
         mine,
-        other,        
+        other,
         line,
         ray
     }
@@ -17,11 +17,15 @@ public class SkillEffect : MonoBehaviour
 
     public float speed;
 
-    public float destroyTime;    
+    public float destroyTime;
 
     public GameObject collisionEffect;
 
+    public float collisionDestroyTime;
+
     public float delayCollisionTime;
+
+    public bool isGround;
 
     private float timer = 0;
 
@@ -29,7 +33,7 @@ public class SkillEffect : MonoBehaviour
     private GameObject from;
     private GameObject to;
 
-    private bool delayEffect=false;
+    private bool delayEffect = false;
 
 
     // Update is called once per frame
@@ -48,29 +52,47 @@ public class SkillEffect : MonoBehaviour
                 break;
             case SkillEffectType.other:
                 //show on the target
-                
+
                 break;
             case SkillEffectType.line:
                 //point to point 
-                Vector3 target = to.GetComponent<GameCharacter>().characterCenter.position;
+                Vector3 target;
+                if (isGround)
+                {
+                    target = to.transform.position;
+                }
+                else
+                {
+                    target = to.GetComponent<GameCharacter>().characterCenter.position;
+                }
+
                 Vector3 dir = (target - transform.position).normalized;
                 transform.position += dir * speed * Time.deltaTime;
                 if (Vector3.Distance(transform.position, target) <= 1f)
                 {
                     GameObject col = Instantiate(collisionEffect, transform.position, transform.rotation) as GameObject;
-                    autoDestroy ad=col.AddComponent<autoDestroy>();
-                    ad.destroyTime = 3;
+                    autoDestroy ad = col.AddComponent<autoDestroy>();
+                    ad.destroyTime = collisionDestroyTime;
                     Destroy(gameObject);
                 }
                 break;
             case SkillEffectType.ray:
-                if (timer >= delayCollisionTime  && !delayEffect) {
-                    Transform t = to.GetComponent<GameCharacter>().characterCenter;
-                    GameObject col = Instantiate(collisionEffect,t.position, transform.rotation) as GameObject;
+                if (timer >= delayCollisionTime && !delayEffect)
+                {
+                    Vector3 tar;
+                    if (isGround)
+                    {
+                        tar = to.transform.position;
+                    }
+                    else
+                    {
+                        tar = to.GetComponent<GameCharacter>().characterCenter.position;
+                    }
+                    GameObject col = Instantiate(collisionEffect, tar, transform.rotation) as GameObject;
                     Transform colt = col.GetComponent<Transform>();
                     colt.forward = transform.forward;
                     autoDestroy ad = col.AddComponent<autoDestroy>();
-                    ad.destroyTime = 3;
+                    ad.destroyTime = collisionDestroyTime;
                     delayEffect = true;
                 }
                 break;
@@ -81,7 +103,8 @@ public class SkillEffect : MonoBehaviour
         this.from = from;
         this.to = to;
     }
-    public float GetRayLength() {
+    public float GetRayLength()
+    {
         return Vector3.Distance(transform.position, to.GetComponent<GameCharacter>().characterCenter.position);
     }
 }
