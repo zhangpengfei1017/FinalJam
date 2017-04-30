@@ -10,11 +10,12 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
 
     //Wander Parameters
     public float wanderJitter; // 'Wandering' amount
+    public float wanderTime;
     public float moveRate;
-    public float wanderPeriod; // Time for the enemy to wander
-    public float stopPeriod; // Time enemy stops movement
-    public float randomBuffer; // Value to randomize movement time
     private float nextMove;
+
+    //Stop Parameters
+    public float stopTime;
 
     private GameObject player;
     public GameObject hpBarPrefab;
@@ -43,6 +44,9 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
     //
     public PhotonView pv;
     public int targetPhotonID;
+
+    private static float wanderCounter;
+    private static float stopCounter;
 
     private enum EnemyMovement
     {
@@ -73,12 +77,34 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         pv = GetComponent<PhotonView>();
         player = GameObject.FindGameObjectWithTag("Player");
 
-        SwitchMovementState(EnemyMovement.WANDER);
+        enemyMovement = EnemyMovement.STOPMOVEMENT;
     }
 
     // Update is called once per frame
     void Update()
     {
+        switch (enemyMovement)
+        {
+            case EnemyMovement.STOPMOVEMENT:
+                StopMovement();
+                break;
+
+            case EnemyMovement.WANDER:
+                Wander();
+                break;
+
+            case EnemyMovement.SEEK:
+                Seek();
+                break;
+
+            case EnemyMovement.FLEE:
+                Flee();
+                break;
+
+            default:
+                break;
+        }
+
         //myHpBar.GetComponent<UIProgressBar>().value = (float)curhp / (float)maxhp;
         //if (!pv.isMine)
         //{
@@ -273,61 +299,30 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         }
     }
 
-    void SwitchMovementState(EnemyMovement currentState)
-    {
-        enemyMovement = currentState;
-
-        #region HandleMovment
-        switch (enemyMovement)
-        {
-            case EnemyMovement.STOPMOVEMENT:
-                StopMovement();
-                break;
-
-            case EnemyMovement.WANDER:
-                Wander();
-                break;
-
-            case EnemyMovement.SEEK:
-                Seek();
-                break;
-
-            case EnemyMovement.FLEE:
-                Flee();
-                break;
-
-            default:
-                break;
-        }
-        #endregion
-    }
-
     #region MoveFunctions
     void StopMovement()
     {
-        Debug.Log("Stop");
         //Stop enemy and walk animation
-
-        float stopTime = 0.0f;
-
-        while ( stopTime < stopPeriod + UnityEngine.Random.Range(-randomBuffer, randomBuffer))
+        if (stopCounter < stopTime)
         {
-            stopTime += Time.deltaTime;
-        }
+            stopCounter+= Time.deltaTime;
 
-        int nextEnemyMovement = UnityEngine.Random.Range(0, 1);
-        SwitchMovementState((EnemyMovement)nextEnemyMovement);
+            
+        }
+        else
+        {
+            stopCounter = 0;
+            enemyMovement = EnemyMovement.WANDER;
+            ani.SetBool("isMove", true);
+        }
     }
 
     void Wander()
     {
-        Debug.Log("Wander");
-        //Start walk animation
-        float wanderTime = 0.0f;
-
-        while( wanderTime < wanderPeriod + UnityEngine.Random.Range(-randomBuffer, randomBuffer))
+       
+        if (wanderCounter < wanderTime)
         {
-            wanderTime += Time.deltaTime;
+            wanderCounter+= Time.deltaTime;
 
             Vector3 wanderTarget = Vector3.zero;
 
@@ -343,28 +338,37 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
 
             cc.SimpleMove(dir * speed * Time.deltaTime);
         }
-
-        int nextEnemyMovement = UnityEngine.Random.Range(0, 1);
-        SwitchMovementState((EnemyMovement)nextEnemyMovement);
+        else
+        {
+            wanderCounter = 0;
+            enemyMovement = EnemyMovement.STOPMOVEMENT;
+            ani.SetBool("isMove", false);
+        }
     }
 
     void Seek()
     {
+        Debug.Log("SEEK");
         Vector3 seekDirection = (player.transform.position - transform.position).normalized;
         seekDirection = new Vector3(seekDirection.x, 0.0f, seekDirection.z);
         transform.forward = seekDirection;
 
         cc.SimpleMove(seekDirection * speed * Time.deltaTime);
+
+        enemyMovement = EnemyMovement.FLEE;
     }
 
     void Flee()
     {
+        Debug.Log("FLEE");
         Vector3 fleeDirection = (transform.position - player.transform.position).normalized;
         fleeDirection = new Vector3(fleeDirection.x, 0.0f, fleeDirection.z);
 
         transform.forward = (fleeDirection);
 
         cc.SimpleMove(fleeDirection * speed * Time.deltaTime);
+
+        enemyMovement = EnemyMovement.STOPMOVEMENT;
     }
     #endregion
 
