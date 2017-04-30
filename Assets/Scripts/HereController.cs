@@ -187,7 +187,6 @@ public class HereController : MonoBehaviour
         //--------------------------------------
         //--------------test code---------------
         //--------------------------------------
-
         GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
         GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
         GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
@@ -203,7 +202,8 @@ public class HereController : MonoBehaviour
         }
         GameObject.Find("HPBar").GetComponent<Text>().text = curHP.ToString() + "/" + finalMaxHP.ToString();
         GameObject.Find("MPBar").GetComponent<Text>().text = curMP.ToString() + "/" + finalMaxMP.ToString();
-        if (target != null) {
+        if (target != null)
+        {
             Text targetName = GameObject.Find("TargetName").GetComponent<Text>();
             Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
             Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
@@ -213,13 +213,14 @@ public class HereController : MonoBehaviour
                 targetMp.text = target.GetComponent<HereController>().curMP.ToString() + "/" + target.GetComponent<HereController>().finalMaxMP;
                 targetName.text = target.name;
             }
-            else if(target.GetComponent<GameCharacter>().characterType== GameCharacter.CharacterType.Monster){
+            else if (target.GetComponent<GameCharacter>().characterType == GameCharacter.CharacterType.Monster)
+            {
                 targetHp.text = target.GetComponent<MonsterController>().curHP.ToString() + "/" + target.GetComponent<MonsterController>().finalMaxHP;
                 targetMp.text = target.GetComponent<MonsterController>().curMP.ToString() + "/" + target.GetComponent<MonsterController>().finalMaxMP;
                 targetName.text = target.name;
             }
         }
-        
+
 
         //--------------------------------------
         //--------------test code---------------
@@ -271,6 +272,7 @@ public class HereController : MonoBehaviour
         curCastSkill.CDTimer = curCastSkill.CDTime;
         curCastSkill = null;
         isInstant = false;
+        skillEffects.Clear();
     }
 
     void UpdateCast()
@@ -304,6 +306,7 @@ public class HereController : MonoBehaviour
         }
         isCasting = false;
         curCastSkill = null;
+        skillEffects.Clear();
     }
 
     void UpdateChanneled()
@@ -317,7 +320,7 @@ public class HereController : MonoBehaviour
             }
             if (channeledTimer >= curCastSkill.channelTime)
             {
-                EndChanneling(true);
+                EndChanneling();
             }
         }
         else
@@ -328,20 +331,18 @@ public class HereController : MonoBehaviour
     }
 
     void StartChanneling(Skill skill)
-    {
+    { 
         isChanneling = true;
         curCastSkill = skill;
+        curCastSkill.CDTimer = curCastSkill.CDTime;
+        curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
     }
 
-    void EndChanneling(bool cd)
-    {
-        if (cd)
-        {
-            curCastSkill.CDTimer = curCastSkill.CDTime;
-            curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
-        }
+    void EndChanneling()
+    {     
         isChanneling = false;
         curCastSkill = null;
+        skillEffects.Clear();
     }
 
     #endregion
@@ -576,6 +577,9 @@ public class HereController : MonoBehaviour
         Skill skill = skills[i];
         if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
         {
+            if (curCastSkill != null) {
+                CancelCast(true);
+            }
             if (curMP >= skill.mpCost)
             {
                 switch (skill.skillType)
@@ -618,21 +622,21 @@ public class HereController : MonoBehaviour
         if (isCasting || isChanneling)
         {
             animator.SetInteger("attackIndex", 0);
-            animator.Play("Idle");
-            if (isCasting)
-            {
-                EndCasting(!self);
-            }
-            else if (isChanneling)
-            {
-                EndChanneling(!self);
-            }
+            animator.Play("Idle");            
             foreach (GameObject g in skillEffects)
             {
                 if (g != null)
                 {
                     Destroy(g);
                 }
+            }
+            if (isCasting)
+            {
+                EndCasting(!self);
+            }
+            else if (isChanneling)
+            {
+                EndChanneling();
             }
             skillEffects.Clear();
             if (self)
@@ -662,6 +666,7 @@ public class HereController : MonoBehaviour
 
     public void CreateSkillEffect()
     {
+
         if (curCastSkill != null)
         {
             GameObject effect = curCastSkill.effect;
@@ -669,7 +674,6 @@ public class HereController : MonoBehaviour
             {
                 return;
             }
-
             SkillEffect e = effect.GetComponent<SkillEffect>();
             GameObject newEffect;
             Vector3 offset = e.offset;
@@ -700,6 +704,15 @@ public class HereController : MonoBehaviour
                     break;
             }
         }
+
+    }
+
+    void CleanEffects() {
+        foreach (GameObject g in skillEffects) {
+            if (g == null) {
+                skillEffects.Remove(g);
+            }
+        }
     }
 
     #endregion
@@ -715,12 +728,13 @@ public class HereController : MonoBehaviour
             {
                 curIndicator = Instantiate(indicator, target.transform.position, transform.transform.rotation, target.transform) as GameObject;
             }
-            else {
+            else
+            {
                 curIndicator.transform.parent = target.transform;
                 curIndicator.transform.position = target.transform.position;
                 curIndicator.transform.rotation = target.transform.rotation;
             }
-            
+
         }
         else
         {

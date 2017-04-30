@@ -720,7 +720,7 @@ ModelImporter:
     - serializedVersion: 16
       name: Sorceress_attack 2
       takeName: 
-      firstFrame: 874
+      firstFrame: 910
       lastFrame: 954
       wrapMode: 0
       orientationOffsetY: 0
@@ -740,7 +740,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.06832298
+        functionName: CreateSkillEffect
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 0
       maskSource: {instanceID: 0}
@@ -924,7 +931,7 @@ ModelImporter:
       name: Sorceress_attack 6
       takeName: 
       firstFrame: 1424
-      lastFrame: 1463
+      lastFrame: 1448
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -943,7 +950,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.5203872
+        functionName: CreateSkillEffect
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 0
       maskSource: {instanceID: 0}

@@ -56,7 +56,7 @@ public class MonsterController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        curHP = Mathf.Clamp(curHP + 100, 0, finalMaxHP);
+
 	}
 
     public void TakeSkill(Skill.CastedSkillStruct sck) {
