@@ -42,6 +42,17 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
     //
     public PhotonView pv;
     public int targetPhotonID;
+
+    private enum EnemyMovement
+    {
+        STOPMOVEMENT,
+        WANDER,
+        SEEK,
+        FLEE
+    }
+
+    private EnemyMovement enemyMovement;
+
     // Use this for initialization
     void Start()
     {
@@ -102,12 +113,29 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         //{
         //    ani.SetBool("isDie", false);
         //}
-
-        if(Input.GetMouseButton(0))
+        #region HandleMovment
+        switch (enemyMovement)
         {
-            Flee();
-            //Seek(player.transform.position);
+            case EnemyMovement.STOPMOVEMENT:
+                StopMovement();
+                break;
+
+            case EnemyMovement.WANDER:
+                Wander();
+                break;
+
+            case EnemyMovement.SEEK:
+                Seek();
+                break;
+
+            case EnemyMovement.FLEE:
+                Flee();
+                break;
+
+            default:
+                break;
         }
+        #endregion
 
     }
     [PunRPC]
@@ -265,6 +293,11 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         }
     }
 
+    void SwitchMovementState(EnemyMovement currentState)
+    {
+        enemyMovement = currentState;
+    }
+
     void Wander()
     {
         Vector3 wanderTarget = Vector3.zero;
@@ -282,9 +315,9 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         cc.SimpleMove(dir * speed * Time.deltaTime);
     }
 
-    void Seek(Vector3 targetPosition)
+    void Seek()
     {
-        Vector3 seekDirection = (targetPosition - transform.position).normalized;
+        Vector3 seekDirection = (player.transform.position - transform.position).normalized;
         seekDirection = new Vector3(seekDirection.x, 0.0f, seekDirection.z);
         transform.forward = seekDirection;
 
@@ -299,6 +332,11 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         transform.forward = (fleeDirection);
 
         cc.SimpleMove(fleeDirection * speed * Time.deltaTime);
+    }
+
+    void StopMovement()
+    {
+        //Stop enemy and walk animation
     }
 
     void SpellSkill(int damage)
