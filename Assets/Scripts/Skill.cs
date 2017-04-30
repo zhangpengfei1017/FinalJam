@@ -22,7 +22,11 @@ public class Skill : MonoBehaviour
         Channeled
     };
 
-
+    public struct CastedSkillStruct
+    {
+        public Skill skill;
+        public int attack;
+    };
 
     public SkillName skillName = SkillName.S_Skill1;
 
@@ -48,7 +52,7 @@ public class Skill : MonoBehaviour
 
     public float channelInterval;
 
-    public bool isMovingCast;   
+    public bool isMovingCast;
 
     public int mpCost;
 
@@ -72,7 +76,8 @@ public class Skill : MonoBehaviour
 
     public GameObject effect;
 
-    public float GetCastingProgress() {
+    public float GetCastingProgress()
+    {
         return (castTimer / castTime);
     }
 

@@ -57,7 +57,9 @@ public class MonsterController : MonoBehaviour {
 		
 	}
 
-    public void TakeSkill(int otherAttack,Skill skill) {
+    public void TakeSkill(Skill.CastedSkillStruct sck) {
+        int otherAttack = sck.attack;
+        Skill skill = sck.skill;
         otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + finalDefense)) * damageRatio);
         print(otherAttack+"  "+damage);

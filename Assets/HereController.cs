@@ -32,6 +32,9 @@ public class HereController : MonoBehaviour
     private Class className = Class.Knight;
 
     [SerializeField]
+    private float threatIndex = 1;
+
+    [SerializeField]
     private int maxHP;
 
     private int curHP;
@@ -145,6 +148,12 @@ public class HereController : MonoBehaviour
 
     private List<GameObject> skillEffects = new List<GameObject>();
 
+
+
+    #endregion
+
+    #region UnityFunctions
+
     void Awake()
     {
         skills = new List<Skill>();
@@ -155,9 +164,6 @@ public class HereController : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region UnityFunctions
     void Start()
     {
         charCtrl = GetComponent<CharacterController>();
@@ -183,6 +189,14 @@ public class HereController : MonoBehaviour
         GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
         GameObject.Find("CD4").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(3) * 100).ToString() + "%";
         GameObject.Find("CD5").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(4) * 100).ToString() + "%";
+        if (isCasting || isChanneling)
+        {
+            GameObject.Find("CastProgress").GetComponent<Text>().text = Mathf.FloorToInt(GetCastingProgress() * 100).ToString() + "%";
+        }
+        else
+        {
+            GameObject.Find("CastProgress").GetComponent<Text>().text = "";
+        }
         UpdateState();
         ResetAnimator();
         if (!isDead)
@@ -203,8 +217,105 @@ public class HereController : MonoBehaviour
             }
         }
     }
+
     #endregion
 
+    #region Cast Skill Functions
+
+    void UpdateInstanct()
+    {
+        if (instantTimer >= curCastSkill.instantDelayTime)
+        {
+            CastSkill(curCastSkill);
+            EndInstant();
+        }
+    }
+
+    void StartInstant(Skill skill)
+    {
+        curCastSkill = skill;
+        isInstant = true;
+    }
+
+    void EndInstant()
+    {
+        curCastSkill.CDTimer = curCastSkill.CDTime;
+        curCastSkill = null;
+        isInstant = false;
+    }
+
+    void UpdateCast()
+    {
+        if (CheckTarget(curCastSkill.targetType, curCastSkill.distance) == TargetCheckResult.Available)
+        {
+            if (castTimer >= curCastSkill.castTime)
+            {
+                CastSkill(curCastSkill);
+                EndCasting(true);
+            }
+        }
+        else
+        {
+            CancelCast(true);
+        }
+    }
+
+    void StartCasting(Skill skill)
+    {
+        isCasting = true;
+        curCastSkill = skill;
+    }
+
+    void EndCasting(bool cd)
+    {
+        if (cd)
+        {
+            curCastSkill.CDTimer = curCastSkill.CDTime;
+        }
+        isCasting = false;
+        curCastSkill = null;
+    }
+
+    void UpdateChanneled()
+    {
+        if (CheckTarget(curCastSkill.targetType, curCastSkill.distance) == TargetCheckResult.Available)
+        {
+            if (channeledInterval >= curCastSkill.channelInterval)
+            {
+                channeledInterval = 0;
+                CastSkill(curCastSkill);
+            }
+            if (channeledTimer >= curCastSkill.channelTime)
+            {
+                EndChanneling(true);
+            }
+        }
+        else
+        {
+            CancelCast(true);
+        }
+
+    }
+
+    void StartChanneling(Skill skill)
+    {
+        isChanneling = true;
+        curCastSkill = skill;
+    }
+
+    void EndChanneling(bool cd)
+    {
+        if (cd)
+        {
+            curCastSkill.CDTimer = curCastSkill.CDTime;
+        }
+        isChanneling = false;
+        curCastSkill = null;
+    }
+
+    #endregion
+
+    #region Move Functions
 
     void DetectMove()
     {
@@ -278,113 +389,9 @@ public class HereController : MonoBehaviour
         }
     }
 
+    #endregion
 
-    void DetectAttack()
-    {
-        int attackIndex = -1;
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            attackIndex = 0;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            attackIndex = 1;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            attackIndex = 2;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            attackIndex = 3;
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-        {
-            attackIndex = 4;
-        }
-        if (attackIndex != -1)
-        {
-            if (globalCDTimer > 0 || skills[attackIndex].CDTimer > 0)
-            {
-
-            }
-            else
-            {
-                prepareAttack(attackIndex);
-            }
-
-        }
-    }
-
-    void prepareAttack(int i)
-    {
-        Skill skill = skills[i];
-        if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
-        {
-            switch (skill.skillType)
-            {
-                case Skill.SkillType.Instant:
-                    StartInstant(skill);
-                    break;
-                case Skill.SkillType.Cast:
-                    StartCasting(skill);
-                    break;
-                case Skill.SkillType.Channeled:
-                    StartChanneling(skill);
-                    break;
-            }
-            animator.Play("Idle");
-            animator.SetInteger("attackIndex", skill.animationIndex);
-            globalCDTimer = globalCDTime;
-        }
-        else
-        {
-            print("wrong target");
-        }
-    }
-
-    void CastSkill(Skill skill)
-    {
-        //instant skill
-        if (skill.targetType == GameCharacter.CharacterType.Monster)
-        {
-            MonsterController mc = target.GetComponent<MonsterController>();
-            mc.TakeSkill(finalAttack, skill);
-        }
-    }
-
-    TargetCheckResult CheckTarget(GameCharacter.CharacterType t, float distance)
-    {
-        if (target == null)
-        {
-            return TargetCheckResult.NoTarget;
-        }
-
-        if (target.GetComponent<GameCharacter>().characterType != t)
-        {
-            return TargetCheckResult.UnknowError;
-        }
-
-        if (Vector3.Distance(transform.position, target.transform.position) > distance)
-        {
-            return TargetCheckResult.TooFar;
-        }
-
-        Vector3 offest = target.transform.position - transform.position;
-        if (Vector3.Angle(transform.forward, offest) > 80)
-        {
-            return TargetCheckResult.NotFaced;
-        }
-        return TargetCheckResult.Available;
-    }
-
-    void UpdateBuff()
-    {
-        foreach (Buff b in buffs)
-        {
-            b.BuffEffect(gameObject);
-        }
-    }
+    #region Character State Functions
 
     void UpdateState()
     {
@@ -433,54 +440,6 @@ public class HereController : MonoBehaviour
         }
     }
 
-    void UpdateInstanct()
-    {
-        if (instantTimer >= curCastSkill.instantDelayTime)
-        {
-            CastSkill(curCastSkill);
-            EndInstant();
-        }
-    }
-
-    void UpdateCast()
-    {
-        if (CheckTarget(curCastSkill.targetType, curCastSkill.distance) == TargetCheckResult.Available)
-        {
-            if (castTimer >= curCastSkill.castTime)
-            {
-                CastSkill(curCastSkill);
-                EndCasting();
-            }
-        }
-        else
-        {
-            CancelCast(true);
-        }
-    }
-
-    void UpdateChanneled()
-    {
-        if (CheckTarget(curCastSkill.targetType, curCastSkill.distance) == TargetCheckResult.Available)
-        {
-            if (channeledInterval >= curCastSkill.channelInterval)
-            {
-                channeledInterval = 0;
-                CastSkill(curCastSkill);
-            }
-            if (channeledTimer >= curCastSkill.channelTime)
-            {
-                EndChanneling();
-            }
-        }
-        else
-        {
-            CancelCast(true);
-        }
-
-    }
-
-    void OnDied() { }
-
     void ResetAnimator()
     {
         AnimatorStateInfo asi0 = animator.GetCurrentAnimatorStateInfo(0);
@@ -491,58 +450,14 @@ public class HereController : MonoBehaviour
         }
     }
 
-    public void TakeSkill(int enemyAttack, Skill skill)
+    void OnDied()
     {
-        //int finalMaxHP = Mathf.FloorToInt(maxHP * maxHPRatio + maxHPTemp);
-        //int damage = Mathf.FloorToInt((skill.pctDamage * enemyAttack + skill.fixedDamage) * (5000 / (5000 + defense)) * damageRatio);
-        //int health = Mathf.FloorToInt((skill.pctHealth * finalMaxHP + skill.fixedHealth) * healRatio);
-        //curHP = Mathf.Clamp(curHP - damage + health, 0, finalMaxHP);
-        //foreach (Buff b in skill.buffs)
-        //{
-        //    Buff temp = new Buff();
-        //    temp.Copy(b);
-        //    AddBuff(temp);
-        //}
+
     }
 
-    void StartInstant(Skill skill)
-    {
-        curCastSkill = skill;
-        isInstant = true;
-    }
+    #endregion
 
-    void EndInstant()
-    {
-        curCastSkill.CDTimer = curCastSkill.CDTime;
-        curCastSkill = null;
-        isInstant = false;
-    }
-
-    void StartCasting(Skill skill)
-    {
-        isCasting = true;
-        curCastSkill = skill;
-    }
-
-    void EndCasting()
-    {
-        curCastSkill.CDTimer = curCastSkill.CDTime;
-        isCasting = false;
-        curCastSkill = null;
-    }
-
-    void StartChanneling(Skill skill)
-    {
-        isChanneling = true;
-        curCastSkill = skill;
-    }
-
-    void EndChanneling()
-    {
-        curCastSkill.CDTimer = curCastSkill.CDTime;
-        isChanneling = false;
-        curCastSkill = null;
-    }
+    #region Buff Functions
 
     void AddBuff(Buff buff)
     {
@@ -576,38 +491,104 @@ public class HereController : MonoBehaviour
         return false;
     }
 
-    public float GetCastingProgress()
+    void UpdateBuff()
     {
-        if (curCastSkill == null)
+        foreach (Buff b in buffs)
         {
-            return 0;
+            b.BuffEffect(gameObject);
         }
-        return curCastSkill.GetCastingProgress();
     }
 
-    public void SetTarget(GameObject target)
+    #endregion
+
+    #region General Attack/Hit Functions
+
+    void DetectAttack()
     {
-        if (target != null)
+        int attackIndex = -1;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            this.target = target;
+            attackIndex = 0;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            attackIndex = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            attackIndex = 2;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            attackIndex = 3;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            attackIndex = 4;
+        }
+        if (attackIndex != -1)
+        {
+            if (globalCDTimer > 0 || skills[attackIndex].CDTimer > 0)
+            {
+
+            }
+            else
+            {
+                PrepareAttack(attackIndex);
+            }
+
+        }
+    }
+
+    void PrepareAttack(int i)
+    {
+        Skill skill = skills[i];
+        if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
+        {
+            switch (skill.skillType)
+            {
+                case Skill.SkillType.Instant:
+                    StartInstant(skill);
+                    break;
+                case Skill.SkillType.Cast:
+                    StartCasting(skill);
+                    break;
+                case Skill.SkillType.Channeled:
+                    StartChanneling(skill);
+                    break;
+            }
+            animator.Play("Idle");
+            animator.SetInteger("attackIndex", skill.animationIndex);
+            globalCDTimer = globalCDTime;
         }
         else
         {
-            this.target = null;
+            print("wrong target");
         }
-        print(target.name);
+    }
 
+    void CastSkill(Skill skill)
+    {
+        Skill.CastedSkillStruct sck = new Skill.CastedSkillStruct();
+        sck.skill = skill;
+        sck.attack = attack;
+        target.SendMessage("TakeSkill", sck);
     }
 
     public void CancelCast(bool self)
     {
-        //reset the animation
         if (isCasting || isChanneling)
         {
             animator.SetInteger("attackIndex", 0);
             animator.Play("Idle");
-            EndCasting();
-            EndChanneling();
+            if (isCasting)
+            {
+                EndCasting(!self);
+            }
+            else if (isChanneling)
+            {
+                EndChanneling(!self);
+            }
             foreach (GameObject g in skillEffects)
             {
                 if (g != null)
@@ -618,38 +599,28 @@ public class HereController : MonoBehaviour
             skillEffects.Clear();
             if (self)
             {
-                print("自我取消");
+                print("Cancel");
             }
             else
             {
-                print("读条打断");
+                print("Interrupt");
             }
         }
     }
 
-
-    #region final property functions
-    void ChangeMaxHP(float ratio, int amount)
+    public void TakeSkill(Skill.CastedSkillStruct sck)
     {
-        finalMaxHP += Mathf.FloorToInt(ratio * maxHP) + amount;
+        //int finalMaxHP = Mathf.FloorToInt(maxHP * maxHPRatio + maxHPTemp);
+        //int damage = Mathf.FloorToInt((skill.pctDamage * enemyAttack + skill.fixedDamage) * (5000 / (5000 + defense)) * damageRatio);
+        //int health = Mathf.FloorToInt((skill.pctHealth * finalMaxHP + skill.fixedHealth) * healRatio);
+        //curHP = Mathf.Clamp(curHP - damage + health, 0, finalMaxHP);
+        //foreach (Buff b in skill.buffs)
+        //{
+        //    Buff temp = new Buff();
+        //    temp.Copy(b);
+        //    AddBuff(temp);
+        //}
     }
-
-    void ChangeMaxMP(float ratio, int amount)
-    {
-        finalMaxMP += Mathf.FloorToInt(ratio * maxMP) + amount;
-    }
-
-    void ChangeAttack(float ratio, int amount)
-    {
-        finalAttack += Mathf.FloorToInt(ratio * attack) + amount;
-    }
-
-    void ChangeDefense(float ratio, int amount)
-    {
-        finalDefense += Mathf.FloorToInt(ratio * defense) + amount;
-    }
-
-    #endregion
 
     public void CreateSkillEffect()
     {
@@ -693,6 +664,77 @@ public class HereController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Target Functions
+
+    public void SetTarget(GameObject target)
+    {
+        if (target != null)
+        {
+            this.target = target;
+        }
+        else
+        {
+            this.target = null;
+        }
+        print(target.name);
+
+    }
+
+    TargetCheckResult CheckTarget(GameCharacter.CharacterType t, float distance)
+    {
+        if (target == null)
+        {
+            return TargetCheckResult.NoTarget;
+        }
+
+        if (target.GetComponent<GameCharacter>().characterType != t)
+        {
+            return TargetCheckResult.UnknowError;
+        }
+
+        if (Vector3.Distance(transform.position, target.transform.position) > distance)
+        {
+            return TargetCheckResult.TooFar;
+        }
+
+        Vector3 offest = target.transform.position - transform.position;
+        if (Vector3.Angle(transform.forward, offest) > 80)
+        {
+            return TargetCheckResult.NotFaced;
+        }
+        return TargetCheckResult.Available;
+    }
+
+    #endregion
+
+    #region Calculate Final Properties Functions
+
+    void ChangeMaxHP(float ratio, int amount)
+    {
+        finalMaxHP += Mathf.FloorToInt(ratio * maxHP) + amount;
+    }
+
+    void ChangeMaxMP(float ratio, int amount)
+    {
+        finalMaxMP += Mathf.FloorToInt(ratio * maxMP) + amount;
+    }
+
+    void ChangeAttack(float ratio, int amount)
+    {
+        finalAttack += Mathf.FloorToInt(ratio * attack) + amount;
+    }
+
+    void ChangeDefense(float ratio, int amount)
+    {
+        finalDefense += Mathf.FloorToInt(ratio * defense) + amount;
+    }
+
+    #endregion
+
+    #region Get Skill Information Functions
+
     public float GetCDProgress(int i)
     {
         float pGlobal = globalCDTimer / globalCDTime;
@@ -708,4 +750,23 @@ public class HereController : MonoBehaviour
 
         return pGlobal > pSelf ? pGlobal : pSelf;
     }
+
+    public float GetCastingProgress()
+    {
+        if (isCasting)
+        {
+            return castTimer / curCastSkill.castTime;
+        }
+
+        if (isChanneling)
+        {
+            return channeledTimer / curCastSkill.channelTime;
+        }
+
+        return 0;
+    }
+
+    #endregion
+
+
 }
