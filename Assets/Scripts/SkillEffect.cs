@@ -8,7 +8,7 @@ public class SkillEffect : MonoBehaviour
     {
         mine,
         other,
-        line,
+        move,
         ray
     }
     public Vector3 offset;
@@ -55,7 +55,7 @@ public class SkillEffect : MonoBehaviour
                 //show on the target
 
                 break;
-            case SkillEffectType.line:
+            case SkillEffectType.move:
                 //point to point 
                 Vector3 target;
                 if (isGround)

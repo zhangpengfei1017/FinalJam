@@ -686,10 +686,10 @@ public class HereController : MonoBehaviour
                     break;
                 case SkillEffect.SkillEffectType.other:
 
-                    newEffect = Instantiate(effect, target.transform.position + offset, target.transform.rotation) as GameObject;
+                    newEffect = Instantiate(effect, target.transform.position + offset, target.transform.rotation,target.transform) as GameObject;
                     skillEffects.Add(newEffect);
                     break;
-                case SkillEffect.SkillEffectType.line:
+                case SkillEffect.SkillEffectType.move:
 
                     newEffect = Instantiate(effect, transform.position + offset.x * transform.right + offset.y * transform.up + offset.z * transform.forward, transform.rotation) as GameObject;
                     skillEffects.Add(newEffect);
@@ -741,6 +741,7 @@ public class HereController : MonoBehaviour
             Destroy(curIndicator);
             this.target = null;
         }
+        CancelCast(true);
     }
 
     TargetCheckResult CheckTarget(GameCharacter.CharacterType t, float distance)
