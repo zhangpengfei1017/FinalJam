@@ -108,15 +108,14 @@ public class HereController : MonoBehaviour
 
     private int finalDefense;
 
-
-
-
-
-
-
     //Target
 
     private GameObject target;
+
+    [SerializeField]
+    private GameObject indicator;
+
+    private GameObject curIndicator;
 
     //Component
 
@@ -184,6 +183,11 @@ public class HereController : MonoBehaviour
 
     void Update()
     {
+
+        //--------------------------------------
+        //--------------test code---------------
+        //--------------------------------------
+
         GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
         GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
         GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
@@ -197,6 +201,30 @@ public class HereController : MonoBehaviour
         {
             GameObject.Find("CastProgress").GetComponent<Text>().text = "";
         }
+        GameObject.Find("HPBar").GetComponent<Text>().text = curHP.ToString() + "/" + finalMaxHP.ToString();
+        GameObject.Find("MPBar").GetComponent<Text>().text = curMP.ToString() + "/" + finalMaxMP.ToString();
+        if (target != null) {
+            Text targetName = GameObject.Find("TargetName").GetComponent<Text>();
+            Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
+            Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
+            if (target.GetComponent<GameCharacter>().characterType == GameCharacter.CharacterType.Player)
+            {
+                targetHp.text = target.GetComponent<HereController>().curHP.ToString() + "/" + target.GetComponent<HereController>().finalMaxHP;
+                targetMp.text = target.GetComponent<HereController>().curMP.ToString() + "/" + target.GetComponent<HereController>().finalMaxMP;
+                targetName.text = target.name;
+            }
+            else if(target.GetComponent<GameCharacter>().characterType== GameCharacter.CharacterType.Monster){
+                targetHp.text = target.GetComponent<MonsterController>().curHP.ToString() + "/" + target.GetComponent<MonsterController>().finalMaxHP;
+                targetMp.text = target.GetComponent<MonsterController>().curMP.ToString() + "/" + target.GetComponent<MonsterController>().finalMaxMP;
+                targetName.text = target.name;
+            }
+        }
+        
+
+        //--------------------------------------
+        //--------------test code---------------
+        //--------------------------------------
+
         UpdateState();
         ResetAnimator();
         if (!isDead)
@@ -239,6 +267,7 @@ public class HereController : MonoBehaviour
 
     void EndInstant()
     {
+        curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
         curCastSkill.CDTimer = curCastSkill.CDTime;
         curCastSkill = null;
         isInstant = false;
@@ -271,6 +300,7 @@ public class HereController : MonoBehaviour
         if (cd)
         {
             curCastSkill.CDTimer = curCastSkill.CDTime;
+            curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
         }
         isCasting = false;
         curCastSkill = null;
@@ -308,6 +338,7 @@ public class HereController : MonoBehaviour
         if (cd)
         {
             curCastSkill.CDTimer = curCastSkill.CDTime;
+            curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
         }
         isChanneling = false;
         curCastSkill = null;
@@ -545,21 +576,28 @@ public class HereController : MonoBehaviour
         Skill skill = skills[i];
         if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
         {
-            switch (skill.skillType)
+            if (curMP >= skill.mpCost)
             {
-                case Skill.SkillType.Instant:
-                    StartInstant(skill);
-                    break;
-                case Skill.SkillType.Cast:
-                    StartCasting(skill);
-                    break;
-                case Skill.SkillType.Channeled:
-                    StartChanneling(skill);
-                    break;
+                switch (skill.skillType)
+                {
+                    case Skill.SkillType.Instant:
+                        StartInstant(skill);
+                        break;
+                    case Skill.SkillType.Cast:
+                        StartCasting(skill);
+                        break;
+                    case Skill.SkillType.Channeled:
+                        StartChanneling(skill);
+                        break;
+                }
+                animator.Play("Idle");
+                animator.SetInteger("attackIndex", skill.animationIndex);
+                globalCDTimer = globalCDTime;
             }
-            animator.Play("Idle");
-            animator.SetInteger("attackIndex", skill.animationIndex);
-            globalCDTimer = globalCDTime;
+            else
+            {
+                print("No enough MP");
+            }
         }
         else
         {
@@ -673,13 +711,22 @@ public class HereController : MonoBehaviour
         if (target != null)
         {
             this.target = target;
+            if (curIndicator == null)
+            {
+                curIndicator = Instantiate(indicator, target.transform.position, transform.transform.rotation, target.transform) as GameObject;
+            }
+            else {
+                curIndicator.transform.parent = target.transform;
+                curIndicator.transform.position = target.transform.position;
+                curIndicator.transform.rotation = target.transform.rotation;
+            }
+            
         }
         else
         {
+            Destroy(curIndicator);
             this.target = null;
         }
-        print(target.name);
-
     }
 
     TargetCheckResult CheckTarget(GameCharacter.CharacterType t, float distance)

@@ -7,12 +7,12 @@ public class MonsterController : MonoBehaviour {
     [SerializeField]
     private int maxHP;
 
-    private int curHP;
+    public int curHP;
 
     [SerializeField]
     private int maxMP;
 
-    private int curMP;
+    public int curMP;
 
     [SerializeField]
     private int attack;
@@ -38,9 +38,9 @@ public class MonsterController : MonoBehaviour {
 
     //Final properties
 
-    private int finalMaxHP;
+    public int finalMaxHP;
 
-    private int finalMaxMP;
+    public int finalMaxMP;
 
     private int finalAttack;
 
@@ -48,13 +48,15 @@ public class MonsterController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        finalMaxHP = maxHP;
+        finalMaxMP = maxMP;
         curHP = maxHP;
         curMP = maxMP;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        curHP = Mathf.Clamp(curHP + 100, 0, finalMaxHP);
 	}
 
     public void TakeSkill(Skill.CastedSkillStruct sck) {
@@ -62,6 +64,6 @@ public class MonsterController : MonoBehaviour {
         Skill skill = sck.skill;
         otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + finalDefense)) * damageRatio);
-        print(otherAttack+"  "+damage);
+        curHP = Mathf.Clamp(curHP - damage, 0, finalMaxHP);
     }
 }
