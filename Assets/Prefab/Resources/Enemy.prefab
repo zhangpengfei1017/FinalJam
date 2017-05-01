@@ -2843,6 +2843,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterName: 
   monsterType: 0
+  attackRadius: 30
+  wanderJitter: 360
+  wanderTime: 10
+  moveRate: 1
+  stopTime: 5
 --- !u!114 &114371507102672478
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -135,7 +135,21 @@ public class GameCharacter : MonoBehaviour
 
     private List<GameObject> skillEffects = new List<GameObject>();
 
+    public int MoveSpeed
+    {
+        get
+        {
+            return moveSpeed;
+        }
+    }
 
+    public int CurHP
+    {
+        get
+        {
+            return curHP;
+        }
+    }
 
     #endregion
 

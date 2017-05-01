@@ -5,6 +5,12 @@ labels:
 - PUN
 - Photon
 - Networking
+<<<<<<< HEAD
+MonoAssemblyImporter:
+  serializedVersion: 1
+  iconMap: {}
+  executionOrder: {}
+=======
 PluginImporter:
   serializedVersion: 2
   iconMap: {}
@@ -35,3 +41,4 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+>>>>>>> 286519a468f23cb04c2bd0d9ccf1bca3a38e8b68

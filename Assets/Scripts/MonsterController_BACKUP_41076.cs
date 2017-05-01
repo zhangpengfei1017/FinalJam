@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(GameCharacter))]
+<<<<<<< HEAD
 
+public class MonsterController : MonoBehaviour {
+
+=======
 [RequireComponent(typeof(CharacterController))]
-
 public class MonsterController : MonoBehaviour
 {
+>>>>>>> 930f230b85d788a40c6d709e012dce4cfc9ef140
     public enum MonsterType
     {
         Trash,
