@@ -39,7 +39,7 @@ public class Buff : MonoBehaviour
     {
         if (target.tag == "Player")
         {
-            HereController hc = target.GetComponent<HereController>();
+            HeroController hc = target.GetComponent<HeroController>();
             //
             switch (buffName) {
                 case BuffName.Freezed:
