@@ -143,6 +143,13 @@ public class GameCharacter : MonoBehaviour
         }
     }
 
+    public int CurHP
+    {
+        get
+        {
+            return curHP;
+        }
+    }
 
     #endregion
 

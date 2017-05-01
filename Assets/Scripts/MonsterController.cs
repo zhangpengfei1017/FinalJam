@@ -25,12 +25,12 @@ public class MonsterController : MonoBehaviour
 
     //Wander Parameters
     public float wanderJitter; // 'Wandering' amount
-    public float wanderTime;
-    public float moveRate;
-    private float nextMove;
+    public float wanderTime; // Time to Wander
+    public float moveRate; // Rate to change direction
+    private float nextMove; 
 
     //Stop Parameters
-    public float stopTime;
+    public float stopTime; // Time to stop movement
 
     private GameCharacter character;
     private CharacterController characterController;
@@ -62,6 +62,9 @@ public class MonsterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (character.CurHP < 20)
+            enemyMovement = EnemyMovement.FLEE;
+
         switch (enemyMovement)
         {
             case EnemyMovement.STOPMOVEMENT:
@@ -86,7 +89,10 @@ public class MonsterController : MonoBehaviour
     }
 
     #region MoveFunctions
-    void StopMovement()
+    /// <summary>
+    /// Stops movement
+    /// </summary>
+    void StopMovement() 
     {
         //Stop enemy and walk animation
         if (stopCounter < stopTime)
@@ -106,6 +112,9 @@ public class MonsterController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Free roam. Changes direction at fixed intervals
+    /// </summary>
     void Wander()
     {
         if (wanderCounter < wanderTime)
@@ -124,7 +133,7 @@ public class MonsterController : MonoBehaviour
 
             characterController.SimpleMove(transform.forward * character.MoveSpeed * Time.deltaTime);
 
-            if(CheckForEnemy())
+            if(CheckForTarget())
             {
                 enemyMovement = EnemyMovement.SEEK;
             }
@@ -137,7 +146,11 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    bool CheckForEnemy()
+    /// <summary>
+    /// Checks if target is within attack radius
+    /// </summary>
+    /// <returns></returns>
+    bool CheckForTarget()
     {
         targetToAttack = character.GetTarget();
 
@@ -152,7 +165,9 @@ public class MonsterController : MonoBehaviour
         return false;
     }
 
-
+    /// <summary>
+    /// Moves towards target to attack
+    /// </summary>
     void Seek()
     {
             Vector3 seekDirection = (targetToAttack.transform.position - transform.position).normalized;
@@ -167,6 +182,9 @@ public class MonsterController : MonoBehaviour
             }
     }
 
+    /// <summary>
+    /// Moves away from target
+    /// </summary>
     void Flee()
     {
         Vector3 fleeDirection = (transform.position - targetToAttack.transform.position).normalized;
