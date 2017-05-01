@@ -1,16 +1,5 @@
 fileFormatVersion: 2
 guid: 0268f98d7c649564a818b0768fc68d4b
-labels:
-- ExitGames
-- PUN
-- Photon
-- Networking
-<<<<<<< HEAD
-MonoAssemblyImporter:
-  serializedVersion: 1
-  iconMap: {}
-  executionOrder: {}
-=======
 PluginImporter:
   serializedVersion: 2
   iconMap: {}
@@ -41,4 +30,3 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
->>>>>>> 286519a468f23cb04c2bd0d9ccf1bca3a38e8b68
