@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(GameCharacter))]
+
 public class HeroController : MonoBehaviour
 {
-
     public enum Class
     {
         Knight,

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(GameCharacter))]
+
 public class MonsterController : MonoBehaviour {
 
     public enum MonsterType
