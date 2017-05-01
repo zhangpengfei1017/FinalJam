@@ -92,11 +92,10 @@ public class PlayerController : Photon.MonoBehaviour, IPunObservable
         if (!pv.isMine) {
             return;
         }
-<<<<<<< HEAD
 
         ResetAnimation();
         ResetState();
-=======
+
         //if (Input.GetKeyDown(KeyCode.Escape)) {
         //    if (restart.activeInHierarchy)
         //    {
@@ -109,7 +108,7 @@ public class PlayerController : Photon.MonoBehaviour, IPunObservable
         //    }
         //}
         //
->>>>>>> 286519a468f23cb04c2bd0d9ccf1bca3a38e8b68
+
         hpBar.GetComponent<UIProgressBar>().value = (float)curhp / (float)maxhp;
         mpBar.GetComponent<UIProgressBar>().value = (float)curmp / (float)maxmp;        
         ResetState();               
