@@ -142,13 +142,17 @@ public class HeroController : MonoBehaviour
             character.SetTarget(target);
             if (curIndicator == null)
             {
-                curIndicator = Instantiate(indicator, target.transform.position, transform.transform.rotation, target.transform) as GameObject;
+                curIndicator = Instantiate(indicator, target.transform) as GameObject;
+                curIndicator.GetComponent<Projector>().orthographicSize =  target.GetComponent<CharacterController>().radius * 2;
+                //
             }
             else
             {
-                curIndicator.transform.parent = target.transform;
-                curIndicator.transform.position = target.transform.position;
-                curIndicator.transform.rotation = target.transform.rotation;
+                curIndicator.transform.SetParent(target.transform, false);
+                curIndicator.GetComponent<Projector>().orthographicSize = target.GetComponent<CharacterController>().radius * 2;
+                //curIndicator.transform.parent = target.transform;
+                //curIndicator.transform.position = target.transform.position;
+                //curIndicator.transform.rotation = target.transform.rotation;
             }
         }
         else
