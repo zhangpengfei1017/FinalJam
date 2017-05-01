@@ -51,6 +51,7 @@ public class HeroController : MonoBehaviour
 
         DetectMove();
 
+        DetectClick();
     }
 
 
@@ -138,13 +139,40 @@ public class HeroController : MonoBehaviour
         }
     }
 
+    void DetectClick() {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = cam.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject hitgo = hit.collider.gameObject;
+                if (hitgo.GetComponent<GameCharacter>() != null)
+                {
+                    ChooseTarget(hitgo);
+                }
+                else
+                {
+                    ChooseTarget(null);
+                }
+            }
+            else {
+                ChooseTarget(null);
+            }
+        }
+    }
+
     public void ChooseTarget(GameObject target)
     {
+        if (target == character.GetTarget())
+        {
+            return;
+        }
         if (curIndicator != null) {
             Destroy(curIndicator);
         }
         if (target != null)
-        {
+        {            
             character.SetTarget(target);
             if (target.GetComponent<GameCharacter>().characterType == GameCharacter.CharacterType.Monster)
             {

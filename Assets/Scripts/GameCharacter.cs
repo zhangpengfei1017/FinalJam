@@ -189,14 +189,19 @@ public class GameCharacter : MonoBehaviour
             }
             GameObject.Find("HPBar").GetComponent<Text>().text = curHP.ToString() + "/" + finalMaxHP.ToString();
             GameObject.Find("MPBar").GetComponent<Text>().text = curMP.ToString() + "/" + finalMaxMP.ToString();
+            Text targetName = GameObject.Find("TargetName").GetComponent<Text>();
+            Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
+            Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
             if (target != null)
-            {
-                Text targetName = GameObject.Find("TargetName").GetComponent<Text>();
-                Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
-                Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
+            {               
                 targetHp.text = target.GetComponent<GameCharacter>().curHP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxHP;
                 targetMp.text = target.GetComponent<GameCharacter>().curMP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxMP;
                 targetName.text = target.name;
+            }
+            else {
+                targetHp.text = "";
+                targetMp.text = "";
+                targetName.text = "";
             }
         }
        
@@ -643,11 +648,6 @@ public class GameCharacter : MonoBehaviour
 
     public GameObject GetTarget() {
         return target;
-    }
-
-    void OnMouseDown()
-    {
-        GameObject.FindGameObjectWithTag("Player").SendMessage("ChooseTarget", gameObject);
     }
 
     #endregion
