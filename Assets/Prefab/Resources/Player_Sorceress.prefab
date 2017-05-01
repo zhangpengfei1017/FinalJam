@@ -3128,23 +3128,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b27efb554c58e04c81cd2e3c307d25d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: Pengfei
+  playerName: 
   className: 1
-  threatIndex: 1
-  maxHP: 3000
-  maxMP: 3000
-  attack: 1500
-  defense: 200
-  moveSpeed: 250
-  globalCDTime: 1.5
   indicator: {fileID: 1658205733655036, guid: 385f18a1b6cde514a840d41d51b8051f, type: 2}
-  headPoint: {fileID: 4848820241697240}
-  skillPrefabs:
-  - {fileID: 114937449987161312, guid: 3a3c99f0a1b2a76469a99b1815304f88, type: 2}
-  - {fileID: 114133971954640074, guid: dec77763f8152bb4897a6c179d5126d2, type: 2}
-  - {fileID: 114404271764782932, guid: bc27094d0ca60f64d97aebda7a115d70, type: 2}
-  - {fileID: 114770264692848974, guid: e16f04a2643d2f446930614195f4f5b0, type: 2}
-  - {fileID: 114570972902097838, guid: bb57fc1964b2a394b9570970a7686cbc, type: 2}
 --- !u!114 &114236628577371994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3156,22 +3142,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b631b6abbcbf844189bcf9644680f35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: 
-  className: 0
-  threatIndex: 1
-  maxHP: 0
-  curHP: 0
-  maxMP: 0
-  curMP: 0
-  attack: 0
-  defense: 0
-  moveSpeed: 0
-  finalMaxHP: 0
-  finalMaxMP: 0
-  finalAttack: 0
-  finalDefense: 0
-  characterCenter: {fileID: 4431625368610878}
   characterType: 0
+  threatIndex: 1
+  maxHP: 3000
+  maxMP: 3000
+  attack: 1500
+  defense: 1500
+  moveSpeed: 250
+  globalCDTime: 1.5
+  headPoint: {fileID: 4659308484732072}
+  characterCenter: {fileID: 4431625368610878}
+  skillPrefabs:
+  - {fileID: 114937449987161312, guid: 3a3c99f0a1b2a76469a99b1815304f88, type: 2}
+  - {fileID: 114133971954640074, guid: dec77763f8152bb4897a6c179d5126d2, type: 2}
+  - {fileID: 114404271764782932, guid: bc27094d0ca60f64d97aebda7a115d70, type: 2}
+  - {fileID: 114770264692848974, guid: e16f04a2643d2f446930614195f4f5b0, type: 2}
+  - {fileID: 114570972902097838, guid: bb57fc1964b2a394b9570970a7686cbc, type: 2}
 --- !u!137 &137414436869215600
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
