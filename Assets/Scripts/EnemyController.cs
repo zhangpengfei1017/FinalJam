@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class EnemyController : MonoBehaviour {
+public class EnemyController : Photon.MonoBehaviour, IPunObservable
+{
     public float speed;
     public int maxhp;
     public int curhp;
@@ -29,6 +31,10 @@ public class EnemyController : MonoBehaviour {
     private float attackTimer;
 
     private ArrayList skillTrigger;
+
+    //
+    public PhotonView pv;
+    public int targetPhotonID;
     // Use this for initialization
     void Start () {
         isWalking = false;
@@ -40,15 +46,19 @@ public class EnemyController : MonoBehaviour {
         attackCount = 0;
         inAttack = false;
         UIRoot = GameObject.FindGameObjectWithTag("UIRoot");
-        player = GameObject.FindGameObjectWithTag("Player");
         myHpBar = NGUITools.AddChild(UIRoot, hpBarPrefab);
         myHpBar.GetComponent<UIFollowTarget>().target = HUDpoint.transform;
         myHpBar.SetActive(false);
         skillTrigger = new ArrayList();
+        pv=GetComponent<PhotonView>();
     }
 	
 	// Update is called once per frame
 	void Update () {
+        myHpBar.GetComponent<UIProgressBar>().value = (float)curhp / (float)maxhp;
+        if (!pv.isMine) {
+            return;
+        }
         if (attackTimer<3) {
             attackTimer += Time.deltaTime;
         }
@@ -78,8 +88,21 @@ public class EnemyController : MonoBehaviour {
             ani.SetBool("isDie", false);
         }
 	}
-
-    public void GetHit(int damage) {
+    [PunRPC]
+    public void GetHit(int damage,int id) {
+        if (!pv.isMine) {
+            return;
+        }
+        player = GameObject.FindGameObjectWithTag("Player");
+        targetPhotonID = id;
+        PhotonView[] allviews = GameObject.FindObjectsOfType<PhotonView>();
+        foreach (PhotonView p in allviews)
+        {
+            if (p.photonView.ownerId == id)
+            {
+                player = p.gameObject;
+            }
+        }
         CancelSkill();
         ani.SetBool("isGethit", true);
         if (ani.GetCurrentAnimatorStateInfo(0).IsName("gethit"))
@@ -90,7 +113,6 @@ public class EnemyController : MonoBehaviour {
         inAttack = true;
         ani.SetBool("isInAttack", true);
         myHpBar.SetActive(true);
-        myHpBar.GetComponent<UIProgressBar>().value = (float)curhp / (float)maxhp;
         if (curhp == 0) {
             Die();
         }
@@ -100,8 +122,10 @@ public class EnemyController : MonoBehaviour {
         GetComponent<CharacterController>().enabled = false;
     }
 
-    public void Attack() {        
-        
+    public void Attack() {
+        if (player == null) {
+            return;
+        }
         Vector3 direction = (player.transform.position - transform.position);
         if (ani.GetCurrentAnimatorStateInfo(0).IsTag("look"))
         {
@@ -182,7 +206,7 @@ public class EnemyController : MonoBehaviour {
         timer += Time.deltaTime;
         if ((timer > 5 && !isWalking) || (timer > 15))
         {
-            des = new Vector3(oriPosition.x + Random.Range(-8, 8), oriPosition.y, oriPosition.z + Random.Range(-8, 8));
+            des = new Vector3(oriPosition.x + UnityEngine.Random.Range(-8, 8), oriPosition.y, oriPosition.z + UnityEngine.Random.Range(-8, 8));
             dir = (des - transform.position).normalized;
             isWalking = true;
             ani.SetBool("isMove", true);
@@ -217,5 +241,20 @@ public class EnemyController : MonoBehaviour {
             Destroy(i);
         }
         skillTrigger.Clear();
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(curhp);
+            stream.SendNext(myHpBar.GetActive());
+            stream.SendNext(targetPhotonID);
+        }
+        else {
+            curhp = (int)stream.ReceiveNext();
+            myHpBar.SetActive((bool)stream.ReceiveNext());
+            targetPhotonID = (int)stream.ReceiveNext();
+        }
     }
 }

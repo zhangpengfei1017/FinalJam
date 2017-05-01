@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Photon.MonoBehaviour, IPunObservable
 {
     public float speed;
     public GameObject cam;
@@ -30,6 +31,8 @@ public class PlayerController : MonoBehaviour
     public GameObject hpBar;
     public GameObject mpBar;
     public GameObject restart;
+
+    public PhotonView pv;
     // Use this for initialization
     void Start()
     {
@@ -70,27 +73,46 @@ public class PlayerController : MonoBehaviour
         maxmp = 100;
         curhp = maxhp;
         curmp = maxmp;
+        
+        //
+        pv = GetComponent<PhotonView>();
+        cam = GameObject.Find("MainCam");
+        //
+        if (pv.isMine) {
+            hpBar = GameObject.Find("PlayerHpBar");
+            mpBar = GameObject.Find("PlayerMpBar");
+        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (restart.activeInHierarchy)
-            {
-                restart.SetActive(false);
-                Time.timeScale = 1;
-            }
-            else if(Time.timeScale!=0){
-                Time.timeScale = 0;
-                restart.SetActive(true);
-            }
+        ResetAnimation();
+        if (!pv.isMine) {
+            return;
         }
+<<<<<<< HEAD
 
         ResetAnimation();
         ResetState();
+=======
+        //if (Input.GetKeyDown(KeyCode.Escape)) {
+        //    if (restart.activeInHierarchy)
+        //    {
+        //        restart.SetActive(false);
+        //        Time.timeScale = 1;
+        //    }
+        //    else if(Time.timeScale!=0){
+        //        Time.timeScale = 0;
+        //        restart.SetActive(true);
+        //    }
+        //}
+        //
+>>>>>>> 286519a468f23cb04c2bd0d9ccf1bca3a38e8b68
         hpBar.GetComponent<UIProgressBar>().value = (float)curhp / (float)maxhp;
-        mpBar.GetComponent<UIProgressBar>().value = (float)curmp / (float)maxmp;
+        mpBar.GetComponent<UIProgressBar>().value = (float)curmp / (float)maxmp;        
+        ResetState();               
         if (isActive)
         {//is alive
             curmp = Mathf.Clamp(curmp + 10 * Time.deltaTime, 0, 100);
@@ -236,8 +258,12 @@ public class PlayerController : MonoBehaviour
         }
         allTrigger.Clear();
     }
-    public void GetHit(int damage)
+    [PunRPC]
+    public void GetHit(int damage,int id)
     {
+        if (!pv.isMine) {
+            return;
+        }
         if (isRollable)
         {
             CancelSkill();
@@ -319,7 +345,6 @@ public class PlayerController : MonoBehaviour
         {
             ani.SetBool("isRun", false);
         }
-
     }
 
     void ResetAnimation()
@@ -340,6 +365,17 @@ public class PlayerController : MonoBehaviour
             ani.SetBool("isAttack", false);
             isAttackTiming = false;
             attackState = 0;
+        }
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting) {
+            stream.SendNext(curhp);
+
+        }else
+        {
+            curhp = (float)stream.ReceiveNext();
         }
     }
 }

@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1360587373881540}
+  m_IsPrefabParent: 1
+--- !u!1 &1360587373881540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4579876534754626}
+  - component: {fileID: 114570972902097838}
+  m_Layer: 0
+  m_Name: Sorceress_Skill5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4579876534754626
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1360587373881540}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 329.27768, y: 51.749706, z: 236.75534}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114570972902097838
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1360587373881540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f4013eee91ae744a1015e9795bfc7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillName: 4
+  icon: {fileID: 0}
+  animationIndex: 2
+  targetType: 2
+  distance: 20
+  skillType: 2
+  instantDelayTime: 0
+  castTime: 0
+  channelTime: 5
+  channelInterval: 0.49
+  isMovingCast: 0
+  mpCost: 100
+  CDTime: 5
+  CDTimer: 0
+  pctDamage: 2
+  fixedDamage: 2000
+  pctHealth: 0
+  fixedHealth: 0
+  fixedThreat: 0
+  maxTargets: 0
+  buffs: []
+  effect: {fileID: 1762522841323190, guid: 866a7c8f375a2914291e31b92a1cd931, type: 2}
