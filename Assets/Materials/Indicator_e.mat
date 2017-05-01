@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Indicator
+  m_Name: Indicator_e
   m_Shader: {fileID: 4800000, guid: 4d4e346462fdd9b4dba52fd66216ed94, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -98,7 +98,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _Threshold: 0.242
+    - _Threshold: 0.5
     - _UVSec: 0
     - _WaveScale: 0.063
     - _ZWrite: 1

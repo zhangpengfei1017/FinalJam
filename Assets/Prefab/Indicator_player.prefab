@@ -9,43 +9,43 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1849888630782984}
+  m_RootGameObject: {fileID: 1527074361810072}
   m_IsPrefabParent: 1
---- !u!1 &1849888630782984
+--- !u!1 &1527074361810072
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4269267904726870}
-  - component: {fileID: 119440971108350532}
+  - component: {fileID: 4710740477650712}
+  - component: {fileID: 119917554011595300}
   m_Layer: 10
-  m_Name: Indicator
+  m_Name: Indicator_player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4269267904726870
+--- !u!4 &4710740477650712
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1849888630782984}
+  m_GameObject: {fileID: 1527074361810072}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 6, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!119 &119440971108350532
+--- !u!119 &119917554011595300
 Projector:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1849888630782984}
+  m_GameObject: {fileID: 1527074361810072}
   m_Enabled: 1
   serializedVersion: 2
   m_NearClipPlane: 0.1
@@ -54,7 +54,7 @@ Projector:
   m_AspectRatio: 1
   m_Orthographic: 1
   m_OrthographicSize: 2
-  m_Material: {fileID: 2100000, guid: 6633a32c969d3314e847abb448f1877b, type: 2}
+  m_Material: {fileID: 2100000, guid: 808eb5b86590ada45bbd475b364a5566, type: 2}
   m_IgnoreLayers:
     serializedVersion: 2
     m_Bits: 1024

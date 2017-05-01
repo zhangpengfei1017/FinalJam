@@ -26,7 +26,10 @@ public class HeroController : MonoBehaviour
     private Class className = Class.Knight;
 
     [SerializeField]
-    private GameObject indicator;
+    private GameObject indicator_enemy;
+
+    [SerializeField]
+    private GameObject indicator_player;
 
     private GameObject curIndicator;
 
@@ -137,27 +140,24 @@ public class HeroController : MonoBehaviour
 
     public void ChooseTarget(GameObject target)
     {
+        if (curIndicator != null) {
+            Destroy(curIndicator);
+        }
         if (target != null)
         {
             character.SetTarget(target);
-            if (curIndicator == null)
+            if (target.GetComponent<GameCharacter>().characterType == GameCharacter.CharacterType.Monster)
             {
-                curIndicator = Instantiate(indicator, target.transform) as GameObject;
-                curIndicator.GetComponent<Projector>().orthographicSize =  target.GetComponent<CharacterController>().radius * 2;
-                //
+                curIndicator = Instantiate(indicator_enemy, target.transform) as GameObject;
+                curIndicator.GetComponent<Projector>().orthographicSize = target.GetComponent<CharacterController>().radius * 2;
             }
             else
             {
-                curIndicator.transform.SetParent(target.transform, false);
+                curIndicator = Instantiate(indicator_player, target.transform) as GameObject;
                 curIndicator.GetComponent<Projector>().orthographicSize = target.GetComponent<CharacterController>().radius * 2;
-                //curIndicator.transform.parent = target.transform;
-                //curIndicator.transform.position = target.transform.position;
-                //curIndicator.transform.rotation = target.transform.rotation;
             }
         }
-        else
-        {
-            Destroy(curIndicator);
+        else {
             character.SetTarget(null);
         }
         character.CancelCast(true);
