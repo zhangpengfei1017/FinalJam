@@ -8,6 +8,15 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
     public int maxhp;
     public int curhp;
 
+    //Wander Parameters
+    public float wanderJitter; // 'Wandering' amount
+    public float wanderTime;
+    public float moveRate;
+    private float nextMove;
+
+    //Stop Parameters
+    public float stopTime;
+
     private GameObject player;
     public GameObject hpBarPrefab;
     public GameObject HUDpoint;
@@ -35,8 +44,23 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
     //
     public PhotonView pv;
     public int targetPhotonID;
+
+    private static float wanderCounter;
+    private static float stopCounter;
+
+    private enum EnemyMovement
+    {
+        STOPMOVEMENT,
+        WANDER,
+        SEEK,
+        FLEE
+    }
+
+    private EnemyMovement enemyMovement;
+
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         isWalking = false;
         isGettingHit = false;
         cc = GetComponent<CharacterController>();
@@ -50,47 +74,81 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         myHpBar.GetComponent<UIFollowTarget>().target = HUDpoint.transform;
         myHpBar.SetActive(false);
         skillTrigger = new ArrayList();
-        pv=GetComponent<PhotonView>();
+        pv = GetComponent<PhotonView>();
+        player = GameObject.FindGameObjectWithTag("Player");
+
+        enemyMovement = EnemyMovement.STOPMOVEMENT;
     }
-	
-	// Update is called once per frame
-	void Update () {
-        myHpBar.GetComponent<UIProgressBar>().value = (float)curhp / (float)maxhp;
-        if (!pv.isMine) {
-            return;
-        }
-        if (attackTimer<3) {
-            attackTimer += Time.deltaTime;
-        }
-        if (ani.GetCurrentAnimatorStateInfo(0).IsName("gethit")&&ani.GetBool("isGethit"))
+
+    // Update is called once per frame
+    void Update()
+    {
+        switch (enemyMovement)
         {
-            ani.SetBool("isGethit", false);
+            case EnemyMovement.STOPMOVEMENT:
+                StopMovement();
+                break;
+
+            case EnemyMovement.WANDER:
+                Wander();
+                break;
+
+            case EnemyMovement.SEEK:
+                Seek();
+                break;
+
+            case EnemyMovement.FLEE:
+                Flee();
+                break;
+
+            default:
+                break;
         }
-        else {
-            isGettingHit = false;
-        }
-        if (!ani.GetCurrentAnimatorStateInfo(0).IsName("die"))
-        {
-            if (!inAttack)
-            {
-                WalkAround();
-            }
-            else
-            {
-                //in attack
-                //first look at player, then go to his position, if the position is ok, attack over time, if not, chase the player, if can't catch player in a certain time, come back
-                if (!isGettingHit) {
-                    Attack();
-                }                
-            }
-        }
-        if (ani.GetCurrentAnimatorStateInfo(0).IsName("die")) {
-            ani.SetBool("isDie", false);
-        }
-	}
+
+        //myHpBar.GetComponent<UIProgressBar>().value = (float)curhp / (float)maxhp;
+        //if (!pv.isMine)
+        //{
+        //    return;
+        //}
+        //if (attackTimer < 3)
+        //{
+        //    attackTimer += Time.deltaTime;
+        //}
+        //if (ani.GetCurrentAnimatorStateInfo(0).IsName("gethit") && ani.GetBool("isGethit"))
+        //{
+        //    ani.SetBool("isGethit", false);
+        //}
+        //else
+        //{
+        //    isGettingHit = false;
+        //}
+        //if (!ani.GetCurrentAnimatorStateInfo(0).IsName("die"))
+        //{
+        //    if (!inAttack)
+        //    {
+        //        WalkAround();
+        //    }
+        //    else
+        //    {
+        //        //in attack
+        //        //first look at player, then go to his position, if the position is ok, attack over time, if not, chase the player, if can't catch player in a certain time, come back
+        //        if (!isGettingHit)
+        //        {
+        //            Attack();
+        //        }
+        //    }
+        //}
+        //if (ani.GetCurrentAnimatorStateInfo(0).IsName("die"))
+        //{
+        //    ani.SetBool("isDie", false);
+        //}
+    }
+
     [PunRPC]
-    public void GetHit(int damage,int id) {
-        if (!pv.isMine) {
+    public void GetHit(int damage, int id)
+    {
+        if (!pv.isMine)
+        {
             return;
         }
         player = GameObject.FindGameObjectWithTag("Player");
@@ -113,17 +171,21 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         inAttack = true;
         ani.SetBool("isInAttack", true);
         myHpBar.SetActive(true);
-        if (curhp == 0) {
+        if (curhp == 0)
+        {
             Die();
         }
     }
-    void Die() {
+    void Die()
+    {
         ani.SetBool("isDie", true);
         GetComponent<CharacterController>().enabled = false;
     }
 
-    public void Attack() {
-        if (player == null) {
+    public void Attack()
+    {
+        if (player == null)
+        {
             return;
         }
         Vector3 direction = (player.transform.position - transform.position);
@@ -135,32 +197,36 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         if (distance > 4.5 && distance <= 15)
         {
             //chase
-                ani.SetBool("isMove", true);
+            ani.SetBool("isMove", true);
             cc.SimpleMove(direction.normalized * speed * 1f * Time.deltaTime);
         }
         else if (distance <= 4.5)
         {
             //attack
             ani.SetBool("isMove", false);
-            if (ani.GetCurrentAnimatorStateInfo(0).IsTag("attack")) {
+            if (ani.GetCurrentAnimatorStateInfo(0).IsTag("attack"))
+            {
                 ani.SetBool("isAttack1", false);
                 ani.SetBool("isAttack2", false);
             }
-            
-            if (attackTimer >= 3) {
+
+            if (attackTimer >= 3)
+            {
                 int mod = attackCount % 3;
                 if (mod < 2)
                 {
                     //attack1
                     attackCount++;
-                    ani.SetBool("isAttack1", true);       
+                    ani.SetBool("isAttack1", true);
                 }
-                else {
+                else
+                {
                     //attack2
                     attackCount++;
                     ani.SetBool("isAttack2", true);
                 }
-                if (!player.GetComponent<PlayerController>().isAlive()) {
+                if (!player.GetComponent<PlayerController>().isAlive())
+                {
                     attackTimer = 3;
                     oriPosition = transform.position;
                     inAttack = false;
@@ -174,7 +240,8 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
                 attackTimer = 0;
             }
         }
-        else if (distance > 15) {
+        else if (distance > 15)
+        {
             //quit
             ani.SetBool("isMove", false);
             attackTimer = 3f;
@@ -188,11 +255,14 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
             curhp = maxhp;
         }
     }
-    public void RemoveTrigger(GameObject g) {
+    public void RemoveTrigger(GameObject g)
+    {
         skillTrigger.Remove(g);
     }
-    public void Skill(int i) {
-        if (i == 1) {
+    public void Skill(int i)
+    {
+        if (i == 1)
+        {
             SpellSkill(30);
         }
         if (i == 2)
@@ -202,7 +272,8 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
 
     }
 
-    public void WalkAround() {
+    public void WalkAround()
+    {
         timer += Time.deltaTime;
         if ((timer > 5 && !isWalking) || (timer > 15))
         {
@@ -228,7 +299,81 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         }
     }
 
-    void SpellSkill(int damage) {
+    #region MoveFunctions
+    void StopMovement()
+    {
+        //Stop enemy and walk animation
+        if (stopCounter < stopTime)
+        {
+            stopCounter+= Time.deltaTime;
+
+            
+        }
+        else
+        {
+            stopCounter = 0;
+            enemyMovement = EnemyMovement.WANDER;
+            ani.SetBool("isMove", true);
+        }
+    }
+
+    void Wander()
+    {
+       
+        if (wanderCounter < wanderTime)
+        {
+            wanderCounter+= Time.deltaTime;
+
+            Vector3 wanderTarget = Vector3.zero;
+
+            if (nextMove < Time.time)
+            {
+                nextMove = Time.time + (1 / moveRate);
+
+                wanderTarget += new Vector3(UnityEngine.Random.Range(-1.0f, 1.0f) * wanderJitter, 0.0f, UnityEngine.Random.Range(-1.0f, 1.0f) * wanderJitter);
+                dir = (wanderTarget - transform.position).normalized;
+                dir = new Vector3(dir.x, 0.0f, dir.z);
+                transform.forward = dir;
+            }
+
+            cc.SimpleMove(dir * speed * Time.deltaTime);
+        }
+        else
+        {
+            wanderCounter = 0;
+            enemyMovement = EnemyMovement.STOPMOVEMENT;
+            ani.SetBool("isMove", false);
+        }
+    }
+
+    void Seek()
+    {
+        Debug.Log("SEEK");
+        Vector3 seekDirection = (player.transform.position - transform.position).normalized;
+        seekDirection = new Vector3(seekDirection.x, 0.0f, seekDirection.z);
+        transform.forward = seekDirection;
+
+        cc.SimpleMove(seekDirection * speed * Time.deltaTime);
+
+        enemyMovement = EnemyMovement.FLEE;
+    }
+
+    void Flee()
+    {
+        Debug.Log("FLEE");
+        Vector3 fleeDirection = (transform.position - player.transform.position).normalized;
+        fleeDirection = new Vector3(fleeDirection.x, 0.0f, fleeDirection.z);
+
+        transform.forward = (fleeDirection);
+
+        cc.SimpleMove(fleeDirection * speed * Time.deltaTime);
+
+        enemyMovement = EnemyMovement.STOPMOVEMENT;
+    }
+    #endregion
+
+    void SpellSkill(int damage)
+    {
         GameObject go = Instantiate(skillPrefab, transform.position + transform.up * 2, Quaternion.identity) as GameObject;
         go.GetComponent<SkillTriggerAction>().SetOwner(gameObject);
         go.transform.forward = transform.forward;
@@ -236,8 +381,10 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
         skillTrigger.Add(go);
     }
 
-    void CancelSkill() {
-        foreach (GameObject i in skillTrigger) {
+    void CancelSkill()
+    {
+        foreach (GameObject i in skillTrigger)
+        {
             Destroy(i);
         }
         skillTrigger.Clear();
@@ -251,7 +398,8 @@ public class EnemyController : Photon.MonoBehaviour, IPunObservable
             stream.SendNext(myHpBar.GetActive());
             stream.SendNext(targetPhotonID);
         }
-        else {
+        else
+        {
             curhp = (int)stream.ReceiveNext();
             myHpBar.SetActive((bool)stream.ReceiveNext());
             targetPhotonID = (int)stream.ReceiveNext();
