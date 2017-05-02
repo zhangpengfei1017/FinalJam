@@ -106,7 +106,7 @@ public class MonsterController : MonoBehaviour
         oriPos = transform.position;
         wanderTimer = maxWanderTime;
         stopTimer = maxStopTime;
-        attackTimer = 0;
+        attackTimer = attackCD;
         hasAttackTarget = false;
         destroyTimer = 0;
         //
@@ -310,9 +310,6 @@ public class MonsterController : MonoBehaviour
             {
                 gotoFlee = true;
             }
-            else {
-                gotoWander = true;
-            }
         }
     }
 
@@ -369,7 +366,10 @@ public class MonsterController : MonoBehaviour
 
     void Chasing()
     {
-        Vector3 targetPlayer = character.GetTarget().transform.position;
+        if (target == null) {
+            return;
+        }
+        Vector3 targetPlayer = target.transform.position;
         Vector3 direction = (targetPlayer - transform.position).normalized;
         Quaternion q = Quaternion.LookRotation(direction);
         character.Move(direction, q.eulerAngles.y, 1, 1);

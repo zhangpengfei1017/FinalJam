@@ -3147,7 +3147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 0
-  maxHP: 6000
+  maxHP: 1000
   maxMP: 3000
   attack: 1500
   defense: 1500

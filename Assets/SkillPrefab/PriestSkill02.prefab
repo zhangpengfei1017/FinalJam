@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f4013eee91ae744a1015e9795bfc7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillName: 0
+  skillName: 
   icon: {fileID: 0}
   animationIndex: 1
   targetType: 0
@@ -65,10 +65,10 @@ MonoBehaviour:
   mpCost: 0
   CDTime: 0
   CDTimer: 0
-  pctDamage: 2
-  fixedDamage: 700
-  pctHealth: 0
-  fixedHealth: 0
+  pctDamage: 0
+  fixedDamage: 0
+  pctHealth: 10
+  fixedHealth: 1500
   fixedThreat: 0
   maxTargets: 0
   buffs: []

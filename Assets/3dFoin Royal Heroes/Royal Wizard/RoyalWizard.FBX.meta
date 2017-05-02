@@ -727,25 +727,25 @@ ModelImporter:
     400720: Rectangle01
     4300000: Mace
     4300002: Wizard
-    7400000: walk
-    7400002: run
+    7400000: Priest_walk
+    7400002: Priest_run
     7400004: strafe left
     7400006: strafe right
     7400008: stand
     7400010: stand blink
-    7400012: idle
+    7400012: Priest_idle
     7400014: talk
     7400016: jump
     7400018: ready
     7400020: ready blink
     7400022: attack 1
-    7400024: attack 2
+    7400024: Priest_attack2
     7400026: attack 3
     7400028: attack 4
     7400030: attack 5
     7400032: hit 1
     7400034: hit 2
-    7400036: death
+    7400036: Priest_death
     9500000: //RootNode
     11100000: //RootNode
     13700000: Mace
@@ -766,7 +766,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -774,7 +774,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: walk
+      name: Priest_walk
       takeName: Take 001
       firstFrame: 42
       lastFrame: 82
@@ -784,7 +784,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -1506,7 +1506,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: run
+      name: Priest_run
       takeName: Take 001
       firstFrame: 126
       lastFrame: 156
@@ -1516,7 +1516,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 1
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -6596,7 +6596,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: idle
+      name: Priest_idle
       takeName: Take 001
       firstFrame: 332
       lastFrame: 452
@@ -6606,7 +6606,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -12704,9 +12704,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: attack 2
+      name: Priest_attack2
       takeName: Take 001
-      firstFrame: 675
+      firstFrame: 704
       lastFrame: 737
       wrapMode: 0
       orientationOffsetY: 0
@@ -18812,7 +18812,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: death
+      name: Priest_death
       takeName: Take 001
       firstFrame: 1059
       lastFrame: 1096
@@ -19867,10 +19867,10 @@ ModelImporter:
     rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 1
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

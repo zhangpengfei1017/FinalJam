@@ -197,7 +197,8 @@ public class GameCharacter : MonoBehaviour
         charCtrl = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         globalCDTimer = 0;
-        curHP = maxHP;
+        //curHP = maxHP;
+        curHP = 1500;
         curMP = maxMP;
         finalAttack = attack;
         finalDefense = defense;
@@ -650,7 +651,8 @@ public class GameCharacter : MonoBehaviour
 
         otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + (float)finalDefense)) * damageRatio);
-        curHP = Mathf.Clamp(curHP - damage, 0, finalMaxHP);
+        int heal = Mathf.FloorToInt((skill.pctHealth * finalMaxHP + skill.fixedHealth) * healRatio);
+        curHP = Mathf.Clamp(curHP - damage+heal, 0, finalMaxHP);
 
         foreach (Buff b in sck.skill.buffs)
         {

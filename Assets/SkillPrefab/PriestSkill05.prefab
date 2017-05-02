@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4671536758136994}
   - component: {fileID: 114937449987161312}
   m_Layer: 0
-  m_Name: PriestSkill01
+  m_Name: PriestSkill05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
   skillName: 
   icon: {fileID: 0}
   animationIndex: 1
-  targetType: 2
+  targetType: 0
   distance: 20
   skillType: 0
   instantDelayTime: 0.5
@@ -62,14 +62,14 @@ MonoBehaviour:
   channelTime: 0
   channelInterval: 0
   isMovingCast: 0
-  mpCost: 20
-  CDTime: 0
+  mpCost: 0
+  CDTime: 10
   CDTimer: 0
-  pctDamage: 1.5
-  fixedDamage: 300
+  pctDamage: 0
+  fixedDamage: 0
   pctHealth: 0
-  fixedHealth: 0
+  fixedHealth: 8000
   fixedThreat: 0
   maxTargets: 0
   buffs: []
-  effect: {fileID: 107500, guid: 685c13b8ef68bc944ba648567723e63b, type: 2}
+  effect: {fileID: 117802, guid: 185d8bfc0f9f778448eb08bea62f34d6, type: 2}

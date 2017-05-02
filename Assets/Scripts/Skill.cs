@@ -32,7 +32,7 @@ public class Skill : MonoBehaviour
 
     public CastedSkillStruct test;
 
-    public SkillName skillName = SkillName.S_Skill1;
+    public string skillName;
 
     public GameObject icon;
 
