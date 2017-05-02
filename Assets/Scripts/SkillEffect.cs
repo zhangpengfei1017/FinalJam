@@ -25,6 +25,10 @@ public class SkillEffect : MonoBehaviour
 
     public float delayCollisionTime;
 
+    public Transform keepToCharacter;
+
+    public bool useOffsetForKeptEffect;
+
     public bool isGround;
 
     private float timer = 0;
@@ -119,6 +123,12 @@ public class SkillEffect : MonoBehaviour
     {
         this.from = from;
         this.to = to;
+
+        if (null != keepToCharacter)
+        {
+            keepToCharacter.position = from.transform.position + (useOffsetForKeptEffect ? offset : Vector3.zero);
+            keepToCharacter.rotation = from.transform.rotation;
+        }
     }
     public float GetRayLength()
     {
