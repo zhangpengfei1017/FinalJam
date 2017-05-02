@@ -59,6 +59,7 @@ public class LobbyUser : PunBehaviour {
             }
             Rooms.Clear();
         }
+        Debug.Log("");
         Debug.Log(PhotonNetwork.GetRoomList().Length);
         for (int i = 0; i < PhotonNetwork.GetRoomList().Length;)
         {
@@ -68,10 +69,14 @@ public class LobbyUser : PunBehaviour {
             temp_room.transform.SetParent(RoomPrefab.transform.parent);
             temp_room.GetComponent<RectTransform>().localScale = RoomPrefab.GetComponent<RectTransform>().localScale;
             Vector3 tempos = RoomPrefab.GetComponent<RectTransform>().position;
-            temp_room.GetComponent<RectTransform>().position = new Vector3(tempos.x, tempos.y - 15 * i, tempos.z);
-            temp_room.transform.FindChild("Game").GetComponent<Text>().text = PhotonNetwork.GetRoomList()[i].Name;
+            temp_room.GetComponent<RectTransform>().position = new Vector3(tempos.x, tempos.y - 20 * i, tempos.z);
+            temp_room.transform.FindChild("GameName").GetComponent<Text>().text = PhotonNetwork.GetRoomList()[i].Name;
             temp_room.transform.FindChild("Players").GetComponent<Text>().text = PhotonNetwork.GetRoomList()[i].PlayerCount.ToString() + "/5";
+            temp_room.transform.FindChild("SelectButton").GetComponent<Button>().onClick.AddListener( () => {
+                SelectRoom(temp_room.transform.FindChild("SelectButton").GetComponent<Button>());
+                });
             temp_room.SetActive(true);
+            
             Debug.Log(PhotonNetwork.GetRoomList()[i].Name.ToString());
             Rooms.Add(temp_room);
 
@@ -85,6 +90,12 @@ public class LobbyUser : PunBehaviour {
         RoomOptions RO = new RoomOptions();
         RO.MaxPlayers = byte.Parse("2");
         bool result = PhotonNetwork.CreateRoom(_RoomName.text, RO, TypedLobby.Default);
-        Debug.Log(result);
+        
+    }
+
+    public void SelectRoom(Button button)
+    {
+        GameObject room = button.transform.parent.FindChild("GameName").gameObject;
+        PhotonNetwork.JoinRoom(room.GetComponent<Text>().text);
     }
 }
