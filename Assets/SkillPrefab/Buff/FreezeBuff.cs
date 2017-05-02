@@ -8,6 +8,7 @@ public class FreezeBuff : Buff {
     {
         //print("++");
         target.freezedCount++;
+        target.SetAnimatorSpeed(0);
     }
 
     public override void onEffect(GameCharacter target)
@@ -19,5 +20,6 @@ public class FreezeBuff : Buff {
     {
         //print("--");
         target.freezedCount--;
+        target.SetAnimatorSpeed(1);       
     }
 }

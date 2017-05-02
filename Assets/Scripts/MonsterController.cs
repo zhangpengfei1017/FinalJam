@@ -339,10 +339,8 @@ public class MonsterController : MonoBehaviour
         else
         {
             Vector3 direction = (targetPosition - transform.position).normalized;
-            character.Move(direction,0, -1, 0.5f);
-            if (direction != Vector3.zero) {
-                transform.forward = direction;
-            }            
+            Quaternion q = Quaternion.LookRotation(direction);
+            character.Move(direction,q.eulerAngles.y, -1, 0.5f);                                              
             if (Vector3.Distance(transform.position, targetPosition) <= 1 || wanderTimer <= 0)
             {
                 gotoStop = true;
@@ -364,8 +362,8 @@ public class MonsterController : MonoBehaviour
     {
         Vector3 targetPlayer = character.GetTarget().transform.position;
         Vector3 direction = (targetPlayer - transform.position).normalized;
-        character.Move(direction, 0, 1, 1);
-        transform.forward = direction;
+        Quaternion q = Quaternion.LookRotation(direction);
+        character.Move(direction, q.eulerAngles.y, 1, 1);
         float distance = Vector3.Distance(transform.position, targetPlayer);
         if (distance <= 4)
         {
@@ -385,8 +383,8 @@ public class MonsterController : MonoBehaviour
         attackTimer += Time.deltaTime;
         Vector3 targetPlayer = target.transform.position;
         Vector3 direction = (targetPlayer - transform.position).normalized;
-        character.Move(Vector3.zero, 0, 0, 0);
-        transform.forward = direction;
+        Quaternion q = Quaternion.LookRotation(direction);
+        character.Move(Vector3.zero, q.eulerAngles.y, 0, 0);
         float distance = Vector3.Distance(transform.position, targetPlayer);
         if (attackTimer >= attackCD)
         {

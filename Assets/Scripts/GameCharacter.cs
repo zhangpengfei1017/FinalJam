@@ -787,6 +787,10 @@ public class GameCharacter : MonoBehaviour
         finalDefense += Mathf.FloorToInt(ratio * defense) + amount;
     }
 
+    public void SetAnimatorSpeed(float speed) {
+        animator.speed = speed;
+    }
+
     #endregion
 
     #region Get Skill Information Functions
