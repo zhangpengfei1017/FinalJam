@@ -26,6 +26,7 @@ public class Skill : MonoBehaviour
     {
         public Skill skill;
         public int attack;
+        public GameObject owner;
     };
 
     public SkillName skillName = SkillName.S_Skill1;

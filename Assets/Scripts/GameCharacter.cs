@@ -151,6 +151,21 @@ public class GameCharacter : MonoBehaviour
         }
     }
 
+    public int MaxHP
+    {
+        get
+        {
+            return finalMaxHP;
+        }
+    }
+
+    public bool IsAlive {
+        get
+        {
+            return !isDead;
+        }
+    }
+
     #endregion
 
     #region UnityFunctions
@@ -180,6 +195,7 @@ public class GameCharacter : MonoBehaviour
         channeledInterval = 0;
         channeledTimer = 0;
         instantTimer = 0;
+        isDead = false;
     }
 
     void Update()
@@ -187,7 +203,8 @@ public class GameCharacter : MonoBehaviour
         //--------------------------------------
         //--------------test code---------------
         //--------------------------------------
-        if (characterType == CharacterType.Player) {
+        if (characterType == CharacterType.Player)
+        {
             GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
             GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
             GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
@@ -207,18 +224,19 @@ public class GameCharacter : MonoBehaviour
             Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
             Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
             if (target != null)
-            {               
+            {
                 targetHp.text = target.GetComponent<GameCharacter>().curHP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxHP;
                 targetMp.text = target.GetComponent<GameCharacter>().curMP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxMP;
                 targetName.text = target.name;
             }
-            else {
+            else
+            {
                 targetHp.text = "";
                 targetMp.text = "";
                 targetName.text = "";
             }
         }
-       
+
 
 
         //--------------------------------------
@@ -490,7 +508,14 @@ public class GameCharacter : MonoBehaviour
         {
             if (curCastSkill != null)
             {
-                CancelCast(true);
+                if (curCastSkill.skillType == Skill.SkillType.Channeled)
+                {
+                    CancelCast(true);
+                }
+                else
+                {
+                    return;
+                }
             }
             if (curMP >= skill.mpCost)
             {
@@ -526,6 +551,7 @@ public class GameCharacter : MonoBehaviour
         Skill.CastedSkillStruct sck = new Skill.CastedSkillStruct();
         sck.skill = skill;
         sck.attack = attack;
+        sck.owner = gameObject;
         target.SendMessage("TakeSkill", sck);
     }
 
@@ -564,10 +590,10 @@ public class GameCharacter : MonoBehaviour
 
     public void TakeSkill(Skill.CastedSkillStruct sck)
     {
-        
+
         int otherAttack = sck.attack;
         Skill skill = sck.skill;
-        
+
         otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + (float)finalDefense)) * damageRatio);
         curHP = Mathf.Clamp(curHP - damage, 0, finalMaxHP);
@@ -656,11 +682,13 @@ public class GameCharacter : MonoBehaviour
         return TargetCheckResult.Available;
     }
 
-    public void SetTarget(GameObject target) {
+    public void SetTarget(GameObject target)
+    {
         this.target = target;
     }
 
-    public GameObject GetTarget() {
+    public GameObject GetTarget()
+    {
         return target;
     }
 

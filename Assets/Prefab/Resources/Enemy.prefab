@@ -2843,11 +2843,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterName: 
   monsterType: 0
-  attackRadius: 30
-  wanderJitter: 360
-  wanderTime: 10
-  moveRate: 1
-  stopTime: 5
+  target: {fileID: 0}
+  maxWanderTime: 10
+  maxStopTime: 3
+  maxChaseDistance: 30
+  attackCD: 3
 --- !u!114 &114371507102672478
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2862,13 +2862,14 @@ MonoBehaviour:
   characterType: 2
   maxHP: 1000000
   maxMP: 100000
-  attack: 1000
-  defense: 5000
-  moveSpeed: 250
+  attack: 50
+  defense: 2000
+  moveSpeed: 180
   globalCDTime: 2
   headPoint: {fileID: 4000011250190590}
   characterCenter: {fileID: 4575572354087710}
-  skillPrefabs: []
+  skillPrefabs:
+  - {fileID: 114937449987161312, guid: c894d24dabb357845b52663067735f8e, type: 2}
 --- !u!137 &137000011112622026
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
