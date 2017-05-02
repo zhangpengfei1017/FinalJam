@@ -9,14 +9,16 @@ using UnityEngine;
 public class Targeting : MonoBehaviour
 {
     //Private Variables
+    private GameManager gm;
+
     //private GameManager gm;
-
-
     /// <summary>
     /// Use this for initialization
     /// </summary>
     void Start ()
     {
+        gm = GameManager.Instance;
+
         //gm = GameManager.Instance;
 	}
 

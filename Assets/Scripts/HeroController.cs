@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(GameCharacter))]
+
 public class HeroController : MonoBehaviour
 {
-
     public enum Class
     {
         Knight,
@@ -46,7 +47,9 @@ public class HeroController : MonoBehaviour
 
     void Update()
     {
-
+        if (!GetComponent<PhotonView>().isMine) {
+            return;
+        }
         DetectAttack();
 
         DetectMove();
@@ -171,17 +174,17 @@ public class HeroController : MonoBehaviour
         if (curIndicator != null) {
             Destroy(curIndicator);
         }
-        if (target != null)
+        if (target != null && target.GetComponent<GameCharacter>().IsAlive)
         {            
-            character.SetTarget(target);
+            character.SetTarget(target.GetComponent<GameCharacter>());
             if (target.GetComponent<GameCharacter>().characterType == GameCharacter.CharacterType.Monster)
             {
-                curIndicator = Instantiate(indicator_enemy, target.transform) as GameObject;
+                curIndicator = Instantiate(indicator_enemy, target.transform.position + new Vector3(0,5,0), indicator_enemy.transform.rotation, target.transform) as GameObject;
                 curIndicator.GetComponent<Projector>().orthographicSize = target.GetComponent<CharacterController>().radius * 2;
             }
             else
             {
-                curIndicator = Instantiate(indicator_player, target.transform) as GameObject;
+                curIndicator = Instantiate(indicator_player, target.transform.position + new Vector3(0, 5, 0), indicator_player.transform.rotation, target.transform) as GameObject;
                 curIndicator.GetComponent<Projector>().orthographicSize = target.GetComponent<CharacterController>().radius * 2;
             }
         }

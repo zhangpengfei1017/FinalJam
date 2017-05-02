@@ -4,18 +4,26 @@ using UnityEngine;
 using AdvancedUtilities.Cameras.Components;
 
 public class CreatePlayer : MonoBehaviour {
-    public Transform startPosition;
-    public GameObject cam;
+    public GameObject selectClassUI;
+    public GameObject createRoomUI;
+    public byte Version = 1;
+
+    void Start() {
+        PhotonNetwork.ConnectUsingSettings(Version + "." + SceneManagerHelper.ActiveSceneBuildIndex);
+    }
 
     void OnJoinedRoom()
     {
-        CreatePlayerObject();
+        createRoomUI.SetActive(false);
+        selectClassUI.SetActive(true);
     }
 
-    void CreatePlayerObject()
+    public virtual void OnConnectedToMaster()
     {
-        GameObject newPlayerObject = PhotonNetwork.Instantiate("Player", startPosition.position, Quaternion.identity, 0);
-        cam = GameObject.Find("MainCam");
-        cam.GetComponent<AdvancedUtilities.Cameras.BasicCameraController>().Target.Target = newPlayerObject.transform.GetChild(5).transform;
+        Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
+        createRoomUI.SetActive(true);
     }
+
+
+
 }

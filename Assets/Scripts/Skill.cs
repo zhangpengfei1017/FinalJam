@@ -5,14 +5,6 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
     #region SkillInformation
-    public enum SkillName
-    {
-        S_Skill1,
-        S_Skill2,
-        S_Skill3,
-        S_Skill4,
-        S_Skill5,
-    }
 
 
     public enum SkillType
@@ -22,13 +14,17 @@ public class Skill : MonoBehaviour
         Channeled
     };
 
+
     public struct CastedSkillStruct
     {
         public Skill skill;
         public int attack;
+        public int ownerID;
     };
 
-    public SkillName skillName = SkillName.S_Skill1;
+    public CastedSkillStruct test;
+
+    public string skillName;
 
     public GameObject icon;
 
@@ -60,11 +56,11 @@ public class Skill : MonoBehaviour
 
     public float CDTimer;
 
-    public int pctDamage;
+    public float pctDamage;
 
     public int fixedDamage;
 
-    public int pctHealth;
+    public float pctHealth;
 
     public int fixedHealth;
 

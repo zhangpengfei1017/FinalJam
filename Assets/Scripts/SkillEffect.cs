@@ -25,6 +25,10 @@ public class SkillEffect : MonoBehaviour
 
     public float delayCollisionTime;
 
+    public Transform keepToCharacter;
+
+    public bool useOffsetForKeptEffect;
+
     public bool isGround;
 
     private float timer = 0;
@@ -35,7 +39,26 @@ public class SkillEffect : MonoBehaviour
 
     private bool delayEffect = false;
 
+    //ray
+    private float distance;
 
+    
+    //void Start()
+    //{
+    //    var tm = GetComponentInChildren<RFX4_TransformMotion>(true);
+    //    if (tm != null)
+    //    {
+    //        //print("yes");
+    //        tm.CollisionEnter += Tm_CollisionEnter;
+    //    }
+
+    //    //else print("null");
+    //}
+
+    //private void Tm_CollisionEnter(object sender, RFX4_TransformMotion.RFX4_CollisionInfo e)
+    //{
+    //    Debug.Log(e.Hit.transform.name); //will print collided object name to the console.
+    //}
 
     // Update is called once per frame
     void Update()
@@ -71,13 +94,16 @@ public class SkillEffect : MonoBehaviour
                 transform.position += dir * speed * Time.deltaTime;
                 if (Vector3.Distance(transform.position, target) <= 1f)
                 {
-                    GameObject col = Instantiate(collisionEffect, transform.position, transform.rotation) as GameObject;
-                    autoDestroy ad = col.AddComponent<autoDestroy>();
-                    ad.destroyTime = collisionDestroyTime;
+                    if (collisionEffect != null) {
+                        GameObject col = Instantiate(collisionEffect, transform.position, transform.rotation) as GameObject;
+                        autoDestroy ad = col.AddComponent<autoDestroy>();
+                        ad.destroyTime = collisionDestroyTime;
+                    }                    
                     Destroy(gameObject);
                 }
                 break;
             case SkillEffectType.ray:
+                transform.LookAt(to.GetComponent<GameCharacter>().characterCenter.position);
                 if (timer >= delayCollisionTime && !delayEffect)
                 {
                     Vector3 tar;
@@ -89,12 +115,14 @@ public class SkillEffect : MonoBehaviour
                     {
                         tar = to.GetComponent<GameCharacter>().characterCenter.position;
                     }
-                    GameObject col = Instantiate(collisionEffect, tar, transform.rotation) as GameObject;
-                    Transform colt = col.GetComponent<Transform>();
-                    colt.forward = transform.forward;
-                    autoDestroy ad = col.AddComponent<autoDestroy>();
-                    ad.destroyTime = collisionDestroyTime;
-                    delayEffect = true;
+                    if (collisionEffect != null) {
+                        GameObject col = Instantiate(collisionEffect, tar, transform.rotation) as GameObject;
+                        Transform colt = col.GetComponent<Transform>();
+                        colt.forward = transform.forward;
+                        autoDestroy ad = col.AddComponent<autoDestroy>();
+                        ad.destroyTime = collisionDestroyTime;
+                        delayEffect = true;
+                    }                  
                 }
                 break;
         }
@@ -103,6 +131,12 @@ public class SkillEffect : MonoBehaviour
     {
         this.from = from;
         this.to = to;
+
+        if (null != keepToCharacter)
+        {
+            keepToCharacter.position = from.transform.position + (useOffsetForKeptEffect ? offset : Vector3.zero);
+            keepToCharacter.rotation = from.transform.rotation;
+        }
     }
     public float GetRayLength()
     {

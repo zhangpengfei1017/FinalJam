@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameCharacter : MonoBehaviour
+public class GameCharacter : Photon.MonoBehaviour, IPunObservable
 {
     public enum CharacterType
     {
@@ -27,6 +28,9 @@ public class GameCharacter : MonoBehaviour
 
     [SerializeField]
     public CharacterType characterType = CharacterType.Monster;
+
+    [SerializeField]
+    public string characterName;
 
     [SerializeField]
     private int maxHP;
@@ -57,7 +61,16 @@ public class GameCharacter : MonoBehaviour
 
     private bool isDead;
 
-    private bool isFreezed;
+    [HideInInspector]
+    public int freezedCount = 0;
+
+    public bool isFreezed
+    {
+        get
+        {
+            return freezedCount != 0;
+        }
+    }
 
     private bool isRestricted;
 
@@ -104,15 +117,13 @@ public class GameCharacter : MonoBehaviour
 
     //Target
 
-    private GameObject target;
+    private GameCharacter target;
 
     //Component
 
     private Animator animator;
 
     private CharacterController charCtrl;
-
-    private PhotonView photonView;
 
     [SerializeField]
     private Transform headPoint;
@@ -129,13 +140,49 @@ public class GameCharacter : MonoBehaviour
 
     private Skill curCastSkill;
 
+    private int curSkillIndex;
+
+    private bool deleteCurSkill;
+
+    private float delayTimer;
+
     //BUFF or DEBUFF
 
     private List<Buff> buffs;
 
     private List<GameObject> skillEffects = new List<GameObject>();
 
+    public int MoveSpeed
+    {
+        get
+        {
+            return moveSpeed;
+        }
+    }
 
+    public int CurHP
+    {
+        get
+        {
+            return curHP;
+        }
+    }
+
+    public int MaxHP
+    {
+        get
+        {
+            return finalMaxHP;
+        }
+    }
+
+    public bool IsAlive
+    {
+        get
+        {
+            return !isDead;
+        }
+    }
 
     #endregion
 
@@ -144,6 +191,8 @@ public class GameCharacter : MonoBehaviour
     void Awake()
     {
         skills = new List<Skill>();
+        buffs = new List<Buff>();
+
         foreach (Skill s in skillPrefabs)
         {
             GameObject skill = Instantiate(s.gameObject, transform) as GameObject;
@@ -166,14 +215,19 @@ public class GameCharacter : MonoBehaviour
         channeledInterval = 0;
         channeledTimer = 0;
         instantTimer = 0;
+        delayTimer = 0;
+        deleteCurSkill = false;
+        isDead = false;
     }
 
     void Update()
     {
+        
         //--------------------------------------
         //--------------test code---------------
         //--------------------------------------
-        if (characterType == CharacterType.Player) {
+        if (characterType == CharacterType.Player  && photonView.isMine)
+        {
             GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
             GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
             GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
@@ -193,25 +247,31 @@ public class GameCharacter : MonoBehaviour
             Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
             Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
             if (target != null)
-            {               
+            {
                 targetHp.text = target.GetComponent<GameCharacter>().curHP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxHP;
                 targetMp.text = target.GetComponent<GameCharacter>().curMP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxMP;
-                targetName.text = target.name;
+                targetName.text = target.GetComponent<GameCharacter>().characterName;
             }
-            else {
+            else
+            {
                 targetHp.text = "";
                 targetMp.text = "";
                 targetName.text = "";
             }
         }
-       
+
 
 
         //--------------------------------------
         //--------------test code---------------
         //--------------------------------------
         UpdateState();
+        UpdateTarget();
+        UpdateBuffs();
         ResetAnimator();
+        DelayDeleteCurSkill();
+
+        
     }
 
     #endregion
@@ -231,15 +291,17 @@ public class GameCharacter : MonoBehaviour
     {
         curCastSkill = skill;
         isInstant = true;
+        deleteCurSkill = false;
     }
 
     void EndInstant()
     {
         curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
         curCastSkill.CDTimer = curCastSkill.CDTime;
-        curCastSkill = null;
         isInstant = false;
         skillEffects.Clear();
+        deleteCurSkill = true;
+        delayTimer = 0;
     }
 
     void UpdateCast()
@@ -254,7 +316,7 @@ public class GameCharacter : MonoBehaviour
         }
         else
         {
-            CancelCast(true);
+            photonView.RPC("CancelCast", PhotonTargets.All,true);
         }
     }
 
@@ -262,6 +324,7 @@ public class GameCharacter : MonoBehaviour
     {
         isCasting = true;
         curCastSkill = skill;
+        deleteCurSkill = false;
     }
 
     void EndCasting(bool cd)
@@ -272,8 +335,9 @@ public class GameCharacter : MonoBehaviour
             curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
         }
         isCasting = false;
-        curCastSkill = null;
         skillEffects.Clear();
+        deleteCurSkill = true;
+        delayTimer = 0;
     }
 
     void UpdateChanneled()
@@ -292,7 +356,7 @@ public class GameCharacter : MonoBehaviour
         }
         else
         {
-            CancelCast(true);
+            photonView.RPC("CancelCast", PhotonTargets.All, true);
         }
 
     }
@@ -303,13 +367,28 @@ public class GameCharacter : MonoBehaviour
         curCastSkill = skill;
         curCastSkill.CDTimer = curCastSkill.CDTime;
         curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
+        deleteCurSkill = false;
     }
 
     void EndChanneling()
     {
         isChanneling = false;
-        curCastSkill = null;
         skillEffects.Clear();
+        deleteCurSkill = true;
+        delayTimer = 0;
+    }
+
+    void DelayDeleteCurSkill() {
+        if (deleteCurSkill) {
+            delayTimer += Time.deltaTime;
+            if (delayTimer > 3 && curCastSkill != null) {
+                curCastSkill = null;
+                curSkillIndex = -1;
+                delayTimer = 0;
+                deleteCurSkill = false;
+            }
+        }
+
     }
 
     #endregion
@@ -318,23 +397,27 @@ public class GameCharacter : MonoBehaviour
 
     public void Move(Vector3 dir, float rotation, int d, float speed)
     {
-        charCtrl.SimpleMove(dir.normalized * speed * moveSpeed * Time.deltaTime);
+        if (this.isFreezed || isDead || isRestricted)
+        {
+            return;
+        }
         Quaternion qRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotation, transform.rotation.eulerAngles.z);
         transform.rotation = qRotation;
         if (dir != Vector3.zero)
         {
+            charCtrl.SimpleMove(dir.normalized * speed * moveSpeed * Time.deltaTime);
             animator.SetBool("isRun", true);
             animator.SetInteger("moveDir", d);
+
             if (curCastSkill != null && curCastSkill.skillType != Skill.SkillType.Instant)
             {
                 if (!curCastSkill.isMovingCast)
                 {
-                    CancelCast(true);
+                    photonView.RPC("CancelCast", PhotonTargets.All, true);
                 }
             }
         }
-        else
-        {
+        else {
             animator.SetBool("isRun", false);
             animator.SetInteger("moveDir", 0);
         }
@@ -389,6 +472,17 @@ public class GameCharacter : MonoBehaviour
         {
             instantTimer = 0;
         }
+        if (curHP <= 0 && !isDead) {
+            isDead = true;
+            OnDied();
+        }
+        if (isFreezed)
+        {
+            SetAnimatorSpeed(0);
+        }
+        else {
+            SetAnimatorSpeed(1);
+        }
     }
 
     void ResetAnimator()
@@ -402,7 +496,7 @@ public class GameCharacter : MonoBehaviour
 
     void OnDied()
     {
-
+        animator.SetTrigger("isDie");
     }
 
     #endregion
@@ -411,41 +505,69 @@ public class GameCharacter : MonoBehaviour
 
     void AddBuff(Buff buff)
     {
-        foreach (Buff b in buffs)
+        Buff temp = GetBuff(buff.name);
+
+        if (temp)
         {
-            if (buff.buffName == b.buffName)
-            {
-                b.AddLevel();
-                return;
-            }
+            temp.AddLevel();
         }
-        buffs.Add(buff);
-        buff.BuffEnter(gameObject);
+        else
+        {
+            GameObject g = Instantiate(buff.gameObject, transform) as GameObject;
+            Buff newBuff = g.GetComponent<Buff>();
+            buffs.Add(newBuff);
+            newBuff.reset();
+            newBuff.onEnter(this);
+        }
     }
 
     void RemoveBuff(Buff buff)
     {
-        buff.BuffExit(gameObject);
+        buff.onExit(this);
         buffs.Remove(buff);
     }
 
-    public bool HasBuff(Buff.BuffName buffName)
+    public Buff GetBuff(string buffName)
     {
         foreach (Buff b in buffs)
         {
-            if (b.buffName == buffName)
+            if (b.BuffName == buffName)
             {
-                return true;
+                return b;
             }
         }
-        return false;
+        return null;
     }
 
-    void UpdateBuff()
+    void UpdateBuffs()
     {
+        List<Buff> removes = new List<Buff>();
+
         foreach (Buff b in buffs)
         {
-            b.BuffEffect(gameObject);
+            b.duration -= Time.deltaTime;
+
+            if (b.duration <= 0)
+            {
+                removes.Add(b);
+                continue;
+            }
+
+            if (b.interval != 0)
+            {
+                b.intervalCount += Time.deltaTime;
+
+                if (b.intervalCount > b.interval)
+                {
+                    b.intervalCount -= b.intervalCount;
+                    b.onEffect(this);
+                }
+            }
+        }
+
+        foreach (Buff b in removes)
+        {
+            RemoveBuff(b);
         }
     }
 
@@ -455,6 +577,9 @@ public class GameCharacter : MonoBehaviour
 
     public void Attack(int attackIndex)
     {
+        if (isDead || isFreezed) {
+            return;
+        }
         if (attackIndex != -1)
         {
             if (globalCDTimer > 0 || skills[attackIndex].CDTimer > 0)
@@ -472,11 +597,19 @@ public class GameCharacter : MonoBehaviour
     void PrepareAttack(int i)
     {
         Skill skill = skills[i];
+
         if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
         {
-            if (curCastSkill != null)
+            if (curCastSkill != null && !deleteCurSkill)
             {
-                CancelCast(true);
+                if (curCastSkill.skillType == Skill.SkillType.Channeled)
+                {
+                    photonView.RPC("CancelCast", PhotonTargets.All, true);
+                }
+                else
+                {
+                    return;
+                }
             }
             if (curMP >= skill.mpCost)
             {
@@ -484,12 +617,15 @@ public class GameCharacter : MonoBehaviour
                 {
                     case Skill.SkillType.Instant:
                         StartInstant(skill);
+                        curSkillIndex = i;
                         break;
                     case Skill.SkillType.Cast:
                         StartCasting(skill);
+                        curSkillIndex = i;
                         break;
                     case Skill.SkillType.Channeled:
                         StartChanneling(skill);
+                        curSkillIndex = i;
                         break;
                 }
                 animator.Play("Idle");
@@ -509,12 +645,10 @@ public class GameCharacter : MonoBehaviour
 
     void CastSkill(Skill skill)
     {
-        Skill.CastedSkillStruct sck = new Skill.CastedSkillStruct();
-        sck.skill = skill;
-        sck.attack = attack;
-        target.SendMessage("TakeSkill", sck);
+        target.photonView.RPC("TakeSkillMessage", PhotonTargets.All, skill.skillName,attack,photonView.viewID);
     }
 
+    [PunRPC]
     public void CancelCast(bool self)
     {
         if (isCasting || isChanneling)
@@ -547,21 +681,36 @@ public class GameCharacter : MonoBehaviour
             }
         }
     }
-
-    public void TakeSkill(Skill.CastedSkillStruct sck)
+    [PunRPC]
+    public void TakeSkillMessage(string skillName, int attack, int ownerID) {
+        Skill.CastedSkillStruct scs;
+        scs.skill = GameObject.FindObjectOfType<SkillManager>().FindSkillWithName(skillName);
+        scs.attack = attack;
+        scs.ownerID = ownerID;
+        SendMessage("TakeSkill",scs);
+    }
+    
+    public void TakeSkill(Skill.CastedSkillStruct scs)
     {
-        
-        int otherAttack = sck.attack;
-        Skill skill = sck.skill;
-        
-        otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
+        if (!photonView.isMine) {
+            return;
+        }        
+        int otherAttack = scs.attack;
+        Skill skill = scs.skill;
+
+        otherAttack = Mathf.FloorToInt(UnityEngine.Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + (float)finalDefense)) * damageRatio);
-        curHP = Mathf.Clamp(curHP - damage, 0, finalMaxHP);
+        int heal = Mathf.FloorToInt((skill.pctHealth * finalMaxHP + skill.fixedHealth) * healRatio);
+        curHP = Mathf.Clamp(curHP - damage+heal, 0, finalMaxHP);
+
+        foreach (Buff b in skill.buffs)
+        {
+            AddBuff(b);
+        }
     }
 
     public void CreateSkillEffect()
     {
-
         if (curCastSkill != null)
         {
             GameObject effect = curCastSkill.effect;
@@ -576,30 +725,32 @@ public class GameCharacter : MonoBehaviour
             {
                 case SkillEffect.SkillEffectType.mine:
 
-                    newEffect = Instantiate(effect, transform.position + offset, transform.rotation) as GameObject;
+                    newEffect = Instantiate(effect, transform.position + offset, transform.rotation, transform) as GameObject;
                     skillEffects.Add(newEffect);
                     break;
+
                 case SkillEffect.SkillEffectType.other:
 
                     newEffect = Instantiate(effect, target.transform.position + offset, target.transform.rotation, target.transform) as GameObject;
                     skillEffects.Add(newEffect);
                     break;
+
                 case SkillEffect.SkillEffectType.move:
 
                     newEffect = Instantiate(effect, transform.position + offset.x * transform.right + offset.y * transform.up + offset.z * transform.forward, transform.rotation) as GameObject;
                     skillEffects.Add(newEffect);
-                    newEffect.GetComponent<SkillEffect>().SetLine(gameObject, target);
+                    newEffect.GetComponent<SkillEffect>().SetLine(gameObject, target.gameObject);
                     break;
+
                 case SkillEffect.SkillEffectType.ray:
 
-                    newEffect = Instantiate(effect, transform.position + offset.x * transform.right + offset.y * transform.up + offset.z * transform.forward, transform.rotation) as GameObject;
+                    newEffect = Instantiate(effect, transform.position + offset.x * transform.right + offset.y * transform.up + offset.z * transform.forward, transform.rotation,transform) as GameObject;
                     newEffect.transform.LookAt(target.GetComponent<GameCharacter>().characterCenter);
                     skillEffects.Add(newEffect);
-                    newEffect.GetComponent<SkillEffect>().SetLine(gameObject, target);
+                    newEffect.GetComponent<SkillEffect>().SetLine(gameObject, target.gameObject);
                     break;
             }
         }
-
     }
 
     void CleanEffects()
@@ -629,6 +780,12 @@ public class GameCharacter : MonoBehaviour
             return TargetCheckResult.UnknowError;
         }
 
+        // click self
+        if (Vector3.Equals(transform.position, target.transform.position))
+        {
+            return TargetCheckResult.Available;
+        }
+
         if (Vector3.Distance(transform.position, target.transform.position) > distance)
         {
             return TargetCheckResult.TooFar;
@@ -639,17 +796,27 @@ public class GameCharacter : MonoBehaviour
         {
             return TargetCheckResult.NotFaced;
         }
+
         return TargetCheckResult.Available;
     }
 
-    public void SetTarget(GameObject target) {
+    public void SetTarget(GameCharacter target)
+    {
         this.target = target;
     }
 
-    public GameObject GetTarget() {
+    public GameCharacter GetTarget()
+    {
         return target;
     }
 
+    void UpdateTarget() {
+        if (target != null) {
+            if (!target.IsAlive) {
+                SetTarget(null);
+            }
+        }
+    }
     #endregion
 
     #region Calculate Final Properties Functions
@@ -672,6 +839,10 @@ public class GameCharacter : MonoBehaviour
     void ChangeDefense(float ratio, int amount)
     {
         finalDefense += Mathf.FloorToInt(ratio * defense) + amount;
+    }
+
+    public void SetAnimatorSpeed(float speed) {
+        animator.speed = speed;
     }
 
     #endregion
@@ -709,5 +880,104 @@ public class GameCharacter : MonoBehaviour
         return 0;
     }
 
+
+
+    #endregion
+
+    #region photon functions
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(characterName);
+            stream.SendNext(curHP);
+            stream.SendNext(curMP);
+            stream.SendNext(finalAttack);
+            stream.SendNext(finalDefense);
+            stream.SendNext(finalMaxHP);
+            stream.SendNext(finalMaxMP);
+            stream.SendNext(isDead);
+            stream.SendNext(freezedCount);
+            stream.SendNext(isRestricted);
+            stream.SendNext(isInstant);
+            stream.SendNext(isCasting);
+            stream.SendNext(castTimer);
+            stream.SendNext(isChanneling);
+            stream.SendNext(channeledInterval);
+            stream.SendNext(channeledTimer);
+            stream.SendNext(curSkillIndex);
+            stream.SendNext(deleteCurSkill);
+            stream.SendNext(delayTimer);
+            for(int i = 0; i < skills.Count; i++) { 
+                stream.SendNext(skills[i].CDTimer);
+            }
+            stream.SendNext(globalCDTimer);
+            if (target != null)
+            {
+                stream.SendNext(target.photonView.viewID);
+            }
+            else {
+                stream.SendNext(-1);
+            }
+            
+
+        }
+        else
+        {
+            characterName = (string)stream.ReceiveNext();
+            curHP = (int)stream.ReceiveNext();
+            curMP = (int)stream.ReceiveNext();
+            finalAttack=(int)stream.ReceiveNext();
+            finalDefense = (int)stream.ReceiveNext();
+            finalMaxHP = (int)stream.ReceiveNext();
+            finalMaxMP = (int)stream.ReceiveNext();
+            isDead = (bool)stream.ReceiveNext();
+            freezedCount = (int)stream.ReceiveNext();
+            isRestricted=(bool)stream.ReceiveNext();
+            isInstant=(bool)stream.ReceiveNext();
+            isCasting=(bool)stream.ReceiveNext(); 
+            castTimer=(float)stream.ReceiveNext();
+            isChanneling=(bool)stream.ReceiveNext();
+            channeledInterval=(float)stream.ReceiveNext();
+            channeledTimer=(float)stream.ReceiveNext();
+            curSkillIndex=(int)stream.ReceiveNext();
+            deleteCurSkill = (bool)stream.ReceiveNext();
+            delayTimer = (float)stream.ReceiveNext();
+            if (curSkillIndex == -1)
+            {
+                curCastSkill = null;
+            }
+            else {
+                curCastSkill = skills[curSkillIndex];
+            }            
+            for (int i = 0; i < skills.Count; i++) {
+                skills[i].CDTimer = (float)stream.ReceiveNext();
+            }
+            globalCDTimer = (float)stream.ReceiveNext();
+            int targetPhotonID = (int)stream.ReceiveNext();
+            if (targetPhotonID == -1)
+            {
+                target = null;
+            }
+            else {
+                PhotonView[] photonViews = GameObject.FindObjectsOfType<PhotonView>();
+                foreach (PhotonView p in photonViews)
+                {
+                    if (p.viewID == targetPhotonID)
+                    {
+                        target = p.GetComponent<GameCharacter>();
+                        break;
+                    }
+                }
+            }
+            if (isFreezed)
+            {
+                SetAnimatorSpeed(0);
+            }
+            else {
+                SetAnimatorSpeed(1);
+            }
+        }
+    }
     #endregion
 }

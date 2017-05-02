@@ -11,18 +11,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
-  AppID: 16afd771-0379-4bb2-9562-7de947ad4287
+  AppID: f9b92913-84ee-42d1-a231-b47419bd81d5
   VoiceAppID: 
   ChatAppID: 
   HostType: 1
-  PreferredRegion: 0
+  PreferredRegion: 1
   EnabledRegions: -1
   Protocol: 0
   ServerAddress: 
   ServerPort: 5055
   VoiceServerPort: 5055
   JoinLobby: 0
-  EnableLobbyStatistics: 0
+  EnableLobbyStatistics: 1
   PunLogging: 0
   NetworkLogging: 1
   RunInBackground: 1
@@ -43,4 +43,8 @@ MonoBehaviour:
   - RequestForPickupTimes
   - TaggedPlayer
   - GetHit
+  - TakeSkill
+  - DestroySelf
+  - TakeSkillMessage
+  - CancelCast
   DisableAutoOpenWizard: 1

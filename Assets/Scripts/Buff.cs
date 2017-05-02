@@ -4,100 +4,98 @@ using UnityEngine;
 
 public class Buff : MonoBehaviour
 {
-    public enum BuffName
+    public enum BuffType
     {
+        None,
         Freezed,
         Burn
     };
+
     #region BuffInfomation
 
-    public BuffName buffName = BuffName.Freezed;
+    public string BuffName;
 
-    public GameObject icon;
+    public BuffType type;
 
-    public float lastTime;
+    public Texture2D icon;
 
-    private float lastTimer;
+    public float duration;
+
+    [HideInInspector]
+    public float count;
 
     public float interval;
 
-    public int maxLevels;
+    [HideInInspector]
+    public float intervalCount;
 
-    private int curLevels;
+    public int maxLevel;
 
+    //[HideInInspector]
+    public int level;
 
     #endregion
 
     #region functions
-    void Start() {
-        lastTimer = lastTime;
-    }
+    //void Start() {
+    //    reset();
+    //}
 
-    public void BuffEnter(GameObject target) { }
-
-    public void BuffEffect(GameObject target)
+    public void reset()
     {
-        if (target.tag == "Player")
-        {
-            HeroController hc = target.GetComponent<HeroController>();
-            //
-            switch (buffName) {
-                case BuffName.Freezed:
-                    break;
-                case BuffName.Burn:
-                    break;
-            }
-
-
-
-
-
-
-
-
-
-        //
-        }
-        else if (target.tag == "Enemy")
-        {
-            //EnemyController ec = target.GetComponent<EnemyController>();
-            //
-            switch (buffName)
-            {
-                case BuffName.Freezed:
-                    break;
-                case BuffName.Burn:
-                    break;
-            }
-
-
-
-
-
-
-
-            //
-        }
-
+        count = duration;
+        intervalCount = interval;
     }
 
-    public void BuffExit(GameObject target) { }
+    public virtual void onEnter(GameCharacter target) {
+        Debug.LogError("error!");
+    }
+
+    public virtual void onEffect(GameCharacter target)
+    {
+        Debug.LogError("error!");
+
+        //if (target.tag == "Player")
+        //{
+        //    HeroController hc = target.GetComponent<HeroController>();
+        //    //
+        //    switch (buffName) {
+        //        case BuffName.Freezed:
+        //            break;
+        //        case BuffName.Burn:
+        //            break;
+        //    }
+        //}
+        //else if (target.tag == "Enemy")
+        //{
+        //    //EnemyController ec = target.GetComponent<EnemyController>();
+        //    //
+        //    switch (buffName)
+        //    {
+        //        case BuffName.Freezed:
+        //            break;
+        //        case BuffName.Burn:
+        //            break;
+        //    }
+        //}
+    }
+
+    public virtual void onExit(GameCharacter target) {
+        Debug.LogError("error!");
+    }
 
     public void AddLevel() {
-        curLevels = Mathf.Clamp(curLevels + 1, 0, maxLevels);
-        Refresh();
-    }
-    public void Refresh() {
-        lastTimer = lastTime;
+        level = Mathf.Clamp(++level, 0, maxLevel);
+        reset();
     }
 
-    public void Copy(Buff other) {
-        this.buffName = other.buffName;
-        this.icon=other.icon;
-        this.lastTime=other.lastTime;
-        this.interval=other.interval;
-        this.maxLevels=other.maxLevels;
+    //public void Copy(Buff other) {
+    //    this.buffName = other.buffName;
+    //    this.icon=other.icon;
+    //    //this.lastTime=other.lastTime;
+    //    this.interval=other.interval;
+    //    this.maxLevels=other.maxLevels;
+    //}
 
-}
     #endregion
 }
