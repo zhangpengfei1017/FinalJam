@@ -71,5 +71,6 @@ MonoBehaviour:
   fixedHealth: 0
   fixedThreat: 0
   maxTargets: 0
-  buffs: []
+  buffs:
+  - {fileID: 114825798651726774, guid: 33e8104419a0fd44db73c11df53eaea9, type: 2}
   effect: {fileID: 1069239251428974, guid: f55cdad74a924304a904434c28dd5c85, type: 2}

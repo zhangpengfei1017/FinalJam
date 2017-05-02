@@ -57,7 +57,15 @@ public class GameCharacter : MonoBehaviour
 
     private bool isDead;
 
-    private bool isFreezed;
+    public int freezedCount = 0;
+    
+    public bool isFreezed
+    {
+        get
+        {
+            return freezedCount != 0;
+        }
+    }
 
     private bool isRestricted;
 
@@ -158,6 +166,8 @@ public class GameCharacter : MonoBehaviour
     void Awake()
     {
         skills = new List<Skill>();
+        buffs = new List<Buff>();
+
         foreach (Skill s in skillPrefabs)
         {
             GameObject skill = Instantiate(s.gameObject, transform) as GameObject;
@@ -333,25 +343,26 @@ public class GameCharacter : MonoBehaviour
 
     public void Move(Vector3 dir, float rotation, int d, float speed)
     {
-        charCtrl.SimpleMove(dir.normalized * speed * moveSpeed * Time.deltaTime);
-        Quaternion qRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotation, transform.rotation.eulerAngles.z);
-        transform.rotation = qRotation;
-        if (dir != Vector3.zero)
-        {
-            animator.SetBool("isRun", true);
-            animator.SetInteger("moveDir", d);
-            if (curCastSkill != null && curCastSkill.skillType != Skill.SkillType.Instant)
-            {
-                if (!curCastSkill.isMovingCast)
-                {
-                    CancelCast(true);
-                }
-            }
-        }
-        else
+        if (dir == Vector3.zero || this.isFreezed)
         {
             animator.SetBool("isRun", false);
             animator.SetInteger("moveDir", 0);
+            return;
+        }
+
+        charCtrl.SimpleMove(dir.normalized * speed * moveSpeed * Time.deltaTime);
+        Quaternion qRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotation, transform.rotation.eulerAngles.z);
+        transform.rotation = qRotation;
+
+        animator.SetBool("isRun", true);
+        animator.SetInteger("moveDir", d);
+
+        if (curCastSkill != null && curCastSkill.skillType != Skill.SkillType.Instant)
+        {
+            if (!curCastSkill.isMovingCast)
+            {
+                CancelCast(true);
+            }
         }
     }
 
@@ -426,41 +437,68 @@ public class GameCharacter : MonoBehaviour
 
     void AddBuff(Buff buff)
     {
-        foreach (Buff b in buffs)
+        Buff temp = GetBuff(buff.name);
+
+        if (temp)
         {
-            if (buff.buffName == b.buffName)
-            {
-                b.AddLevel();
-                return;
-            }
+            temp.AddLevel();
+        } else
+        {
+            GameObject g = Instantiate(buff.gameObject, transform) as GameObject;
+            Buff newBuff = g.GetComponent<Buff>();
+            buffs.Add(newBuff);
+            newBuff.reset();
+            newBuff.onEnter(this);
         }
-        buffs.Add(buff);
-        buff.BuffEnter(gameObject);
     }
 
     void RemoveBuff(Buff buff)
     {
-        buff.BuffExit(gameObject);
+        buff.onExit(this);
         buffs.Remove(buff);
     }
 
-    public bool HasBuff(Buff.BuffName buffName)
+    public Buff GetBuff(string buffName)
     {
         foreach (Buff b in buffs)
         {
-            if (b.buffName == buffName)
+            if (b.BuffName == buffName)
             {
-                return true;
+                return b;
             }
         }
-        return false;
+        return null;
     }
 
-    void UpdateBuff()
+    void UpdateBuffs()
     {
+        List<Buff> removes = new List<Buff>();
+
         foreach (Buff b in buffs)
         {
-            b.BuffEffect(gameObject);
+            b.duration -= Time.deltaTime;
+
+            if (b.duration <= 0)
+            {
+                removes.Add(b);
+                continue;
+            }
+
+            if (b.interval != 0)
+            {
+                b.intervalCount += Time.deltaTime;
+
+                if (b.intervalCount > b.interval)
+                {
+                    b.intervalCount -= b.intervalCount;
+                    b.onEffect(this);
+                }
+            }
+        }
+
+        foreach (Buff b in removes)
+        {
+            RemoveBuff(b);
         }
     }
 
@@ -487,8 +525,6 @@ public class GameCharacter : MonoBehaviour
     void PrepareAttack(int i)
     {
         Skill skill = skills[i];
-
-        print(CheckTarget(skill.targetType, skill.distance));
 
         if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
         {
@@ -574,6 +610,11 @@ public class GameCharacter : MonoBehaviour
         otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + (float)finalDefense)) * damageRatio);
         curHP = Mathf.Clamp(curHP - damage, 0, finalMaxHP);
+
+        foreach (Buff b in sck.skill.buffs)
+        {
+            AddBuff(b);
+        }
     }
 
     public void CreateSkillEffect()
@@ -732,17 +773,4 @@ public class GameCharacter : MonoBehaviour
     }
 
     #endregion
-
-    void UpdateBuffs()
-    {
-        if (buffs == null)
-            return;
-
-        List<Buff> removes = new List<Buff>();
-
-        foreach (Buff b in buffs)
-        {
-            //b.duration
-        }
-    }
 }
