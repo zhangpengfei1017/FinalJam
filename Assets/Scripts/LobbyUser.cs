@@ -21,6 +21,10 @@ public class LobbyUser : PunBehaviour {
     }
 
     public string name;
+    private List<GameObject> Rooms = new List<GameObject>();
+    public GameObject RoomPrefab;
+    public GameObject RoomListObject;
+    public GameObject LoginGameObject;
 
     // Use this for initialization
     void Start () {
@@ -29,12 +33,58 @@ public class LobbyUser : PunBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Debug.Log(name);
+
 	}
 
     public void SetName(Text inputName )
     {
         name = inputName.text;
         // Connect to the Lobby here and check all the rooms.
+        if (!PhotonNetwork.ConnectUsingSettings("1.0f"))
+        {
+            // TODO: Do something here.
+            return;
+        }
+        LoginGameObject.SetActive(false);
+        RoomListObject.SetActive(true);
+    }
+
+    public void RefreshRoomList()
+    {
+        if (Rooms.Count > 0)
+        {
+            for (int i = 0; i < Rooms.Count; i++)
+            {
+                Destroy(Rooms[i]);
+            }
+            Rooms.Clear();
+        }
+        Debug.Log(PhotonNetwork.GetRoomList().Length);
+        for (int i = 0; i < PhotonNetwork.GetRoomList().Length;)
+        {
+            Debug.Log("In the Loop");
+            GameObject temp_room = Instantiate(RoomPrefab);
+            Debug.Log(RoomPrefab.transform.parent);
+            temp_room.transform.SetParent(RoomPrefab.transform.parent);
+            temp_room.GetComponent<RectTransform>().localScale = RoomPrefab.GetComponent<RectTransform>().localScale;
+            Vector3 tempos = RoomPrefab.GetComponent<RectTransform>().position;
+            temp_room.GetComponent<RectTransform>().position = new Vector3(tempos.x, tempos.y - 15 * i, tempos.z);
+            temp_room.transform.FindChild("Game").GetComponent<Text>().text = PhotonNetwork.GetRoomList()[i].Name;
+            temp_room.transform.FindChild("Players").GetComponent<Text>().text = PhotonNetwork.GetRoomList()[i].PlayerCount.ToString() + "/5";
+            temp_room.SetActive(true);
+            Debug.Log(PhotonNetwork.GetRoomList()[i].Name.ToString());
+            Rooms.Add(temp_room);
+
+            i++;
+        }
+
+    }
+
+    public void CreateARoom(Text _RoomName)
+    {
+        RoomOptions RO = new RoomOptions();
+        RO.MaxPlayers = byte.Parse("2");
+        bool result = PhotonNetwork.CreateRoom(_RoomName.text, RO, TypedLobby.Default);
+        Debug.Log(result);
     }
 }
