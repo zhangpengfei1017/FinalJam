@@ -172,17 +172,17 @@ public class HeroController : MonoBehaviour
         if (curIndicator != null) {
             Destroy(curIndicator);
         }
-        if (target != null)
+        if (target != null && target.GetComponent<GameCharacter>().IsAlive)
         {            
             character.SetTarget(target);
             if (target.GetComponent<GameCharacter>().characterType == GameCharacter.CharacterType.Monster)
             {
-                curIndicator = Instantiate(indicator_enemy, target.transform) as GameObject;
+                curIndicator = Instantiate(indicator_enemy, target.transform.position + new Vector3(0,5,0), indicator_enemy.transform.rotation, target.transform) as GameObject;
                 curIndicator.GetComponent<Projector>().orthographicSize = target.GetComponent<CharacterController>().radius * 2;
             }
             else
             {
-                curIndicator = Instantiate(indicator_player, target.transform) as GameObject;
+                curIndicator = Instantiate(indicator_player, target.transform.position + new Vector3(0, 5, 0), indicator_player.transform.rotation, target.transform) as GameObject;
                 curIndicator.GetComponent<Projector>().orthographicSize = target.GetComponent<CharacterController>().radius * 2;
             }
         }

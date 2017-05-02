@@ -90,6 +90,10 @@ public class MonsterController : MonoBehaviour
 
     private bool gotoDie;
 
+    public float destroyTime;
+
+    private float destroyTimer;
+
 
 
     // Use this for initialization
@@ -104,7 +108,7 @@ public class MonsterController : MonoBehaviour
         stopTimer = maxStopTime;
         attackTimer = 0;
         hasAttackTarget = false;
-
+        destroyTimer = 0;
         //
         gotoAttack = false;
         gotoChase = false;
@@ -138,6 +142,7 @@ public class MonsterController : MonoBehaviour
                 Fleeing();
                 break;
             case EnemyState.Die:
+                Dying();
                 break;
         }
     }
@@ -277,6 +282,7 @@ public class MonsterController : MonoBehaviour
 
                 if (exit)
                 {
+                    hasTargetPosition = false;
                     exit = false;
                 }
                 break;
@@ -303,6 +309,9 @@ public class MonsterController : MonoBehaviour
             if (((float)curHP / (float)maxHP) < 0.1)
             {
                 gotoFlee = true;
+            }
+            else {
+                gotoWander = true;
             }
         }
     }
@@ -398,7 +407,24 @@ public class MonsterController : MonoBehaviour
 
     void Fleeing()
     {
+        if (!hasTargetPosition)
+        {
+            targetPosition = new Vector3(transform.position.x + Random.Range(-8, 8), transform.position.y, transform.position.z + Random.Range(-8, 8));
+            hasTargetPosition = true;
+        }
+        else
+        {
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            Quaternion q = Quaternion.LookRotation(direction);
+            character.Move(direction, q.eulerAngles.y, 1, 1);
+        }
+    }
 
+    void Dying() {
+        destroyTimer += Time.deltaTime;
+        if (destroyTimer >= destroyTime) {
+            Destroy(gameObject);
+        }
     }
 
 

@@ -64,11 +64,11 @@ public class Skill : MonoBehaviour
 
     public float CDTimer;
 
-    public int pctDamage;
+    public float pctDamage;
 
     public int fixedDamage;
 
-    public int pctHealth;
+    public float pctHealth;
 
     public int fixedHealth;
 
