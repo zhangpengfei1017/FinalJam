@@ -275,6 +275,7 @@ MonoBehaviour:
   defense: 0
   moveSpeed: 0
   globalCDTime: 0
+  freezedCount: 0
   headPoint: {fileID: 301660994}
   characterCenter: {fileID: 301660994}
   skillPrefabs: []
@@ -487,7 +488,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
