@@ -57,6 +57,7 @@ public class GameCharacter : MonoBehaviour
 
     private bool isDead;
 
+    [HideInInspector]
     public int freezedCount = 0;
 
     public bool isFreezed
