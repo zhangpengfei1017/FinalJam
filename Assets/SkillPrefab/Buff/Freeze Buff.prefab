@@ -19,9 +19,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4153475742281658}
-  - component: {fileID: 114444540908904192}
+  - component: {fileID: 114756759210081714}
   m_Layer: 0
-  m_Name: Test Buff
+  m_Name: Freeze Buff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114444540908904192
+--- !u!114 &114756759210081714
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,11 +48,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1611132463018680}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6b8203bca5a46c4c981bb84b59b8a7a, type: 3}
+  m_Script: {fileID: 11500000, guid: 452398b34b27a9f498905a5c2e7620c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buffName: 0
+  BuffName: Freezed
+  type: 1
   icon: {fileID: 0}
-  lastTime: 0
-  interval: 0
-  maxLevels: 0
+  duration: 5
+  count: 0
+  interval: 1
+  intervalCount: 0
+  maxLevel: 2
+  level: 0

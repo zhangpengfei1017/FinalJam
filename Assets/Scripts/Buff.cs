@@ -48,11 +48,13 @@ public class Buff : MonoBehaviour
     }
 
     public virtual void onEnter(GameCharacter target) {
-
+        Debug.LogError("error!");
     }
 
     public virtual void onEffect(GameCharacter target)
     {
+        Debug.LogError("error!");
+
         //if (target.tag == "Player")
         //{
         //    HeroController hc = target.GetComponent<HeroController>();
@@ -79,7 +81,7 @@ public class Buff : MonoBehaviour
     }
 
     public virtual void onExit(GameCharacter target) {
-
+        Debug.LogError("error!");
     }
 
     public void AddLevel() {
