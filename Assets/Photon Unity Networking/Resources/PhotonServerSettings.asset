@@ -46,4 +46,5 @@ MonoBehaviour:
   - TakeSkill
   - DestroySelf
   - TakeSkillMessage
+  - CancelCast
   DisableAutoOpenWizard: 1

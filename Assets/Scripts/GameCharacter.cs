@@ -142,6 +142,10 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
 
     private int curSkillIndex;
 
+    private bool deleteCurSkill;
+
+    private float delayTimer;
+
     //BUFF or DEBUFF
 
     private List<Buff> buffs;
@@ -211,14 +215,14 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         channeledInterval = 0;
         channeledTimer = 0;
         instantTimer = 0;
+        delayTimer = 0;
+        deleteCurSkill = false;
         isDead = false;
     }
 
     void Update()
     {
-        if (!photonView.isMine) {
-            return;
-        }
+        
         //--------------------------------------
         //--------------test code---------------
         //--------------------------------------
@@ -265,6 +269,8 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         UpdateTarget();
         UpdateBuffs();
         ResetAnimator();
+        DelayDeleteCurSkill();
+
         
     }
 
@@ -285,16 +291,17 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     {
         curCastSkill = skill;
         isInstant = true;
+        deleteCurSkill = false;
     }
 
     void EndInstant()
     {
         curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
         curCastSkill.CDTimer = curCastSkill.CDTime;
-        curCastSkill = null;
-        curSkillIndex = -1;
         isInstant = false;
         skillEffects.Clear();
+        deleteCurSkill = true;
+        delayTimer = 0;
     }
 
     void UpdateCast()
@@ -309,7 +316,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         }
         else
         {
-            CancelCast(true);
+            photonView.RPC("CancelCast", PhotonTargets.All,true);
         }
     }
 
@@ -317,6 +324,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     {
         isCasting = true;
         curCastSkill = skill;
+        deleteCurSkill = false;
     }
 
     void EndCasting(bool cd)
@@ -327,9 +335,9 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
             curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
         }
         isCasting = false;
-        curCastSkill = null;
-        curSkillIndex = -1;
         skillEffects.Clear();
+        deleteCurSkill = true;
+        delayTimer = 0;
     }
 
     void UpdateChanneled()
@@ -348,7 +356,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         }
         else
         {
-            CancelCast(true);
+            photonView.RPC("CancelCast", PhotonTargets.All, true);
         }
 
     }
@@ -359,14 +367,28 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         curCastSkill = skill;
         curCastSkill.CDTimer = curCastSkill.CDTime;
         curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
+        deleteCurSkill = false;
     }
 
     void EndChanneling()
     {
         isChanneling = false;
-        curCastSkill = null;
-        curSkillIndex = -1;
         skillEffects.Clear();
+        deleteCurSkill = true;
+        delayTimer = 0;
+    }
+
+    void DelayDeleteCurSkill() {
+        if (deleteCurSkill) {
+            delayTimer += Time.deltaTime;
+            if (delayTimer > 3 && curCastSkill != null) {
+                curCastSkill = null;
+                curSkillIndex = -1;
+                delayTimer = 0;
+                deleteCurSkill = false;
+            }
+        }
+
     }
 
     #endregion
@@ -391,7 +413,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
             {
                 if (!curCastSkill.isMovingCast)
                 {
-                    CancelCast(true);
+                    photonView.RPC("CancelCast", PhotonTargets.All, true);
                 }
             }
         }
@@ -578,11 +600,11 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
 
         if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
         {
-            if (curCastSkill != null)
+            if (curCastSkill != null && !deleteCurSkill)
             {
                 if (curCastSkill.skillType == Skill.SkillType.Channeled)
                 {
-                    CancelCast(true);
+                    photonView.RPC("CancelCast", PhotonTargets.All, true);
                 }
                 else
                 {
@@ -626,6 +648,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         target.photonView.RPC("TakeSkillMessage", PhotonTargets.All, skill.skillName,attack,photonView.viewID);
     }
 
+    [PunRPC]
     public void CancelCast(bool self)
     {
         if (isCasting || isChanneling)
@@ -883,6 +906,8 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
             stream.SendNext(channeledInterval);
             stream.SendNext(channeledTimer);
             stream.SendNext(curSkillIndex);
+            stream.SendNext(deleteCurSkill);
+            stream.SendNext(delayTimer);
             for(int i = 0; i < skills.Count; i++) { 
                 stream.SendNext(skills[i].CDTimer);
             }
@@ -916,9 +941,11 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
             channeledInterval=(float)stream.ReceiveNext();
             channeledTimer=(float)stream.ReceiveNext();
             curSkillIndex=(int)stream.ReceiveNext();
+            deleteCurSkill = (bool)stream.ReceiveNext();
+            delayTimer = (float)stream.ReceiveNext();
             if (curSkillIndex == -1)
             {
-                
+                curCastSkill = null;
             }
             else {
                 curCastSkill = skills[curSkillIndex];
