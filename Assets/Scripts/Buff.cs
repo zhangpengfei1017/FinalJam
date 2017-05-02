@@ -43,12 +43,13 @@ public class Buff : MonoBehaviour
 
     public void reset()
     {
+        print("reset");
         count = duration;
         intervalCount = interval;
     }
 
     public virtual void onEnter(GameCharacter target) {
-
+        print("fuck");
     }
 
     public virtual void onEffect(GameCharacter target)

@@ -294,7 +294,7 @@ public class MonsterController : MonoBehaviour
     {
         int curHP = character.CurHP;
         int maxHP = character.MaxHP;
-        if (curHP <= 0)
+        if (!character.IsAlive)
         {
             gotoDie = true;
         }
@@ -306,6 +306,7 @@ public class MonsterController : MonoBehaviour
             }
         }
     }
+
     public void TakeSkill(Skill.CastedSkillStruct sck) {
         if (!hasAttackTarget && (enemyState == EnemyState.Wander || enemyState == EnemyState.Stop)) {
             target = sck.owner;
@@ -314,15 +315,19 @@ public class MonsterController : MonoBehaviour
             hasAttackTarget = true;
         }
     }
+
     void CheckTarget() {
-        if (target != null) {
+        if (target != null)
+        {
             if (!target.GetComponent<GameCharacter>().IsAlive)
             {
                 hasAttackTarget = false;
                 target = null;
+                gotoWander = true;
             }
-        }            
+        }          
     }
+
     void Wandering()
     {
         wanderTimer -= Time.deltaTime;
@@ -335,13 +340,16 @@ public class MonsterController : MonoBehaviour
         {
             Vector3 direction = (targetPosition - transform.position).normalized;
             character.Move(direction,0, -1, 0.5f);
-            transform.forward = direction;
+            if (direction != Vector3.zero) {
+                transform.forward = direction;
+            }            
             if (Vector3.Distance(transform.position, targetPosition) <= 1 || wanderTimer <= 0)
             {
                 gotoStop = true;
             }
         }
     }
+
     void Stopping()
     {
         stopTimer -= Time.deltaTime;
@@ -351,6 +359,7 @@ public class MonsterController : MonoBehaviour
             gotoWander = true;
         }
     }
+
     void Chasing()
     {
         Vector3 targetPlayer = character.GetTarget().transform.position;
@@ -367,10 +376,14 @@ public class MonsterController : MonoBehaviour
             gotoWander = true;
         }
     }
+
     void Attacking()
     {
+        if (target == null) {
+            return;
+        }
         attackTimer += Time.deltaTime;
-        Vector3 targetPlayer = character.GetTarget().transform.position;
+        Vector3 targetPlayer = target.transform.position;
         Vector3 direction = (targetPlayer - transform.position).normalized;
         character.Move(Vector3.zero, 0, 0, 0);
         transform.forward = direction;
@@ -384,6 +397,7 @@ public class MonsterController : MonoBehaviour
             gotoChase = true;
         }
     }
+
     void Fleeing()
     {
 

@@ -3147,12 +3147,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 0
-  maxHP: 3000
+  maxHP: 6000
   maxMP: 3000
   attack: 1500
   defense: 1500
   moveSpeed: 250
   globalCDTime: 1.5
+  freezedCount: 0
   headPoint: {fileID: 4659308484732072}
   characterCenter: {fileID: 4431625368610878}
   skillPrefabs:

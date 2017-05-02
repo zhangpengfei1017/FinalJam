@@ -58,7 +58,7 @@ public class GameCharacter : MonoBehaviour
     private bool isDead;
 
     public int freezedCount = 0;
-    
+
     public bool isFreezed
     {
         get
@@ -167,7 +167,8 @@ public class GameCharacter : MonoBehaviour
         }
     }
 
-    public bool IsAlive {
+    public bool IsAlive
+    {
         get
         {
             return !isDead;
@@ -253,8 +254,10 @@ public class GameCharacter : MonoBehaviour
         //--------------test code---------------
         //--------------------------------------
         UpdateState();
+        UpdateTarget();
         UpdateBuffs();
         ResetAnimator();
+        
     }
 
     #endregion
@@ -361,26 +364,29 @@ public class GameCharacter : MonoBehaviour
 
     public void Move(Vector3 dir, float rotation, int d, float speed)
     {
-        if (dir == Vector3.zero || this.isFreezed)
+        if (this.isFreezed || isDead || isRestricted)
         {
-            animator.SetBool("isRun", false);
-            animator.SetInteger("moveDir", 0);
             return;
         }
-
-        charCtrl.SimpleMove(dir.normalized * speed * moveSpeed * Time.deltaTime);
         Quaternion qRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotation, transform.rotation.eulerAngles.z);
         transform.rotation = qRotation;
-
-        animator.SetBool("isRun", true);
-        animator.SetInteger("moveDir", d);
-
-        if (curCastSkill != null && curCastSkill.skillType != Skill.SkillType.Instant)
+        if (dir != Vector3.zero)
         {
-            if (!curCastSkill.isMovingCast)
+            charCtrl.SimpleMove(dir.normalized * speed * moveSpeed * Time.deltaTime);
+            animator.SetBool("isRun", true);
+            animator.SetInteger("moveDir", d);
+
+            if (curCastSkill != null && curCastSkill.skillType != Skill.SkillType.Instant)
             {
-                CancelCast(true);
+                if (!curCastSkill.isMovingCast)
+                {
+                    CancelCast(true);
+                }
             }
+        }
+        else {
+            animator.SetBool("isRun", false);
+            animator.SetInteger("moveDir", 0);
         }
     }
 
@@ -433,6 +439,10 @@ public class GameCharacter : MonoBehaviour
         {
             instantTimer = 0;
         }
+        if (curHP <= 0 && !isDead) {
+            isDead = true;
+            OnDied();
+        }
     }
 
     void ResetAnimator()
@@ -446,7 +456,7 @@ public class GameCharacter : MonoBehaviour
 
     void OnDied()
     {
-
+        animator.SetTrigger("isDie");
     }
 
     #endregion
@@ -460,7 +470,8 @@ public class GameCharacter : MonoBehaviour
         if (temp)
         {
             temp.AddLevel();
-        } else
+        }
+        else
         {
             GameObject g = Instantiate(buff.gameObject, transform) as GameObject;
             Buff newBuff = g.GetComponent<Buff>();
@@ -526,6 +537,9 @@ public class GameCharacter : MonoBehaviour
 
     public void Attack(int attackIndex)
     {
+        if (isDead || isFreezed) {
+            return;
+        }
         if (attackIndex != -1)
         {
             if (globalCDTimer > 0 || skills[attackIndex].CDTimer > 0)
@@ -710,9 +724,9 @@ public class GameCharacter : MonoBehaviour
         {
             return TargetCheckResult.UnknowError;
         }
-        
+
         // click self
-        if(Vector3.Equals(transform.position, target.transform.position))
+        if (Vector3.Equals(transform.position, target.transform.position))
         {
             return TargetCheckResult.Available;
         }
@@ -741,6 +755,13 @@ public class GameCharacter : MonoBehaviour
         return target;
     }
 
+    void UpdateTarget() {
+        if (target != null) {
+            if (!target.GetComponent<GameCharacter>().IsAlive) {
+                SetTarget(null);
+            }
+        }
+    }
     #endregion
 
     #region Calculate Final Properties Functions
