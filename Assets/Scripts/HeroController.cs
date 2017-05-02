@@ -47,7 +47,9 @@ public class HeroController : MonoBehaviour
 
     void Update()
     {
-
+        if (!GetComponent<PhotonView>().isMine) {
+            return;
+        }
         DetectAttack();
 
         DetectMove();
@@ -174,7 +176,7 @@ public class HeroController : MonoBehaviour
         }
         if (target != null && target.GetComponent<GameCharacter>().IsAlive)
         {            
-            character.SetTarget(target);
+            character.SetTarget(target.GetComponent<GameCharacter>());
             if (target.GetComponent<GameCharacter>().characterType == GameCharacter.CharacterType.Monster)
             {
                 curIndicator = Instantiate(indicator_enemy, target.transform.position + new Vector3(0,5,0), indicator_enemy.transform.rotation, target.transform) as GameObject;

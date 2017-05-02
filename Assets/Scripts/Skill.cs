@@ -5,14 +5,6 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
     #region SkillInformation
-    public enum SkillName
-    {
-        S_Skill1,
-        S_Skill2,
-        S_Skill3,
-        S_Skill4,
-        S_Skill5,
-    }
 
 
     public enum SkillType
@@ -27,7 +19,7 @@ public class Skill : MonoBehaviour
     {
         public Skill skill;
         public int attack;
-        public GameObject owner;
+        public int ownerID;
     };
 
     public CastedSkillStruct test;

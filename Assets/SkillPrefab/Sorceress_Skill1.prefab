@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f4013eee91ae744a1015e9795bfc7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillName: 
+  skillName: s1
   icon: {fileID: 0}
   animationIndex: 1
   targetType: 2
@@ -62,7 +62,7 @@ MonoBehaviour:
   channelTime: 0
   channelInterval: 0
   isMovingCast: 0
-  mpCost: 10
+  mpCost: 5
   CDTime: 0
   CDTimer: 0
   pctDamage: 1

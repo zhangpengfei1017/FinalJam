@@ -121,6 +121,9 @@ public class MonsterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GetComponent<PhotonView>().isMine) {
+            return;
+        }
         CheckHealth();
         CheckTarget();
         UpdateState();
@@ -313,10 +316,19 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    public void TakeSkill(Skill.CastedSkillStruct sck) {
+
+    public void TakeSkill(Skill.CastedSkillStruct scs) {
         if (!hasAttackTarget && (enemyState == EnemyState.Wander || enemyState == EnemyState.Stop)) {
-            target = sck.owner;
-            character.SetTarget(target);
+            PhotonView[] photonViews = GameObject.FindObjectsOfType<PhotonView>();
+            foreach (PhotonView p in photonViews)
+            {
+                if (p.viewID == scs.ownerID)
+                {
+                    target = p.gameObject;
+                    break;
+                }
+            }
+            character.SetTarget(target.GetComponent<GameCharacter>());
             gotoChase = true;
             hasAttackTarget = true;
         }
@@ -426,7 +438,7 @@ public class MonsterController : MonoBehaviour
     void Dying() {
         destroyTimer += Time.deltaTime;
         if (destroyTimer >= destroyTime) {
-            Destroy(gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 

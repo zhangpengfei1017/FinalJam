@@ -2196,7 +2196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4961635163634376}
   m_Layer: 10
-  m_Name: HeadPoint
+  m_Name: headPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2754,13 +2754,16 @@ GameObject:
   - component: {fileID: 143978570953885518}
   - component: {fileID: 114388691611062852}
   - component: {fileID: 114089421046749028}
+  - component: {fileID: 114530942498960716}
+  - component: {fileID: 114806611353824720}
+  - component: {fileID: 114954799630728588}
   m_Layer: 10
-  m_Name: Player_priest
+  m_Name: Player_Priest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1450195156616134
 GameObject:
   m_ObjectHideFlags: 1
@@ -8627,7 +8630,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1919692451007430}
-  m_LocalRotation: {x: 0.7128987, y: 0.076046765, z: -0.6892918, w: 0.10425552}
+  m_LocalRotation: {x: 0.7128987, y: 0.076046765, z: -0.6892918, w: 0.104255505}
   m_LocalPosition: {x: 0.057495423, y: 0.025273342, z: 0.020734072}
   m_LocalScale: {x: 0.9999999, y: 0.9999998, z: 0.9999998}
   m_Children:
@@ -10679,10 +10682,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 0
-  maxHP: 8000
+  characterName: 
+  maxHP: 4000
   maxMP: 8000
   attack: 800
-  defense: 1500
+  defense: 500
   moveSpeed: 250
   globalCDTime: 1.5
   freezedCount: 0
@@ -10694,6 +10698,128 @@ MonoBehaviour:
   - {fileID: 114937449987161312, guid: d556c87c5e562ba4faac4ee0e1ba7b6a, type: 2}
   - {fileID: 114937449987161312, guid: 949215de9061df24faae7b0d0ee7f33c, type: 2}
   - {fileID: 114937449987161312, guid: 12bd596888260754a9ae43b392e37f45, type: 2}
+--- !u!114 &114530942498960716
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1448262045830506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  OwnerShipWasTransfered: 0
+  prefixBackup: -1
+  synchronization: 3
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 114954799630728588}
+  - {fileID: 114388691611062852}
+  - {fileID: 114806611353824720}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 0
+  instantiationId: -1
+  currentMasterID: -1
+  isRuntimeInstantiated: 0
+--- !u!114 &114806611353824720
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1448262045830506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 3
+    SynchronizeType: 1
+    Name: attackIndex
+  - Type: 9
+    SynchronizeType: 1
+    Name: isDie
+  - Type: 4
+    SynchronizeType: 1
+    Name: isRun
+  - Type: 3
+    SynchronizeType: 1
+    Name: moveDir
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
+--- !u!114 &114954799630728588
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1448262045830506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PositionModel:
+    SynchronizeEnabled: 1
+    TeleportEnabled: 1
+    TeleportIfDistanceGreaterThan: 3
+    InterpolateOption: 2
+    InterpolateMoveTowardsSpeed: 1
+    InterpolateLerpSpeed: 1
+    InterpolateMoveTowardsAcceleration: 2
+    InterpolateMoveTowardsDeceleration: 2
+    InterpolateSpeedCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 2
+        time: -1
+        value: 0
+        inSlope: 0
+        outSlope: Infinity
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 1
+        tangentMode: 0
+      - serializedVersion: 2
+        time: 4
+        value: 4
+        inSlope: 1
+        outSlope: 0
+        tangentMode: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ExtrapolateOption: 0
+    ExtrapolateSpeed: 1
+    ExtrapolateIncludingRoundTripTime: 1
+    ExtrapolateNumberOfStoredPositions: 1
+    DrawErrorGizmo: 1
+  m_RotationModel:
+    SynchronizeEnabled: 1
+    InterpolateOption: 1
+    InterpolateRotateTowardsSpeed: 180
+    InterpolateLerpSpeed: 5
+  m_ScaleModel:
+    SynchronizeEnabled: 1
+    InterpolateOption: 0
+    InterpolateMoveTowardsSpeed: 1
+    InterpolateLerpSpeed: 0
 --- !u!137 &137619522237765522
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

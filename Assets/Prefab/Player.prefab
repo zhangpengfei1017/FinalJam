@@ -3101,23 +3101,29 @@ MonoBehaviour:
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
   m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 1
-    Name: isRun
-  - Type: 4
-    SynchronizeType: 1
-    Name: isAttack
   - Type: 3
     SynchronizeType: 1
-    Name: attackNum
-  - Type: 4
+    Name: attackIndex
+  - Type: 9
     SynchronizeType: 1
     Name: isDie
   - Type: 4
     SynchronizeType: 1
+    Name: isRun
+  - Type: 3
+    SynchronizeType: 1
+    Name: moveDir
+  - Type: 4
+    SynchronizeType: 0
+    Name: isAttack
+  - Type: 3
+    SynchronizeType: 0
+    Name: attackNum
+  - Type: 4
+    SynchronizeType: 0
     Name: isGethit
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 0
     Name: isRoll
   m_SynchronizeLayers:
   - SynchronizeType: 0
