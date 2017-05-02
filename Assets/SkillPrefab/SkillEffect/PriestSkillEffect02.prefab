@@ -9831,11 +9831,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bcb7dda0bab7cd43bf4b7851409c8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 0, z: 0}
-  skillEffectType: 2
+  offset: {x: 0, y: 1, z: 0.3}
+  skillEffectType: 3
   speed: 30
   destroyTime: 3
   collisionEffect: {fileID: 161520, guid: 6eb8bfabf8e3b0b468999c810d5f2096, type: 2}
   collisionDestroyTime: 3
   delayCollisionTime: 0
+  keepToCharacter: {fileID: 0}
+  useOffsetForKeptEffect: 0
   isGround: 0

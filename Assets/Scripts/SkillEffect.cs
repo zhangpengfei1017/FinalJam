@@ -39,6 +39,10 @@ public class SkillEffect : MonoBehaviour
 
     private bool delayEffect = false;
 
+    //ray
+    private float distance;
+
+    
     //void Start()
     //{
     //    var tm = GetComponentInChildren<RFX4_TransformMotion>(true);
@@ -90,13 +94,16 @@ public class SkillEffect : MonoBehaviour
                 transform.position += dir * speed * Time.deltaTime;
                 if (Vector3.Distance(transform.position, target) <= 1f)
                 {
-                    GameObject col = Instantiate(collisionEffect, transform.position, transform.rotation) as GameObject;
-                    autoDestroy ad = col.AddComponent<autoDestroy>();
-                    ad.destroyTime = collisionDestroyTime;
+                    if (collisionEffect != null) {
+                        GameObject col = Instantiate(collisionEffect, transform.position, transform.rotation) as GameObject;
+                        autoDestroy ad = col.AddComponent<autoDestroy>();
+                        ad.destroyTime = collisionDestroyTime;
+                    }                    
                     Destroy(gameObject);
                 }
                 break;
             case SkillEffectType.ray:
+                transform.LookAt(to.GetComponent<GameCharacter>().characterCenter.position);
                 if (timer >= delayCollisionTime && !delayEffect)
                 {
                     Vector3 tar;
@@ -108,13 +115,14 @@ public class SkillEffect : MonoBehaviour
                     {
                         tar = to.GetComponent<GameCharacter>().characterCenter.position;
                     }
-                    transform.LookAt(tar);
-                    GameObject col = Instantiate(collisionEffect, tar, transform.rotation) as GameObject;
-                    Transform colt = col.GetComponent<Transform>();
-                    colt.forward = transform.forward;
-                    autoDestroy ad = col.AddComponent<autoDestroy>();
-                    ad.destroyTime = collisionDestroyTime;
-                    delayEffect = true;
+                    if (collisionEffect != null) {
+                        GameObject col = Instantiate(collisionEffect, tar, transform.rotation) as GameObject;
+                        Transform colt = col.GetComponent<Transform>();
+                        colt.forward = transform.forward;
+                        autoDestroy ad = col.AddComponent<autoDestroy>();
+                        ad.destroyTime = collisionDestroyTime;
+                        delayEffect = true;
+                    }                  
                 }
                 break;
         }

@@ -74,4 +74,4 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Tiling: {r: 1200, g: 700, b: 12, a: 7}
-    - _TintColor: {r: 1.2590559, g: 0.92718095, b: 0.21292855, a: 1}
+    - _TintColor: {r: 0.21292855, g: 0.78288746, b: 1.2590559, a: 1}

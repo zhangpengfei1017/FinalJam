@@ -3147,8 +3147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 0
-  maxHP: 1000
-  maxMP: 3000
+  maxHP: 15000
+  maxMP: 12000
   attack: 1500
   defense: 1500
   moveSpeed: 250

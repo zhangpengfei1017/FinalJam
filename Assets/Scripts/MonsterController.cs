@@ -409,7 +409,7 @@ public class MonsterController : MonoBehaviour
     {
         if (!hasTargetPosition)
         {
-            targetPosition = new Vector3(transform.position.x + Random.Range(-8, 8), transform.position.y, transform.position.z + Random.Range(-8, 8));
+            targetPosition = new Vector3(transform.position.x + Random.Range(-5, 5), transform.position.y, transform.position.z + Random.Range(-5, 5));
             hasTargetPosition = true;
         }
         else
@@ -417,6 +417,9 @@ public class MonsterController : MonoBehaviour
             Vector3 direction = (targetPosition - transform.position).normalized;
             Quaternion q = Quaternion.LookRotation(direction);
             character.Move(direction, q.eulerAngles.y, 1, 1);
+            if (Vector3.Distance(targetPosition, transform.position) < 2) {
+                hasTargetPosition = false;
+            }
         }
     }
 

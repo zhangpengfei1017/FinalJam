@@ -68,7 +68,7 @@ MonoBehaviour:
   pctDamage: 0
   fixedDamage: 0
   pctHealth: 10
-  fixedHealth: 1500
+  fixedHealth: 500
   fixedThreat: 0
   maxTargets: 0
   buffs: []

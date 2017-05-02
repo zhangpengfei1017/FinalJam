@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameCharacter : MonoBehaviour
+public class GameCharacter : Photon.MonoBehaviour, IPunObservable
 {
     public enum CharacterType
     {
@@ -121,8 +122,6 @@ public class GameCharacter : MonoBehaviour
 
     private CharacterController charCtrl;
 
-    private PhotonView photonView;
-
     [SerializeField]
     private Transform headPoint;
 
@@ -197,8 +196,7 @@ public class GameCharacter : MonoBehaviour
         charCtrl = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         globalCDTimer = 0;
-        //curHP = maxHP;
-        curHP = 1500;
+        curHP = maxHP;
         curMP = maxMP;
         finalAttack = attack;
         finalDefense = defense;
@@ -649,7 +647,7 @@ public class GameCharacter : MonoBehaviour
         int otherAttack = sck.attack;
         Skill skill = sck.skill;
 
-        otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
+        otherAttack = Mathf.FloorToInt(UnityEngine.Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + (float)finalDefense)) * damageRatio);
         int heal = Mathf.FloorToInt((skill.pctHealth * finalMaxHP + skill.fixedHealth) * healRatio);
         curHP = Mathf.Clamp(curHP - damage+heal, 0, finalMaxHP);
@@ -676,23 +674,26 @@ public class GameCharacter : MonoBehaviour
             {
                 case SkillEffect.SkillEffectType.mine:
 
-                    newEffect = Instantiate(effect, transform.position + offset, transform.rotation) as GameObject;
+                    newEffect = Instantiate(effect, transform.position + offset, transform.rotation, transform) as GameObject;
                     skillEffects.Add(newEffect);
                     break;
+
                 case SkillEffect.SkillEffectType.other:
 
                     newEffect = Instantiate(effect, target.transform.position + offset, target.transform.rotation, target.transform) as GameObject;
                     skillEffects.Add(newEffect);
                     break;
+
                 case SkillEffect.SkillEffectType.move:
 
                     newEffect = Instantiate(effect, transform.position + offset.x * transform.right + offset.y * transform.up + offset.z * transform.forward, transform.rotation) as GameObject;
                     skillEffects.Add(newEffect);
                     newEffect.GetComponent<SkillEffect>().SetLine(gameObject, target);
                     break;
+
                 case SkillEffect.SkillEffectType.ray:
 
-                    newEffect = Instantiate(effect, transform.position + offset.x * transform.right + offset.y * transform.up + offset.z * transform.forward, transform.rotation) as GameObject;
+                    newEffect = Instantiate(effect, transform.position + offset.x * transform.right + offset.y * transform.up + offset.z * transform.forward, transform.rotation,transform) as GameObject;
                     newEffect.transform.LookAt(target.GetComponent<GameCharacter>().characterCenter);
                     skillEffects.Add(newEffect);
                     newEffect.GetComponent<SkillEffect>().SetLine(gameObject, target);
@@ -828,5 +829,24 @@ public class GameCharacter : MonoBehaviour
         return 0;
     }
 
+
+
+    #endregion
+    #region photon functions
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.isWriting)
+        {
+            stream.SendNext(curHP);
+            stream.SendNext(curMP);
+            stream.SendNext(curMP);
+
+        }
+        else
+        {
+            curHP = (int)stream.ReceiveNext();
+            curMP = (int)stream.ReceiveNext();
+        }
+    }
     #endregion
 }
