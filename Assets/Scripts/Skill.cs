@@ -22,11 +22,14 @@ public class Skill : MonoBehaviour
         Channeled
     };
 
+
     public struct CastedSkillStruct
     {
         public Skill skill;
         public int attack;
     };
+
+    public CastedSkillStruct test;
 
     public SkillName skillName = SkillName.S_Skill1;
 

@@ -206,6 +206,7 @@ public class GameCharacter : MonoBehaviour
         //--------------test code---------------
         //--------------------------------------
         UpdateState();
+        UpdateBuffs();
         ResetAnimator();
     }
 
@@ -545,18 +546,17 @@ public class GameCharacter : MonoBehaviour
 
     public void TakeSkill(Skill.CastedSkillStruct sck)
     {
-        
         int otherAttack = sck.attack;
         Skill skill = sck.skill;
         
         otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + (float)finalDefense)) * damageRatio);
         curHP = Mathf.Clamp(curHP - damage, 0, finalMaxHP);
+        print("cause Effect");
     }
 
     public void CreateSkillEffect()
     {
-
         if (curCastSkill != null)
         {
             GameObject effect = curCastSkill.effect;
@@ -594,7 +594,6 @@ public class GameCharacter : MonoBehaviour
                     break;
             }
         }
-
     }
 
     void CleanEffects()
@@ -710,4 +709,17 @@ public class GameCharacter : MonoBehaviour
     }
 
     #endregion
+
+    void UpdateBuffs()
+    {
+        if (buffs == null)
+            return;
+
+        List<Buff> removes = new List<Buff>();
+
+        foreach (Buff b in buffs)
+        {
+            //b.duration
+        }
+    }
 }

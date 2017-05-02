@@ -9,31 +9,38 @@ public class Buff : MonoBehaviour
         Freezed,
         Burn
     };
+
     #region BuffInfomation
 
     public BuffName buffName = BuffName.Freezed;
 
-    public GameObject icon;
+    public Texture2D icon;
 
-    public float lastTime;
+    public float duration;
 
-    private float lastTimer;
+    public float count;
 
     public float interval;
 
     public int maxLevels;
 
-    private int curLevels;
-
+    public int curLevels;
 
     #endregion
 
     #region functions
     void Start() {
-        lastTimer = lastTime;
+        reset();
     }
 
-    public void BuffEnter(GameObject target) { }
+    void reset()
+    {
+        count = duration;
+    }
+
+    public void BuffEnter(GameObject target) {
+
+    }
 
     public void BuffEffect(GameObject target)
     {
@@ -47,16 +54,6 @@ public class Buff : MonoBehaviour
                 case BuffName.Burn:
                     break;
             }
-
-
-
-
-
-
-
-
-
-        //
         }
         else if (target.tag == "Enemy")
         {
@@ -69,32 +66,25 @@ public class Buff : MonoBehaviour
                 case BuffName.Burn:
                     break;
             }
-
-
-
-
-
-
-
-            //
         }
-
     }
 
-    public void BuffExit(GameObject target) { }
+    public void BuffExit(GameObject target) {
+
+    }
 
     public void AddLevel() {
         curLevels = Mathf.Clamp(curLevels + 1, 0, maxLevels);
         Refresh();
     }
     public void Refresh() {
-        lastTimer = lastTime;
+        //lastTimer = lastTime;
     }
 
     public void Copy(Buff other) {
         this.buffName = other.buffName;
         this.icon=other.icon;
-        this.lastTime=other.lastTime;
+        //this.lastTime=other.lastTime;
         this.interval=other.interval;
         this.maxLevels=other.maxLevels;
 
