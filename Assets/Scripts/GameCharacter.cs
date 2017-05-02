@@ -487,6 +487,9 @@ public class GameCharacter : MonoBehaviour
     void PrepareAttack(int i)
     {
         Skill skill = skills[i];
+
+        print(CheckTarget(skill.targetType, skill.distance));
+
         if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
         {
             if (curCastSkill != null)
@@ -571,7 +574,6 @@ public class GameCharacter : MonoBehaviour
         otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + (float)finalDefense)) * damageRatio);
         curHP = Mathf.Clamp(curHP - damage, 0, finalMaxHP);
-        print("cause Effect");
     }
 
     public void CreateSkillEffect()
@@ -641,6 +643,12 @@ public class GameCharacter : MonoBehaviour
         {
             return TargetCheckResult.UnknowError;
         }
+        
+        // click self
+        if(Vector3.Equals(transform.position, target.transform.position))
+        {
+            return TargetCheckResult.Available;
+        }
 
         if (Vector3.Distance(transform.position, target.transform.position) > distance)
         {
@@ -652,6 +660,7 @@ public class GameCharacter : MonoBehaviour
         {
             return TargetCheckResult.NotFaced;
         }
+
         return TargetCheckResult.Available;
     }
 

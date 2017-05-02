@@ -40,11 +40,11 @@ public class SkillEffect : MonoBehaviour
         var tm = GetComponentInChildren<RFX4_TransformMotion>(true);
         if (tm != null)
         {
-            print("yes");
+            //print("yes");
             tm.CollisionEnter += Tm_CollisionEnter;
         }
 
-        else print("null");
+        //else print("null");
     }
 
     private void Tm_CollisionEnter(object sender, RFX4_TransformMotion.RFX4_CollisionInfo e)
