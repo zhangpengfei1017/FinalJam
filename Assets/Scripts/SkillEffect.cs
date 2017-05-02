@@ -104,6 +104,7 @@ public class SkillEffect : MonoBehaviour
                     {
                         tar = to.GetComponent<GameCharacter>().characterCenter.position;
                     }
+                    transform.LookAt(tar);
                     GameObject col = Instantiate(collisionEffect, tar, transform.rotation) as GameObject;
                     Transform colt = col.GetComponent<Transform>();
                     colt.forward = transform.forward;
