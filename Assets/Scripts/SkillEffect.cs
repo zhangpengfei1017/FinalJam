@@ -35,7 +35,22 @@ public class SkillEffect : MonoBehaviour
 
     private bool delayEffect = false;
 
+    //void Start()
+    //{
+    //    var tm = GetComponentInChildren<RFX4_TransformMotion>(true);
+    //    if (tm != null)
+    //    {
+    //        //print("yes");
+    //        tm.CollisionEnter += Tm_CollisionEnter;
+    //    }
 
+    //    //else print("null");
+    //}
+
+    //private void Tm_CollisionEnter(object sender, RFX4_TransformMotion.RFX4_CollisionInfo e)
+    //{
+    //    Debug.Log(e.Hit.transform.name); //will print collided object name to the console.
+    //}
 
     // Update is called once per frame
     void Update()
@@ -89,6 +104,7 @@ public class SkillEffect : MonoBehaviour
                     {
                         tar = to.GetComponent<GameCharacter>().characterCenter.position;
                     }
+                    transform.LookAt(tar);
                     GameObject col = Instantiate(collisionEffect, tar, transform.rotation) as GameObject;
                     Transform colt = col.GetComponent<Transform>();
                     colt.forward = transform.forward;

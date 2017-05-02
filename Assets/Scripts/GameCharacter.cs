@@ -57,7 +57,15 @@ public class GameCharacter : MonoBehaviour
 
     private bool isDead;
 
-    private bool isFreezed;
+    public int freezedCount = 0;
+    
+    public bool isFreezed
+    {
+        get
+        {
+            return freezedCount != 0;
+        }
+    }
 
     private bool isRestricted;
 
@@ -151,6 +159,21 @@ public class GameCharacter : MonoBehaviour
         }
     }
 
+    public int MaxHP
+    {
+        get
+        {
+            return finalMaxHP;
+        }
+    }
+
+    public bool IsAlive {
+        get
+        {
+            return !isDead;
+        }
+    }
+
     #endregion
 
     #region UnityFunctions
@@ -158,6 +181,8 @@ public class GameCharacter : MonoBehaviour
     void Awake()
     {
         skills = new List<Skill>();
+        buffs = new List<Buff>();
+
         foreach (Skill s in skillPrefabs)
         {
             GameObject skill = Instantiate(s.gameObject, transform) as GameObject;
@@ -180,6 +205,7 @@ public class GameCharacter : MonoBehaviour
         channeledInterval = 0;
         channeledTimer = 0;
         instantTimer = 0;
+        isDead = false;
     }
 
     void Update()
@@ -187,7 +213,8 @@ public class GameCharacter : MonoBehaviour
         //--------------------------------------
         //--------------test code---------------
         //--------------------------------------
-        if (characterType == CharacterType.Player) {
+        if (characterType == CharacterType.Player)
+        {
             GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
             GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
             GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
@@ -207,24 +234,26 @@ public class GameCharacter : MonoBehaviour
             Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
             Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
             if (target != null)
-            {               
+            {
                 targetHp.text = target.GetComponent<GameCharacter>().curHP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxHP;
                 targetMp.text = target.GetComponent<GameCharacter>().curMP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxMP;
                 targetName.text = target.name;
             }
-            else {
+            else
+            {
                 targetHp.text = "";
                 targetMp.text = "";
                 targetName.text = "";
             }
         }
-       
+
 
 
         //--------------------------------------
         //--------------test code---------------
         //--------------------------------------
         UpdateState();
+        UpdateBuffs();
         ResetAnimator();
     }
 
@@ -332,25 +361,26 @@ public class GameCharacter : MonoBehaviour
 
     public void Move(Vector3 dir, float rotation, int d, float speed)
     {
-        charCtrl.SimpleMove(dir.normalized * speed * moveSpeed * Time.deltaTime);
-        Quaternion qRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotation, transform.rotation.eulerAngles.z);
-        transform.rotation = qRotation;
-        if (dir != Vector3.zero)
-        {
-            animator.SetBool("isRun", true);
-            animator.SetInteger("moveDir", d);
-            if (curCastSkill != null && curCastSkill.skillType != Skill.SkillType.Instant)
-            {
-                if (!curCastSkill.isMovingCast)
-                {
-                    CancelCast(true);
-                }
-            }
-        }
-        else
+        if (dir == Vector3.zero || this.isFreezed)
         {
             animator.SetBool("isRun", false);
             animator.SetInteger("moveDir", 0);
+            return;
+        }
+
+        charCtrl.SimpleMove(dir.normalized * speed * moveSpeed * Time.deltaTime);
+        Quaternion qRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, rotation, transform.rotation.eulerAngles.z);
+        transform.rotation = qRotation;
+
+        animator.SetBool("isRun", true);
+        animator.SetInteger("moveDir", d);
+
+        if (curCastSkill != null && curCastSkill.skillType != Skill.SkillType.Instant)
+        {
+            if (!curCastSkill.isMovingCast)
+            {
+                CancelCast(true);
+            }
         }
     }
 
@@ -425,41 +455,68 @@ public class GameCharacter : MonoBehaviour
 
     void AddBuff(Buff buff)
     {
-        foreach (Buff b in buffs)
+        Buff temp = GetBuff(buff.name);
+
+        if (temp)
         {
-            if (buff.buffName == b.buffName)
-            {
-                b.AddLevel();
-                return;
-            }
+            temp.AddLevel();
+        } else
+        {
+            GameObject g = Instantiate(buff.gameObject, transform) as GameObject;
+            Buff newBuff = g.GetComponent<Buff>();
+            buffs.Add(newBuff);
+            newBuff.reset();
+            newBuff.onEnter(this);
         }
-        buffs.Add(buff);
-        buff.BuffEnter(gameObject);
     }
 
     void RemoveBuff(Buff buff)
     {
-        buff.BuffExit(gameObject);
+        buff.onExit(this);
         buffs.Remove(buff);
     }
 
-    public bool HasBuff(Buff.BuffName buffName)
+    public Buff GetBuff(string buffName)
     {
         foreach (Buff b in buffs)
         {
-            if (b.buffName == buffName)
+            if (b.BuffName == buffName)
             {
-                return true;
+                return b;
             }
         }
-        return false;
+        return null;
     }
 
-    void UpdateBuff()
+    void UpdateBuffs()
     {
+        List<Buff> removes = new List<Buff>();
+
         foreach (Buff b in buffs)
         {
-            b.BuffEffect(gameObject);
+            b.duration -= Time.deltaTime;
+
+            if (b.duration <= 0)
+            {
+                removes.Add(b);
+                continue;
+            }
+
+            if (b.interval != 0)
+            {
+                b.intervalCount += Time.deltaTime;
+
+                if (b.intervalCount > b.interval)
+                {
+                    b.intervalCount -= b.intervalCount;
+                    b.onEffect(this);
+                }
+            }
+        }
+
+        foreach (Buff b in removes)
+        {
+            RemoveBuff(b);
         }
     }
 
@@ -486,11 +543,19 @@ public class GameCharacter : MonoBehaviour
     void PrepareAttack(int i)
     {
         Skill skill = skills[i];
+
         if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
         {
             if (curCastSkill != null)
             {
-                CancelCast(true);
+                if (curCastSkill.skillType == Skill.SkillType.Channeled)
+                {
+                    CancelCast(true);
+                }
+                else
+                {
+                    return;
+                }
             }
             if (curMP >= skill.mpCost)
             {
@@ -526,6 +591,7 @@ public class GameCharacter : MonoBehaviour
         Skill.CastedSkillStruct sck = new Skill.CastedSkillStruct();
         sck.skill = skill;
         sck.attack = attack;
+        sck.owner = gameObject;
         target.SendMessage("TakeSkill", sck);
     }
 
@@ -564,18 +630,21 @@ public class GameCharacter : MonoBehaviour
 
     public void TakeSkill(Skill.CastedSkillStruct sck)
     {
-        
         int otherAttack = sck.attack;
         Skill skill = sck.skill;
-        
+
         otherAttack = Mathf.FloorToInt(Random.Range(otherAttack * 0.95f, otherAttack * 1.05f));
         int damage = Mathf.FloorToInt((skill.pctDamage * otherAttack + skill.fixedDamage) * (5000 / (5000 + (float)finalDefense)) * damageRatio);
         curHP = Mathf.Clamp(curHP - damage, 0, finalMaxHP);
+
+        foreach (Buff b in sck.skill.buffs)
+        {
+            AddBuff(b);
+        }
     }
 
     public void CreateSkillEffect()
     {
-
         if (curCastSkill != null)
         {
             GameObject effect = curCastSkill.effect;
@@ -613,7 +682,6 @@ public class GameCharacter : MonoBehaviour
                     break;
             }
         }
-
     }
 
     void CleanEffects()
@@ -642,6 +710,12 @@ public class GameCharacter : MonoBehaviour
         {
             return TargetCheckResult.UnknowError;
         }
+        
+        // click self
+        if(Vector3.Equals(transform.position, target.transform.position))
+        {
+            return TargetCheckResult.Available;
+        }
 
         if (Vector3.Distance(transform.position, target.transform.position) > distance)
         {
@@ -653,14 +727,17 @@ public class GameCharacter : MonoBehaviour
         {
             return TargetCheckResult.NotFaced;
         }
+
         return TargetCheckResult.Available;
     }
 
-    public void SetTarget(GameObject target) {
+    public void SetTarget(GameObject target)
+    {
         this.target = target;
     }
 
-    public GameObject GetTarget() {
+    public GameObject GetTarget()
+    {
         return target;
     }
 

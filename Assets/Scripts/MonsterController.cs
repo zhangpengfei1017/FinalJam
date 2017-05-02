@@ -4,8 +4,6 @@ using UnityEngine;
 
 [RequireComponent(typeof(GameCharacter))]
 
-[RequireComponent(typeof(CharacterController))]
-
 public class MonsterController : MonoBehaviour
 {
     public enum MonsterType
@@ -20,22 +18,7 @@ public class MonsterController : MonoBehaviour
     [SerializeField]
     private MonsterType monsterType = MonsterType.Trash;
 
-    private GameObject targetToAttack; //Gameobject to attack. Retrieved from GameCharacter
-
-    // Radius to check for player
-    public float attackRadius;
-
-    //Wander Parameters
-    public float wanderJitter; // 'Wandering' amount
-    public float wanderTime; // Time to Wander
-    public float moveRate; // Rate to change direction
-    private float nextMove; 
-
-    //Stop Parameters
-    public float stopTime; // Time to stop movement
-
     private GameCharacter character;
-    private CharacterController characterController;
 
     private enum EnemyMovement
     {
@@ -45,162 +28,480 @@ public class MonsterController : MonoBehaviour
         FLEE
     }
 
-    private EnemyMovement enemyMovement;
+    public enum EnemyState
+    {
+        Wander,
+        Stop,
+        Chase,
+        Attack,
+        Flee,
+        Die
+    }
 
-    private Vector3 dir;
+    private EnemyState enemyState;
 
-    private static float wanderCounter; // Counters to switch between movement
-    private static float stopCounter;
+
+    //global parameters
+
+    public GameObject target;
+
+    private bool hasAttackTarget;
+
+    //wander parameters
+    private Vector3 oriPos;
+
+    private bool gotoWander;
+
+    public float maxWanderTime;
+
+    private float wanderTimer;
+
+    private bool hasTargetPosition;
+
+    private Vector3 targetPosition;
+
+    //stop parameters
+
+    private bool gotoStop;
+
+    public float maxStopTime;
+
+    private float stopTimer;
+
+    //chase parameters
+
+    private bool gotoChase;
+
+    public float maxChaseDistance;
+
+    //attack parameters
+
+    private bool gotoAttack;
+
+    public float attackCD;
+
+    private float attackTimer;
+
+    //flee parameters
+
+    private bool gotoFlee;
+
+    //death parameters
+
+    private bool gotoDie;
+
+
 
     // Use this for initialization
     void Start()
     {
         character = GetComponent<GameCharacter>();
-        characterController = GetComponent<CharacterController>();
 
-        enemyMovement = EnemyMovement.WANDER;
+        enemyState = EnemyState.Wander;
+        //
+        oriPos = transform.position;
+        wanderTimer = maxWanderTime;
+        stopTimer = maxStopTime;
+        attackTimer = 0;
+        hasAttackTarget = false;
+
+        //
+        gotoAttack = false;
+        gotoChase = false;
+        gotoDie = false;
+        gotoFlee = false;
+        gotoStop = false;
+        gotoWander = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (character.CurHP < 20)
-            enemyMovement = EnemyMovement.FLEE;
-
-        switch (enemyMovement)
+        CheckHealth();
+        CheckTarget();
+        UpdateState();
+        switch (enemyState)
         {
-            case EnemyMovement.STOPMOVEMENT:
-                StopMovement();
+            case EnemyState.Wander:
+                Wandering();
                 break;
-
-            case EnemyMovement.WANDER:
-                Wander();
+            case EnemyState.Stop:
+                Stopping();
                 break;
-
-            case EnemyMovement.SEEK:
-                Seek();
+            case EnemyState.Chase:
+                Chasing();
                 break;
-
-            case EnemyMovement.FLEE:
-                Flee();
+            case EnemyState.Attack:
+                Attacking();
                 break;
-
-            default:
+            case EnemyState.Flee:
+                Fleeing();
+                break;
+            case EnemyState.Die:
                 break;
         }
     }
-
-    #region MoveFunctions
-    /// <summary>
-    /// Stops movement
-    /// </summary>
-    void StopMovement() 
+    void UpdateState()
     {
-        //Stop enemy and walk animation
-        if (stopCounter < stopTime)
+        bool exit = false;
+        switch (enemyState)
         {
-            if (targetToAttack != null)
-            {
-                targetToAttack = null;
-            }
-             
-            stopCounter += Time.deltaTime;
+            case EnemyState.Wander:
+                if (gotoChase)
+                {
+                    enemyState = EnemyState.Chase;
+                    exit = true;
+                }
 
+                if (gotoStop)
+                {
+                    enemyState = EnemyState.Stop;
+                    exit = true;
+                }
+
+                if (gotoFlee)
+                {
+                    enemyState = EnemyState.Flee;
+                    exit = true;
+                }
+
+                if (gotoDie)
+                {
+                    enemyState = EnemyState.Die;
+                    exit = true;
+                }
+
+                if (exit)
+                {
+                    hasTargetPosition = false;
+                    wanderTimer = maxWanderTime;
+                    exit = false;
+                }
+                break;
+            case EnemyState.Stop:
+                if (gotoChase)
+                {
+                    enemyState = EnemyState.Chase;
+                    exit = true;
+                }
+                if (gotoWander)
+                {
+                    enemyState = EnemyState.Wander;
+                    exit = true;
+                }
+                if (gotoFlee)
+                {
+                    enemyState = EnemyState.Flee;
+                    exit = true;
+                }
+                if (gotoDie)
+                {
+                    enemyState = EnemyState.Die;
+                    exit = true;
+                }
+                if (exit)
+                {
+                    stopTimer = maxStopTime;
+                    exit = false;
+                }
+                break;
+            case EnemyState.Chase:
+                if (gotoAttack)
+                {
+                    enemyState = EnemyState.Attack;
+                    exit = true;
+                }
+                if (gotoWander)
+                {
+                    enemyState = EnemyState.Wander;
+                    exit = true;
+                }
+
+                if (gotoFlee)
+                {
+                    enemyState = EnemyState.Flee;
+                    exit = true;
+                }
+
+                if (gotoDie)
+                {
+                    enemyState = EnemyState.Die;
+                    exit = true;
+                }
+                if (exit)
+                {
+                    exit = false;
+                }
+                break;
+            case EnemyState.Attack:
+                if (gotoChase)
+                {
+                    enemyState = EnemyState.Chase;
+                    exit = true;
+                }
+
+                if (gotoWander)
+                {
+                    enemyState = EnemyState.Wander;
+                    exit = true;
+                }
+
+                if (gotoFlee)
+                {
+                    enemyState = EnemyState.Flee;
+                    exit = true;
+                }
+
+                if (gotoDie)
+                {
+                    enemyState = EnemyState.Die;
+                    exit = true;
+                }
+                if (exit)
+                {
+                    exit = false;
+                }
+                break;
+            case EnemyState.Flee:
+                if (gotoWander)
+                {
+                    enemyState = EnemyState.Wander;
+                    exit = true;
+                }
+
+                if (gotoDie)
+                {
+                    enemyState = EnemyState.Die;
+                    exit = true;
+                }
+
+                if (exit)
+                {
+                    exit = false;
+                }
+                break;
+        }
+        //all to flee
+        gotoWander = false;
+        gotoStop = false;
+        gotoChase = false;
+        gotoAttack = false;
+        gotoFlee = false;
+        gotoDie = false;
+    }
+
+    void CheckHealth()
+    {
+        int curHP = character.CurHP;
+        int maxHP = character.MaxHP;
+        if (curHP <= 0)
+        {
+            gotoDie = true;
         }
         else
         {
-            stopCounter = 0;
-            enemyMovement = EnemyMovement.WANDER;
+            if (((float)curHP / (float)maxHP) < 0.1)
+            {
+                gotoFlee = true;
+            }
         }
     }
-
-    /// <summary>
-    /// Free roam. Changes direction at fixed intervals
-    /// </summary>
-    void Wander()
+    public void TakeSkill(Skill.CastedSkillStruct sck) {
+        if (!hasAttackTarget && (enemyState == EnemyState.Wander || enemyState == EnemyState.Stop)) {
+            target = sck.owner;
+            character.SetTarget(target);
+            gotoChase = true;
+            hasAttackTarget = true;
+        }
+    }
+    void CheckTarget() {
+        if (target != null) {
+            if (!target.GetComponent<GameCharacter>().IsAlive)
+            {
+                hasAttackTarget = false;
+                target = null;
+            }
+        }            
+    }
+    void Wandering()
     {
-        if (wanderCounter < wanderTime)
+        wanderTimer -= Time.deltaTime;
+        if (!hasTargetPosition)
         {
-            wanderCounter += Time.deltaTime;
-
-            Vector3 wanderTarget = Vector3.zero;
-
-            if (nextMove < Time.time)
-            {
-                nextMove = Time.time + (1 / moveRate);
-                float randomValue = Random.Range(-1.0f, 1.0f);
-                
-                transform.Rotate(Vector3.up, randomValue * wanderJitter);
-            }
-
-            characterController.SimpleMove(transform.forward * character.MoveSpeed * Time.deltaTime);
-
-            if(CheckForTarget())
-            {
-                enemyMovement = EnemyMovement.SEEK;
-            }
-
+            targetPosition = new Vector3(oriPos.x + Random.Range(-8, 8), oriPos.y, oriPos.z + Random.Range(-8, 8));
+            hasTargetPosition = true;
         }
         else
         {
-            wanderCounter = 0;
-            enemyMovement = EnemyMovement.STOPMOVEMENT;
-        }
-    }
-
-    /// <summary>
-    /// Checks if target is within attack radius
-    /// </summary>
-    /// <returns></returns>
-    bool CheckForTarget()
-    {
-        targetToAttack = character.GetTarget();
-
-        if(targetToAttack != null)
-        {
-            if (Vector3.Distance(transform.position, targetToAttack.transform.position) < attackRadius)
+            Vector3 direction = (targetPosition - transform.position).normalized;
+            character.Move(direction,0, -1, 0.5f);
+            transform.forward = direction;
+            if (Vector3.Distance(transform.position, targetPosition) <= 1 || wanderTimer <= 0)
             {
-                return true;
+                gotoStop = true;
             }
         }
-
-        return false;
     }
-
-    /// <summary>
-    /// Moves towards target to attack
-    /// </summary>
-    void Seek()
+    void Stopping()
     {
-            Vector3 seekDirection = (targetToAttack.transform.position - transform.position).normalized;
-            seekDirection = new Vector3(seekDirection.x, 0.0f, seekDirection.z);
-            transform.forward = seekDirection;
-
-            characterController.SimpleMove(seekDirection * character.MoveSpeed * Time.deltaTime);
-
-            if (Vector3.Distance(transform.position, targetToAttack.transform.position) > (attackRadius * 2))
-            {
-                enemyMovement = EnemyMovement.WANDER;
-            }
-    }
-
-    /// <summary>
-    /// Moves away from target
-    /// </summary>
-    void Flee()
-    {
-        Vector3 fleeDirection = (transform.position - targetToAttack.transform.position).normalized;
-        fleeDirection = new Vector3(fleeDirection.x, 0.0f, fleeDirection.z);
-
-        transform.forward = (fleeDirection);
-
-        characterController.SimpleMove(fleeDirection * character.MoveSpeed * Time.deltaTime);
-
-        if (Vector3.Distance(transform.position, targetToAttack.transform.position) > (attackRadius * 2.0f))
+        stopTimer -= Time.deltaTime;
+        character.Move(Vector3.zero, transform.rotation.eulerAngles.y, 0, 0);
+        if (stopTimer <= 0)
         {
-            enemyMovement = EnemyMovement.STOPMOVEMENT;
-            targetToAttack = null;
+            gotoWander = true;
         }
     }
-    #endregion
+    void Chasing()
+    {
+        Vector3 targetPlayer = character.GetTarget().transform.position;
+        Vector3 direction = (targetPlayer - transform.position).normalized;
+        character.Move(direction, 0, 1, 1);
+        transform.forward = direction;
+        float distance = Vector3.Distance(transform.position, targetPlayer);
+        if (distance <= 4)
+        {
+            gotoAttack = true;
+        }
+        if (distance > maxChaseDistance)
+        {
+            gotoWander = true;
+        }
+    }
+    void Attacking()
+    {
+        attackTimer += Time.deltaTime;
+        Vector3 targetPlayer = character.GetTarget().transform.position;
+        Vector3 direction = (targetPlayer - transform.position).normalized;
+        character.Move(Vector3.zero, 0, 0, 0);
+        transform.forward = direction;
+        float distance = Vector3.Distance(transform.position, targetPlayer);
+        if (attackTimer >= attackCD)
+        {
+            character.Attack(0);
+            attackTimer = 0;
+        }
+        if (distance > 4) {
+            gotoChase = true;
+        }
+    }
+    void Fleeing()
+    {
+
+    }
+
+
+    //#region MoveFunctions
+    ///// <summary>
+    ///// Stops movement
+    ///// </summary>
+    //void StopMovement()
+    //{
+    //    //Stop enemy and walk animation
+    //    if (stopCounter < stopTime)
+    //    {
+    //        if (targetToAttack != null)
+    //        {
+    //            targetToAttack = null;
+    //        }
+
+    //        stopCounter += Time.deltaTime;
+
+    //    }
+    //    else
+    //    {
+    //        stopCounter = 0;
+    //        enemyMovement = EnemyMovement.WANDER;
+    //    }
+    //}
+
+    ///// <summary>
+    ///// Free roam. Changes direction at fixed intervals
+    ///// </summary>
+    //void Wander()
+    //{
+    //    if (wanderCounter < wanderTime)
+    //    {
+    //        wanderCounter += Time.deltaTime;
+
+    //        Vector3 wanderTarget = Vector3.zero;
+
+    //        if (nextMove < Time.time)
+    //        {
+    //            nextMove = Time.time + (1 / moveRate);
+    //            float randomValue = Random.Range(-1.0f, 1.0f);
+
+    //            transform.Rotate(Vector3.up, randomValue * wanderJitter);
+    //        }
+    //        character.Move(transform.forward, 0, 1, 1);
+
+    //        if (CheckForTarget())
+    //        {
+    //            enemyMovement = EnemyMovement.SEEK;
+    //        }
+
+    //    }
+    //    else
+    //    {
+    //        wanderCounter = 0;
+    //        enemyMovement = EnemyMovement.STOPMOVEMENT;
+    //    }
+    //}
+
+    ///// <summary>
+    ///// Checks if target is within attack radius
+    ///// </summary>
+    ///// <returns></returns>
+    //bool CheckForTarget()
+    //{
+    //    targetToAttack = character.GetTarget();
+
+    //    if (targetToAttack != null)
+    //    {
+    //        if (Vector3.Distance(transform.position, targetToAttack.transform.position) < attackRadius)
+    //        {
+    //            return true;
+    //        }
+    //    }
+
+    //    return false;
+    //}
+
+    ///// <summary>
+    ///// Moves towards target to attack
+    ///// </summary>
+    //void Seek()
+    //{
+    //    Vector3 seekDirection = (targetToAttack.transform.position - transform.position).normalized;
+    //    seekDirection = new Vector3(seekDirection.x, 0.0f, seekDirection.z);
+    //    transform.forward = seekDirection;
+    //    character.Move(seekDirection, 0, 1, 1);
+    //    //characterController.SimpleMove(seekDirection * character.MoveSpeed * Time.deltaTime);
+
+    //    if (Vector3.Distance(transform.position, targetToAttack.transform.position) > (attackRadius * 2))
+    //    {
+    //        enemyMovement = EnemyMovement.WANDER;
+    //    }
+    //}
+
+    ///// <summary>
+    ///// Moves away from target
+    ///// </summary>
+    //void Flee()
+    //{
+    //    Vector3 fleeDirection = (transform.position - targetToAttack.transform.position).normalized;
+    //    fleeDirection = new Vector3(fleeDirection.x, 0.0f, fleeDirection.z);
+
+    //    transform.forward = (fleeDirection);
+
+    //    character.Move(fleeDirection, 0, 1, 1);
+
+    //    //characterController.SimpleMove(fleeDirection * character.MoveSpeed * Time.deltaTime);
+
+    //    if (Vector3.Distance(transform.position, targetToAttack.transform.position) > (attackRadius * 2.0f))
+    //    {
+    //        enemyMovement = EnemyMovement.STOPMOVEMENT;
+    //        targetToAttack = null;
+    //    }
+    //}
+    //#endregion
 }
