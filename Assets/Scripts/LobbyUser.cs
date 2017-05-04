@@ -23,8 +23,10 @@ public class LobbyUser : PunBehaviour {
     public string name;
     private List<GameObject> Rooms = new List<GameObject>();
     public GameObject RoomPrefab;
+
     public GameObject RoomListObject;
     public GameObject LoginGameObject;
+    public GameObject CharacterSelect;
 
     // Use this for initialization
     void Start () {
@@ -90,12 +92,19 @@ public class LobbyUser : PunBehaviour {
         RoomOptions RO = new RoomOptions();
         RO.MaxPlayers = byte.Parse("2");
         bool result = PhotonNetwork.CreateRoom(_RoomName.text, RO, TypedLobby.Default);
-        
+
+        RoomListObject.SetActive(false);
+        CharacterSelect.SetActive(true);
+
     }
 
     public void SelectRoom(Button button)
     {
         GameObject room = button.transform.parent.FindChild("GameName").gameObject;
-        PhotonNetwork.JoinRoom(room.GetComponent<Text>().text);
+        if ( PhotonNetwork.JoinRoom(room.GetComponent<Text>().text))
+        {
+            RoomListObject.SetActive(false);
+            CharacterSelect.SetActive(true);
+        }
     }
 }
