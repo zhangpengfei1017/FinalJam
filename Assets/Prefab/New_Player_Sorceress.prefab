@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 95453457259924160}
   - component: {fileID: 114346708807584170}
   m_Layer: 0
-  m_Name: New_Royal_Sorceress
+  m_Name: New_Player_Sorceress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

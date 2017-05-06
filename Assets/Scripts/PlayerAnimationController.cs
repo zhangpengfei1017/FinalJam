@@ -29,6 +29,22 @@ public class PlayerAnimationController : MonoBehaviour
         {
             anim.SetInteger(skillIdxHash, 1);
         }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            anim.SetInteger(skillIdxHash, 2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            anim.SetInteger(skillIdxHash, 3);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            anim.SetInteger(skillIdxHash, 4);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            anim.SetInteger(skillIdxHash, 5);
+        }
     }
 
     void CreateSkillEffect()
