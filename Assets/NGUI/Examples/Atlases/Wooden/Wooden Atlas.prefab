@@ -5,17 +5,17 @@ GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 3
+  serializedVersion: 5
   m_Component:
-  - 4: {fileID: 400000}
-  - 114: {fileID: 11400000}
+  - component: {fileID: 400000}
+  - component: {fileID: 11400000}
   m_Layer: 0
   m_Name: Wooden Atlas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1002 &100001
 EditorExtensionImpl:
   serializedVersion: 6
@@ -30,6 +30,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1002 &400001
 EditorExtensionImpl:
   serializedVersion: 6
@@ -41,13 +43,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 1}
+  m_Script: {fileID: 11500000, guid: 4d0c51bb0b6e93049af5e88f93826e3b, type: 3}
   m_Name: 
+  m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: ec268c3ea1baceb4abb2168daed86f68, type: 2}
   mSprites:
   - name: Arimo14
-    x: 256
-    y: 52
+    x: 513
+    y: 216
     width: 126
     height: 126
     borderLeft: 0
@@ -59,7 +62,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 1
   - name: Arimo18
-    x: 0
+    x: 256
     y: 45
     width: 254
     height: 93
@@ -72,7 +75,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 34
   - name: Arimo20
-    x: 0
+    x: 256
     y: 139
     width: 255
     height: 116
@@ -85,8 +88,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 140
   - name: Button
-    x: 444
-    y: 55
+    x: 931
+    y: 421
     width: 17
     height: 17
     borderLeft: 5
@@ -98,7 +101,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Button A
-    x: 232
+    x: 488
     y: 1
     width: 20
     height: 20
@@ -111,8 +114,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Button B
-    x: 306
-    y: 2
+    x: 931
+    y: 439
     width: 20
     height: 20
     borderLeft: 0
@@ -124,8 +127,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Button X
-    x: 335
-    y: 31
+    x: 952
+    y: 439
     width: 20
     height: 20
     borderLeft: 0
@@ -137,8 +140,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Button Y
-    x: 356
-    y: 31
+    x: 769
+    y: 346
     width: 20
     height: 20
     borderLeft: 0
@@ -149,8 +152,47 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  - name: cc_char_name_input
+    x: 513
+    y: 420
+    width: 388
+    height: 92
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: cc_char_options_arrow_left
+    x: 850
+    y: 359
+    width: 60
+    height: 60
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
+  - name: cc_char_options_arrow_right
+    x: 911
+    y: 359
+    width: 60
+    height: 60
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: Checkmark
-    x: 138
+    x: 394
     y: 13
     width: 32
     height: 31
@@ -176,8 +218,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Emoticon - Angry
-    x: 485
-    y: 105
+    x: 1004
+    y: 429
     width: 20
     height: 20
     borderLeft: 0
@@ -189,8 +231,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Emoticon - Annoyed
-    x: 464
-    y: 105
+    x: 983
+    y: 429
     width: 20
     height: 20
     borderLeft: 0
@@ -202,8 +244,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Emoticon - Dead
-    x: 485
-    y: 137
+    x: 1004
+    y: 450
     width: 20
     height: 20
     borderLeft: 0
@@ -215,8 +257,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Emoticon - Frown
-    x: 464
-    y: 137
+    x: 983
+    y: 450
     width: 20
     height: 20
     borderLeft: 0
@@ -228,8 +270,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Emoticon - Laugh
-    x: 485
-    y: 158
+    x: 1004
+    y: 471
     width: 20
     height: 20
     borderLeft: 0
@@ -241,8 +283,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Emoticon - Rambo
-    x: 464
-    y: 158
+    x: 983
+    y: 471
     width: 20
     height: 20
     borderLeft: 0
@@ -254,8 +296,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Emoticon - Skull
-    x: 356
-    y: 10
+    x: 1004
+    y: 492
     width: 20
     height: 20
     borderLeft: 0
@@ -267,8 +309,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Emoticon - Smile
-    x: 335
-    y: 10
+    x: 790
+    y: 346
     width: 20
     height: 20
     borderLeft: 0
@@ -280,8 +322,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Emoticon - Smirk
-    x: 464
-    y: 84
+    x: 983
+    y: 492
     width: 20
     height: 20
     borderLeft: 0
@@ -293,8 +335,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Flag-FR
-    x: 383
-    y: 73
+    x: 769
+    y: 367
     width: 80
     height: 52
     borderLeft: 0
@@ -306,8 +348,8 @@ MonoBehaviour:
     paddingTop: 19
     paddingBottom: 9
   - name: Flag-US
-    x: 383
-    y: 126
+    x: 902
+    y: 460
     width: 80
     height: 52
     borderLeft: 0
@@ -319,8 +361,8 @@ MonoBehaviour:
     paddingTop: 19
     paddingBottom: 9
   - name: Flat
-    x: 462
-    y: 55
+    x: 952
+    y: 421
     width: 17
     height: 17
     borderLeft: 5
@@ -332,7 +374,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Glow - Inner
-    x: 202
+    x: 458
     y: 15
     width: 29
     height: 29
@@ -345,8 +387,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Glow - Outer
-    x: 383
-    y: 12
+    x: 513
+    y: 155
     width: 60
     height: 60
     borderLeft: 26
@@ -358,8 +400,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Highlight - Shadowed
-    x: 306
-    y: 23
+    x: 902
+    y: 431
     width: 28
     height: 28
     borderLeft: 9
@@ -371,7 +413,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Highlight - Thin
-    x: 232
+    x: 488
     y: 22
     width: 22
     height: 22
@@ -384,8 +426,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: NGUI
-    x: 256
-    y: 179
+    x: 513
+    y: 343
     width: 255
     height: 76
     borderLeft: 0
@@ -397,8 +439,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Resize Icon
-    x: 485
-    y: 85
+    x: 811
+    y: 347
     width: 19
     height: 19
     borderLeft: 0
@@ -410,7 +452,7 @@ MonoBehaviour:
     paddingTop: 1
     paddingBottom: 0
   - name: Right Bracket
-    x: 0
+    x: 256
     y: 4
     width: 5
     height: 5
@@ -423,7 +465,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Row Outline
-    x: 6
+    x: 262
     y: 4
     width: 5
     height: 5
@@ -436,7 +478,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Screw
-    x: 171
+    x: 427
     y: 15
     width: 30
     height: 29
@@ -449,7 +491,7 @@ MonoBehaviour:
     paddingTop: 1
     paddingBottom: 1
   - name: Stripes 1
-    x: 0
+    x: 326
     y: 10
     width: 34
     height: 34
@@ -462,7 +504,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Stripes 2
-    x: 70
+    x: 291
     y: 10
     width: 34
     height: 34
@@ -475,7 +517,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Stripes 3
-    x: 35
+    x: 256
     y: 10
     width: 34
     height: 34
@@ -488,8 +530,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: Window
-    x: 256
-    y: 2
+    x: 972
+    y: 370
     width: 49
     height: 49
     borderLeft: 11
@@ -501,8 +543,8 @@ MonoBehaviour:
     paddingTop: 6
     paddingBottom: 4
   - name: Wooden Background
-    x: 513
-    y: 257
+    x: 0
+    y: 0
     width: 255
     height: 255
     borderLeft: 1
@@ -514,7 +556,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: X Mark
-    x: 105
+    x: 361
     y: 12
     width: 32
     height: 32
@@ -544,7 +586,6 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 100000}
   m_IsPrefabParent: 1
-  m_IsExploded: 1
 --- !u!1002 &100100001
 EditorExtensionImpl:
   serializedVersion: 6
