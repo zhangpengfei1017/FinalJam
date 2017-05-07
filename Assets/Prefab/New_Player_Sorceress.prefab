@@ -3039,6 +3039,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 057deed670b293f4dbe56b1ec03d544f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  moveSpeed: 2
+  mouseSensitive: 2
 --- !u!137 &137688895262966486
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
