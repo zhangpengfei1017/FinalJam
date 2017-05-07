@@ -14,8 +14,7 @@ public class Room_ChooseCharacter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        this.GetComponentInChildren<UILabel>().text = characters[i];
-        GameObject.Find("characterinfo name").GetComponent<UILabel>().text= characters[i];
+
     }
 
    

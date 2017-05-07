@@ -93,7 +93,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_gray
-    x: 481
+    x: 828
     y: 333
     width: 346
     height: 130
@@ -101,12 +101,12 @@ MonoBehaviour:
     borderRight: 0
     borderTop: 0
     borderBottom: 0
-    paddingLeft: 0
-    paddingRight: 0
-    paddingTop: 0
-    paddingBottom: 0
+    paddingLeft: -5
+    paddingRight: -5
+    paddingTop: -5
+    paddingBottom: -5
   - name: button_gray-HOVER
-    x: 481
+    x: 828
     y: 202
     width: 346
     height: 130
@@ -119,20 +119,7 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_gray-PUSH
-    x: 481
-    y: 464
-    width: 346
-    height: 130
-    borderLeft: 0
-    borderRight: 0
-    borderTop: 0
-    borderBottom: 0
-    paddingLeft: 0
-    paddingRight: 0
-    paddingTop: 0
-    paddingBottom: 0
-  - name: button_green
-    x: 481
+    x: 828
     y: 71
     width: 346
     height: 130
@@ -144,6 +131,19 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  - name: button_green
+    x: 0
+    y: 10
+    width: 346
+    height: 130
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: -5
+    paddingRight: -5
+    paddingTop: -5
+    paddingBottom: -5
   - name: button_green-HOVER
     x: 828
     y: 464
@@ -158,8 +158,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_green-PUSH
-    x: 828
-    y: 333
+    x: 481
+    y: 464
     width: 346
     height: 130
     borderLeft: 0
@@ -171,7 +171,20 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_orange
-    x: 828
+    x: 481
+    y: 333
+    width: 346
+    height: 130
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: -5
+    paddingRight: -5
+    paddingTop: -5
+    paddingBottom: -5
+  - name: button_orange-HOVER
+    x: 481
     y: 202
     width: 346
     height: 130
@@ -183,22 +196,9 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
-  - name: button_orange-HOVER
-    x: 828
-    y: 71
-    width: 346
-    height: 130
-    borderLeft: 0
-    borderRight: 0
-    borderTop: 0
-    borderBottom: 0
-    paddingLeft: 0
-    paddingRight: 0
-    paddingTop: 0
-    paddingBottom: 0
   - name: button_orange-PUSH
-    x: 0
-    y: 10
+    x: 481
+    y: 71
     width: 346
     height: 130
     borderLeft: 0
@@ -227,14 +227,14 @@ MonoBehaviour:
     y: 751
     width: 388
     height: 92
-    borderLeft: 0
-    borderRight: 0
-    borderTop: 0
-    borderBottom: 0
-    paddingLeft: 0
-    paddingRight: 0
-    paddingTop: 0
-    paddingBottom: 0
+    borderLeft: 14
+    borderRight: 14
+    borderTop: 12
+    borderBottom: 12
+    paddingLeft: -5
+    paddingRight: -5
+    paddingTop: -5
+    paddingBottom: -5
   - name: cc_char_options_arrow_left
     x: 2718
     y: 2936
@@ -327,19 +327,6 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: chat_scroll_handler
-    x: 2779
-    y: 2946
-    width: 10
-    height: 50
-    borderLeft: 0
-    borderRight: 0
-    borderTop: 0
-    borderBottom: 0
-    paddingLeft: 0
-    paddingRight: 0
-    paddingTop: 0
-    paddingBottom: 0
-  - name: chat_scroll_handler-HOVER
     x: 2790
     y: 2946
     width: 10
@@ -352,9 +339,22 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  - name: chat_scroll_handler-HOVER
+    x: 2779
+    y: 2946
+    width: 10
+    height: 50
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: chat_send_btn
-    x: 1175
-    y: 387
+    x: 347
+    y: 64
     width: 117
     height: 76
     borderLeft: 0
@@ -366,8 +366,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: chat_send_btn-HOVER
-    x: 347
-    y: 64
+    x: 1175
+    y: 387
     width: 117
     height: 76
     borderLeft: 0
@@ -591,10 +591,10 @@ MonoBehaviour:
     y: 3462
     width: 764
     height: 634
-    borderLeft: 0
-    borderRight: 0
-    borderTop: 0
-    borderBottom: 0
+    borderLeft: 40
+    borderRight: 40
+    borderTop: 40
+    borderBottom: 40
     paddingLeft: 0
     paddingRight: 0
     paddingTop: 0
@@ -666,7 +666,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: ready
     x: 0
-    y: 141
+    y: 495
     width: 480
     height: 176
     borderLeft: 0
@@ -684,12 +684,12 @@ MonoBehaviour:
     height: 1218
     borderLeft: 0
     borderRight: 0
-    borderTop: 0
-    borderBottom: 0
+    borderTop: 10
+    borderBottom: 10
     paddingLeft: 0
     paddingRight: 0
-    paddingTop: 0
-    paddingBottom: 0
+    paddingTop: -10
+    paddingBottom: -10
   - name: scroll_handler
     x: 4068
     y: 3766
@@ -716,9 +716,22 @@ MonoBehaviour:
     paddingRight: 0
     paddingTop: 0
     paddingBottom: 0
+  - name: ScrollForeground
+    x: 4074
+    y: 3963
+    width: 19
+    height: 133
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: -1
+    paddingBottom: -1
   - name: start
     x: 0
-    y: 495
+    y: 141
     width: 480
     height: 176
     borderLeft: 0
