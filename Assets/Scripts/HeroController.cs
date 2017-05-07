@@ -47,16 +47,14 @@ public class HeroController : MonoBehaviour
 
     void Update()
     {
-        if (!GetComponent<PhotonView>().isMine) {
-            return;
-        }
+        //if (!GetComponent<PhotonView>().isMine) {
+        //    return;
+        //}
         DetectAttack();
 
         DetectMove();
 
         DetectClick();
-
-        print("1");
     }
 
 
