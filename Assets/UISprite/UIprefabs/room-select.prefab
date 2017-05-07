@@ -91,9 +91,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1285896273419048}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 692, y: -852, z: 0}
-  m_LocalScale: {x: 3.343288, y: 7.717331, z: 4.2293363}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 159, y: -6, z: 0}
+  m_LocalScale: {x: 1.6231589, y: 3.6723967, z: 1.6231586}
   m_Children:
   - {fileID: 4038942245833184}
   - {fileID: 4239741243471632}
@@ -150,7 +150,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: c_full_header
   mFillCenter: 1
 --- !u!114 &114575012278835520
@@ -203,7 +203,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: papper_container
   mFillCenter: 1
 --- !u!114 &114893232542498514
@@ -256,6 +256,6 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: avatar_room
   mFillCenter: 1

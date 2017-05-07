@@ -91,9 +91,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1740742487385174}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 88, y: 115, z: 0}
-  m_LocalScale: {x: 1.2828408, y: 0.63743657, z: 0.63743657}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -220, y: 144, z: 0}
+  m_LocalScale: {x: 1.1736187, y: 0.60776526, z: 0.558866}
   m_Children:
   - {fileID: 4133957042534260}
   - {fileID: 4878543174923570}
@@ -150,7 +150,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: uf2_fill_green
   mFillCenter: 1
 --- !u!114 &114609007581293188
@@ -203,7 +203,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: uf2_fill_blue
   mFillCenter: 1
 --- !u!114 &114757931870398874
@@ -256,6 +256,6 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: uf2_frame
   mFillCenter: 1

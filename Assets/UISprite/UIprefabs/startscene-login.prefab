@@ -200,9 +200,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1085881548084402}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -153, y: 225, z: 0}
-  m_LocalScale: {x: 2.2834485, y: 1.1805845, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 11.071, y: 27, z: 0}
+  m_LocalScale: {x: 1.7812502, y: 1, z: 1}
   m_Children:
   - {fileID: 4713106867047266}
   - {fileID: 4318882943522278}
@@ -487,7 +487,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: login_text_input
   mFillCenter: 1
 --- !u!114 &114798134528013690
@@ -540,7 +540,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: login_container
   mFillCenter: 1
 --- !u!114 &114929050085405832
@@ -593,6 +593,6 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: login_big_btn
   mFillCenter: 1

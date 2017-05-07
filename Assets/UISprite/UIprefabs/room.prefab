@@ -609,8 +609,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1115784707041660}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 148, y: -853, z: 0}
-  m_LocalScale: {x: 0.74426395, y: 3.8763063, z: 1}
+  m_LocalPosition: {x: -119, y: -6, z: 0}
+  m_LocalScale: {x: 0.31375217, y: 1.8448639, z: 0.31375223}
   m_Children:
   - {fileID: 4677945850319052}
   - {fileID: 4575934990406680}
@@ -932,7 +932,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: Highlight - Shadowed
   mFillCenter: 1
 --- !u!114 &114247299651290268
@@ -985,7 +985,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: chat_scroll_bar
   mFillCenter: 1
 --- !u!114 &114269849086877864
@@ -1038,7 +1038,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: c_full_header
   mFillCenter: 1
 --- !u!114 &114334748207722604
@@ -1600,7 +1600,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: c_full_header
   mFillCenter: 1
 --- !u!114 &114804564454614524
@@ -1746,7 +1746,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: chat_send_btn
   mFillCenter: 1
 --- !u!114 &114888990112090404
@@ -1829,7 +1829,7 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 11400000, guid: 62adb30369acbf943a67cee0f69267a3, type: 2}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: Highlight - Shadowed
   mFillCenter: 1
 --- !u!114 &114951546395897418
@@ -1882,6 +1882,6 @@ MonoBehaviour:
   rightType: 1
   bottomType: 1
   topType: 1
-  mAtlas: {fileID: 0}
+  mAtlas: {fileID: 114435060434673926, guid: a4f1ab89013d75941bc0c94042c08170, type: 2}
   mSpriteName: borderline
   mFillCenter: 1
