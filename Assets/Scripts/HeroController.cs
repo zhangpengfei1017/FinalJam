@@ -55,6 +55,8 @@ public class HeroController : MonoBehaviour
         DetectMove();
 
         DetectClick();
+
+        print("1");
     }
 
 
@@ -67,7 +69,7 @@ public class HeroController : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             dir += transform.forward;
-            d = 1;
+            d = 1;           
         }
         if (Input.GetKey(KeyCode.S))
         {
