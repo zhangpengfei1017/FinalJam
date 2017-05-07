@@ -44,30 +44,47 @@ public class Lobby : PunBehaviour {
     public override void OnJoinedLobby()
     {
         base.OnJoinedLobby();
+    }
 
+    public override void OnReceivedRoomListUpdate()
+    {
+        base.OnReceivedRoomListUpdate();
         // Get and Refresh Rooms List here.
-        int i = 0;
+        int i = 1;
         Debug.Log("dsa");
         Debug.Log(PhotonNetwork.GetRoomList().Length);
         foreach (var item in PhotonNetwork.GetRoomList())
         {
-            Vector3 tempPos = new Vector3(RoomPanel.transform.position.x, RoomPanel.transform.position.y + i * 50, RoomPanel.transform.position.z);
-            GameObject newObj = Instantiate(RoomPanel, tempPos, Quaternion.identity);
+            Vector3 tempPos = new Vector3(RoomPanel.transform.position.x, RoomPanel.transform.position.y - ( i * 0.15f), RoomPanel.transform.position.z);
+            GameObject newObj = Instantiate(RoomPanel, tempPos, Quaternion.identity, RoomPanel.transform.parent);
+            newObj.transform.FindChild("Name").GetComponent<UILabel>().text = item.Name;
+            newObj.transform.FindChild("Players").GetComponent<UILabel>().text = "" + item.PlayerCount + " / " + item.MaxPlayers;
             Debug.Log(newObj);
             ++i;
         }
-
     }
 
     public void SelectRoom(UILabel _text)
     {
         _selectedRoomName = _text.text;
+        Debug.Log(_selectedRoomName);
     }
 
     public void CreateRoomButton(UILabel _text)
     {
         RoomOptions RO = new RoomOptions();
         RO.MaxPlayers = 5;
-        PhotonNetwork.CreateRoom(_text.text, RO, TypedLobby.Default);
+        bool check = PhotonNetwork.CreateRoom(_text.text, RO, TypedLobby.Default);
+        Debug.Log(check);
+    }
+
+    public void JoinRoom()
+    {
+        if (null != _selectedRoomName)
+        {
+            PhotonNetwork.JoinRoom(_selectedRoomName);
+        }
+        else
+            PhotonNetwork.JoinRandomRoom(); // Should we do this?
     }
 }

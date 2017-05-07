@@ -230,7 +230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 966abc844b175c9428947443ba366136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RoomPanel: {fileID: 0}
+  RoomPanel: {fileID: 231884520}
 --- !u!1 &125270357
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,7 +534,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 231884520}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 53, z: 0}
+  m_LocalPosition: {x: 8, y: 53, z: 0}
   m_LocalScale: {x: 10.425, y: 1, z: 1}
   m_Children:
   - {fileID: 559851522}
@@ -835,7 +835,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4791214540425030, guid: 296f52ff8a9af52478b0eb680b09faf5, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 1795.8
+      value: 1770
       objectReference: {fileID: 0}
     - target: {fileID: 4791214540425030, guid: 296f52ff8a9af52478b0eb680b09faf5, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1998,6 +1998,11 @@ Prefab:
       propertyPath: onClick.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114788710253429444, guid: e2094741e114c5b4b9eb50ea582011b6,
+        type: 2}
+      propertyPath: onClick.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4518972742798126, guid: e2094741e114c5b4b9eb50ea582011b6, type: 2}
       propertyPath: m_LocalPosition.x
       value: -3.7926517
@@ -2098,6 +2103,26 @@ Prefab:
         type: 2}
       propertyPath: onClick.Array.data[0].mMethodName
       value: MoveToCreateRoomPopup
+      objectReference: {fileID: 0}
+    - target: {fileID: 114788710253429444, guid: e2094741e114c5b4b9eb50ea582011b6,
+        type: 2}
+      propertyPath: onClick.Array.data[0].mTarget
+      value: 
+      objectReference: {fileID: 74155651}
+    - target: {fileID: 114788710253429444, guid: e2094741e114c5b4b9eb50ea582011b6,
+        type: 2}
+      propertyPath: onClick.Array.data[0].mMethodName
+      value: JoinRoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 114788710253429444, guid: e2094741e114c5b4b9eb50ea582011b6,
+        type: 2}
+      propertyPath: onClick.Array.data[1].mTarget
+      value: 
+      objectReference: {fileID: 1731587246}
+    - target: {fileID: 114788710253429444, guid: e2094741e114c5b4b9eb50ea582011b6,
+        type: 2}
+      propertyPath: onClick.Array.data[1].mMethodName
+      value: MoveToRoom
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e2094741e114c5b4b9eb50ea582011b6, type: 2}
@@ -2430,6 +2455,10 @@ Prefab:
         type: 2}
       propertyPath: mDepth
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1085881548084402, guid: b9a414bbae2a50049947d7e3380f3b8b, type: 2}
+      propertyPath: m_Name
+      value: Login
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b9a414bbae2a50049947d7e3380f3b8b, type: 2}
