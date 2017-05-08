@@ -8,8 +8,7 @@ public class GameController : Photon.PunBehaviour
     // Use this for initialization
     void Start()
     {
-        PhotonNetwork.Instantiate("TestPlayer", Vector3.zero, Quaternion.identity, 0);
-        photonView.RPC("OnPlayerJoinedGameplay", PhotonTargets.AllViaServer, null);
+        //photonView.RPC("OnPlayerJoinedGameplay", PhotonTargets.AllViaServer, null);
     }
 
     // Update is called once per frame
@@ -20,7 +19,7 @@ public class GameController : Photon.PunBehaviour
     [PunRPC]
     void OnPlayerJoinedGameplay()
     {
-        allPlayers = FindObjectsOfType<HeroController>();
+        //allPlayers = FindObjectsOfType<HeroController>();
         //sort by some way       
     }
 }
