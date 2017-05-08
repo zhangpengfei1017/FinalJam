@@ -7,7 +7,6 @@ public class NewPlayerController : MonoBehaviour
     public Camera cam;
 
     public float moveSpeed = 1.0f;
-    public float mouseSensitive = 1.0f;
 
     public NewSkillEffect[] skillEffects;
 
