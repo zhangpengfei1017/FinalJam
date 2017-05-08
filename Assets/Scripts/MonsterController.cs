@@ -358,7 +358,7 @@ public class MonsterController : MonoBehaviour
         {
             Vector3 direction = (targetPosition - transform.position).normalized;
             Quaternion q = Quaternion.LookRotation(direction);
-            character.Move(direction,q.eulerAngles.y, -1, 0.5f);                                              
+            character.Move(direction,q.eulerAngles.y);                                             
             if (Vector3.Distance(transform.position, targetPosition) <= 1 || wanderTimer <= 0)
             {
                 gotoStop = true;
@@ -369,7 +369,7 @@ public class MonsterController : MonoBehaviour
     void Stopping()
     {
         stopTimer -= Time.deltaTime;
-        character.Move(Vector3.zero, transform.rotation.eulerAngles.y, 0, 0);
+        character.Move(Vector3.zero, transform.rotation.eulerAngles.y);
         if (stopTimer <= 0)
         {
             gotoWander = true;
@@ -384,7 +384,7 @@ public class MonsterController : MonoBehaviour
         Vector3 targetPlayer = target.transform.position;
         Vector3 direction = (targetPlayer - transform.position).normalized;
         Quaternion q = Quaternion.LookRotation(direction);
-        character.Move(direction, q.eulerAngles.y, 1, 1);
+        character.Move(direction, q.eulerAngles.y);
         float distance = Vector3.Distance(transform.position, targetPlayer);
         if (distance <= 4)
         {
@@ -405,7 +405,7 @@ public class MonsterController : MonoBehaviour
         Vector3 targetPlayer = target.transform.position;
         Vector3 direction = (targetPlayer - transform.position).normalized;
         Quaternion q = Quaternion.LookRotation(direction);
-        character.Move(Vector3.zero, q.eulerAngles.y, 0, 0);
+        character.Move(Vector3.zero, q.eulerAngles.y);
         float distance = Vector3.Distance(transform.position, targetPlayer);
         if (attackTimer >= attackCD)
         {
@@ -428,7 +428,7 @@ public class MonsterController : MonoBehaviour
         {
             Vector3 direction = (targetPosition - transform.position).normalized;
             Quaternion q = Quaternion.LookRotation(direction);
-            character.Move(direction, q.eulerAngles.y, 1, 1);
+            //character.Move(direction, q.eulerAngles.y, 1, 1);
             if (Vector3.Distance(targetPosition, transform.position) < 2) {
                 hasTargetPosition = false;
             }

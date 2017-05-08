@@ -46,11 +46,17 @@ public class HeroController : MonoBehaviour
 
     private UIController uiCtrl;
 
+    //
+
+    //private NewPlayerController pc;
+
     void Start()
     {
         character = GetComponent<GameCharacter>();
 
         cam = GameObject.Find("MainCam");
+
+        //pc = GetComponent<NewPlayerController>();
     }
 
     void Update()
@@ -70,56 +76,59 @@ public class HeroController : MonoBehaviour
 
     void DetectMove()
     {
-        Vector3 dir = Vector3.zero;
-        float ro = 0;
-        int d = 0;
-        float speed = 1; ;
-        if (Input.GetKey(KeyCode.W))
-        {
-            dir += transform.forward;
-            d = 1;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            dir -= transform.forward;
-            d = -1;
-            speed = 0.4f;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            if (Input.GetKey(KeyCode.W))
-            {
-                ro = -45;
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                ro = 45;
-            }
-            else
-            {
-                dir += transform.forward;
-                ro = -90;
-                d = 1;
-            }
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            if (Input.GetKey(KeyCode.W))
-            {
-                ro = 45;
-            }
-            else if (Input.GetKey(KeyCode.S))
-            {
-                ro = -45;
-            }
-            else
-            {
-                dir += transform.forward;
-                ro = 90;
-                d = 1;
-            }
-        }
-        character.Move(dir, cam.transform.rotation.eulerAngles.y + ro, d, speed);
+        float moveFwd = Input.GetAxis("Vertical");
+        float moveRt = Input.GetAxis("Horizontal");
+        character.Move(moveFwd, moveRt);
+        //Vector3 dir = Vector3.zero;
+        //float ro = 0;
+        //int d = 0;
+        //float speed = 1; ;
+        //if (Input.GetKey(KeyCode.W))
+        //{
+        //    dir += transform.forward;
+        //    d = 1;
+        //}
+        //if (Input.GetKey(KeyCode.S))
+        //{
+        //    dir -= transform.forward;
+        //    d = -1;
+        //    speed = 0.4f;
+        //}
+        //if (Input.GetKey(KeyCode.A))
+        //{
+        //    if (Input.GetKey(KeyCode.W))
+        //    {
+        //        ro = -45;
+        //    }
+        //    else if (Input.GetKey(KeyCode.S))
+        //    {
+        //        ro = 45;
+        //    }
+        //    else
+        //    {
+        //        dir += transform.forward;
+        //        ro = -90;
+        //        d = 1;
+        //    }
+        //}
+        //if (Input.GetKey(KeyCode.D))
+        //{
+        //    if (Input.GetKey(KeyCode.W))
+        //    {
+        //        ro = 45;
+        //    }
+        //    else if (Input.GetKey(KeyCode.S))
+        //    {
+        //        ro = -45;
+        //    }
+        //    else
+        //    {
+        //        dir += transform.forward;
+        //        ro = 90;
+        //        d = 1;
+        //    }
+        //}
+        //character.Move(dir, cam.transform.rotation.eulerAngles.y + ro, d, speed);
     }
 
     void DetectAttack()
