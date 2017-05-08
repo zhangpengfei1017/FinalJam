@@ -14,72 +14,99 @@ public class Lobby : PunBehaviour {
     public GameObject LoginObject;
     public GameObject RoomListObj;
 
-    public GameObject RoomPanel;
+    public GameObject roomPrefab;
+    public UIGrid roomList;
 
     public GameObject CreateRoomPopup;
 
     private string username;
     private string _selectedRoomName;
+    private RoomUI currentClicked;
 
     private void Awake()
     {
         if (null == Lobby._instance)
         {
             _instance = this;
-            DontDestroyOnLoad(this);
         }else
         {
             Destroy(this);
         }
+        PlayerInfo pi = new PlayerInfo();
+        PlayerInfo.instance = pi;
     }
 
     // Use this for initialization
     void Start () {
-        PhotonNetwork.ConnectUsingSettings("1.0f");
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+        roomList.Reposition();
 	}
 
     public void setUserName(UILabel _uiText)
     {
         username = _uiText.text;
-        LoginObject.SetActive(false);
-        RoomListObj.SetActive(true);
+        PlayerInfo.instance.playerName = _uiText.text;
+        if (username == "") {
+            LobbyMessage.instance.Msg("you need a name!");
+            return;
+        }
+        PhotonNetwork.JoinLobby();
+        PhotonNetwork.ConnectUsingSettings("1.0f");
     }
 
     public override void OnJoinedLobby()
     {
         base.OnJoinedLobby();
+        LoginObject.SetActive(false);
+        RoomListObj.SetActive(true);
+        LobbyMessage.instance.Msg("Joined Lobby");
     }
+
 
     public override void OnReceivedRoomListUpdate()
     {
         base.OnReceivedRoomListUpdate();
         // Get and Refresh Rooms List here.
-        int i = 1;
-        Debug.Log("dsa");
-        Debug.Log(PhotonNetwork.GetRoomList().Length);
-        foreach (var item in PhotonNetwork.GetRoomList())
+        RoomInfo[] rooms = PhotonNetwork.GetRoomList();
+        foreach (Transform t in roomList.GetChildList())
         {
-            Vector3 tempPos = new Vector3(RoomPanel.transform.position.x, RoomPanel.transform.position.y - ( i * 0.15f), RoomPanel.transform.position.z);
-            GameObject newObj = Instantiate(RoomPanel, tempPos, Quaternion.identity, RoomPanel.transform.parent);
-            newObj.transform.FindChild("Name").GetComponent<UILabel>().text = item.Name;
-            newObj.transform.FindChild("Players").GetComponent<UILabel>().text = "" + item.PlayerCount + " / " + item.MaxPlayers;
-            Debug.Log(newObj);
-            ++i;
+            roomList.RemoveChild(t);
+            Destroy(t.gameObject);
         }
+        bool notLostRoom = false;
+        foreach (RoomInfo r in rooms)
+        {
+            GameObject go= Instantiate(roomPrefab,LobbyMessage.instance.transform.parent);
+            roomList.AddChild(go.transform);
+            go.GetComponent<RoomUI>().SetInfo(r.Name, r.PlayerCount);
+            if (r.Name == _selectedRoomName) {
+                go.GetComponent<RoomUI>().Clicked();            
+                notLostRoom = true;
+            }
+        }
+        if (!notLostRoom) {
+            _selectedRoomName = "";
+            currentClicked = null;
+        }           
     }
 
-    public void SelectRoom(UILabel _text)
+
+    public void SelectRoom(RoomUI r)
     {
-        _selectedRoomName = _text.text;
-        Debug.Log(_selectedRoomName);
+        _selectedRoomName = r.roomName;
+
+        if (currentClicked != null && currentClicked!=r)
+        {
+            currentClicked.UnClicked();
+        }
+        currentClicked = r;
     }
 
-    public void CreateRoomButton(UILabel _text)
+    public void CreateRoomButton()
     {
 
         if ( PhotonNetwork.connectionState == ConnectionState.Disconnected)
@@ -89,29 +116,32 @@ public class Lobby : PunBehaviour {
 
         RoomOptions RO = new RoomOptions();
         RO.MaxPlayers = 5;
-        bool check = PhotonNetwork.CreateRoom(_text.text, RO, TypedLobby.Default);
-        if (check)
+        bool check = PhotonNetwork.CreateRoom(username+"'s game", RO, TypedLobby.Default);
+        if (!check)
         {
-            SceneManager.LoadScene(1);
+            LobbyMessage.instance.Msg("Create room failed");
         }
     }
 
     public void JoinRoom()
     {
-        bool check;
         if (null != _selectedRoomName)
         {
-            check = PhotonNetwork.JoinRoom(_selectedRoomName);
+            if (!PhotonNetwork.JoinRoom(_selectedRoomName)) {
+                LobbyMessage.instance.Msg("Join failed!");
+            }            
         }
-        else
-            check = PhotonNetwork.JoinRandomRoom(); // Should we do this?
-
-        if (check) SceneManager.LoadScene(1);
+        else {
+            LobbyMessage.instance.Msg("Please select a room!");
+        }
     }
 
-    public void OpenCreateRoomPopup()
-    {
-        RoomListObj.SetActive(false);
-        CreateRoomPopup.SetActive(true);
+    public override void OnJoinedRoom() {
+        base.OnJoinedRoom();
+        PhotonNetwork.LoadLevel(1);
+    }
+
+    public void QuitGame() {
+        Application.Quit();
     }
 }
