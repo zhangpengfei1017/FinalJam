@@ -90,14 +90,12 @@ public class BossController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("?");
 
         if (!GetComponent<PhotonView>().isMine)
         {
             return;
         }
 
-        Debug.Log("Success");
 
         CheckHealth();
 

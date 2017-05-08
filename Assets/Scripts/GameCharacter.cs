@@ -237,39 +237,39 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         //--------------------------------------
         //--------------test code---------------
         //--------------------------------------
-        if (characterType == CharacterType.Player && photonView.isMine)
-        {
-            GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
-            GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
-            GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
-            GameObject.Find("CD4").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(3) * 100).ToString() + "%";
-            GameObject.Find("CD5").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(4) * 100).ToString() + "%";
-            if (isCasting || isChanneling)
-            {
-                GameObject.Find("CastProgress").GetComponent<Text>().text = Mathf.FloorToInt(GetCastingProgress() * 100).ToString() + "%";
-            }
-            else
-            {
-                GameObject.Find("CastProgress").GetComponent<Text>().text = "";
-            }
-            GameObject.Find("HPBar").GetComponent<Text>().text = curHP.ToString() + "/" + finalMaxHP.ToString();
-            GameObject.Find("MPBar").GetComponent<Text>().text = curMP.ToString() + "/" + finalMaxMP.ToString();
-            Text targetName = GameObject.Find("TargetName").GetComponent<Text>();
-            Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
-            Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
-            if (target != null)
-            {
-                targetHp.text = target.GetComponent<GameCharacter>().curHP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxHP;
-                targetMp.text = target.GetComponent<GameCharacter>().curMP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxMP;
-                targetName.text = target.GetComponent<GameCharacter>().characterName;
-            }
-            else
-            {
-                targetHp.text = "";
-                targetMp.text = "";
-                targetName.text = "";
-            }
-        }
+        //if (characterType == CharacterType.Player && photonView.isMine)
+        //{
+        //    GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
+        //    GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
+        //    GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
+        //    GameObject.Find("CD4").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(3) * 100).ToString() + "%";
+        //    GameObject.Find("CD5").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(4) * 100).ToString() + "%";
+        //    if (isCasting || isChanneling)
+        //    {
+        //        GameObject.Find("CastProgress").GetComponent<Text>().text = Mathf.FloorToInt(GetCastingProgress() * 100).ToString() + "%";
+        //    }
+        //    else
+        //    {
+        //        GameObject.Find("CastProgress").GetComponent<Text>().text = "";
+        //    }
+        //    GameObject.Find("HPBar").GetComponent<Text>().text = curHP.ToString() + "/" + finalMaxHP.ToString();
+        //    GameObject.Find("MPBar").GetComponent<Text>().text = curMP.ToString() + "/" + finalMaxMP.ToString();
+        //    Text targetName = GameObject.Find("TargetName").GetComponent<Text>();
+        //    Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
+        //    Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
+        //    if (target != null)
+        //    {
+        //        targetHp.text = target.GetComponent<GameCharacter>().curHP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxHP;
+        //        targetMp.text = target.GetComponent<GameCharacter>().curMP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxMP;
+        //        targetName.text = target.GetComponent<GameCharacter>().characterName;
+        //    }
+        //    else
+        //    {
+        //        targetHp.text = "";
+        //        targetMp.text = "";
+        //        targetName.text = "";
+        //    }
+        //}
 
 
 
