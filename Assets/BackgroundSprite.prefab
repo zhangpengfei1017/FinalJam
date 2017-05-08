@@ -53,6 +53,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: dded02883ea5cf84c8f4a9ebfb64a1b3, type: 2}
   mSprites:
+  - name: ActionBarBackground
+    x: 2049
+    y: 1742
+    width: 877
+    height: 199
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 1
+  - name: ActionBarShortcut
+    x: 0
+    y: 42
+    width: 558
+    height: 50
+    borderLeft: 0
+    borderRight: 0
+    borderTop: 0
+    borderBottom: 0
+    paddingLeft: 0
+    paddingRight: 0
+    paddingTop: 0
+    paddingBottom: 0
   - name: LobbyScene
     x: 0
     y: 647
@@ -107,7 +133,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: SelectClassBackground
     x: 2049
-    y: 588
+    y: 388
     width: 585
     height: 1353
     borderLeft: 0
