@@ -3013,6 +3013,16 @@ Prefab:
       propertyPath: instantiationId
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114511953289888442, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: mValue
+      value: 0.9090928
+      objectReference: {fileID: 0}
+    - target: {fileID: 114511953289888442, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: mSize
+      value: 0.9450001
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9932df2501741bb4a86a5247038ebbd0, type: 2}
   m_IsPrefabParent: 0
@@ -3433,9 +3443,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5ecb5660b11414fb042fb826e03b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scalingStyle: 0
-  manualWidth: 1280
-  manualHeight: 720
+  scalingStyle: 1
+  manualWidth: 1920
+  manualHeight: 1080
   minimumHeight: 320
   maximumHeight: 1536
   fitWidth: 0
