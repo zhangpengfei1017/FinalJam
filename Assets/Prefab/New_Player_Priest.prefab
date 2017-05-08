@@ -10920,7 +10920,10 @@ MonoBehaviour:
   moveSpeed: 250
   skillEffects:
   - {fileID: 114128141200779638}
-  - {fileID: 0}
+  - {fileID: 114979705701705896}
+  - {fileID: 114130468519947364}
+  - {fileID: 114877956435178894}
+  - {fileID: 114951257913404898}
 --- !u!114 &114877956435178894
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -10963,21 +10966,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeAlive: 10
   spawners:
-  - prefab: {fileID: 1180082404480902, guid: 16e7b5e9b419dd049b00f42f7bea4ae6, type: 2}
-    target: {fileID: 4949630598198322}
-    positionOffset: {x: 0, y: 0, z: 0}
+  - prefab: {fileID: 1467245608897320, guid: 16e7b5e9b419dd049b00f42f7bea4ae6, type: 2}
+    target: {fileID: 0}
+    positionOffset: {x: 0, y: 0.5, z: 0}
     rotationOffset: {x: 0, y: 0, z: 0}
     asChild: 1
     triggeredByEvent: 1
     eventId: 0
-    triggeredTime: 0
-  - prefab: {fileID: 1866702462976764, guid: 5b2a61549ac3e8b499bddb25548dbe35, type: 2}
-    target: {fileID: 4949630598198322}
-    positionOffset: {x: 0, y: 0, z: 0}
-    rotationOffset: {x: 0, y: 0, z: 0}
-    asChild: 0
-    triggeredByEvent: 1
-    eventId: 1
     triggeredTime: 0
 --- !u!114 &114979705701705896
 MonoBehaviour:
