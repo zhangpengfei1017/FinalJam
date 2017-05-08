@@ -2192,7 +2192,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 3.47
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -14120,7 +14120,7 @@ Prefab:
     - target: {fileID: 114697477250200906, guid: 610592602c07d554d8df5174e4aa15ee,
         type: 2}
       propertyPath: aspectRatio
-      value: 2.5
+      value: 2.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 610592602c07d554d8df5174e4aa15ee, type: 2}
