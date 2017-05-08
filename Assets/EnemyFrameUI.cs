@@ -10,6 +10,12 @@ public class EnemyFrameUI : MonoBehaviour {
 
     public UILabel hpPercent;
 
+    public GameObject castBar;
+
+    public UISprite castProgress;
+
+    public UILabel castName;
+
     public UIGrid buffList;
 
     public GameObject[] BuffPrefab;
@@ -34,6 +40,10 @@ public class EnemyFrameUI : MonoBehaviour {
     public void RemoveBuff(Buff b)
     {
 
+    }
+    public void SetCast(string name,float value) {
+        castName.text = name;
+        castProgress.fillAmount = value;
     }
 
 }

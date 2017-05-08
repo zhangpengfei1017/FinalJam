@@ -34,9 +34,17 @@ public class HeroController : MonoBehaviour
 
     private GameObject curIndicator;
 
-    private UIController uiCtrl;
+
 
     private GameObject cam;
+
+    //
+
+    private PlayerFrameUI frame;
+
+    private ActionBarUI actionBar;
+
+    private UIController uiCtrl;
 
     void Start()
     {
@@ -55,6 +63,8 @@ public class HeroController : MonoBehaviour
         DetectMove();
 
         DetectClick();
+
+        UpdateUI();
     }
 
 
@@ -67,7 +77,7 @@ public class HeroController : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             dir += transform.forward;
-            d = 1;           
+            d = 1;
         }
         if (Input.GetKey(KeyCode.S))
         {
@@ -109,7 +119,7 @@ public class HeroController : MonoBehaviour
                 d = 1;
             }
         }
-        character.Move(dir, cam.transform.rotation.eulerAngles.y+ro, d, speed);
+        character.Move(dir, cam.transform.rotation.eulerAngles.y + ro, d, speed);
     }
 
     void DetectAttack()
@@ -175,11 +185,11 @@ public class HeroController : MonoBehaviour
             Destroy(curIndicator);
         }
         if (target != null && target.GetComponent<GameCharacter>().IsAlive)
-        {            
+        {
             character.SetTarget(target.GetComponent<GameCharacter>());
             if (target.GetComponent<GameCharacter>().characterType == GameCharacter.CharacterType.Monster)
             {
-                curIndicator = Instantiate(indicator_enemy, target.transform.position + new Vector3(0,5,0), indicator_enemy.transform.rotation, target.transform) as GameObject;
+                curIndicator = Instantiate(indicator_enemy, target.transform.position + new Vector3(0, 5, 0), indicator_enemy.transform.rotation, target.transform) as GameObject;
                 curIndicator.GetComponent<Projector>().orthographicSize = target.GetComponent<CharacterController>().radius * 2;
             }
             else
@@ -192,6 +202,10 @@ public class HeroController : MonoBehaviour
             character.SetTarget(null);
         }
         character.CancelCast(true);
+    }
+
+    void UpdateUI() {
+
     }
 
 
