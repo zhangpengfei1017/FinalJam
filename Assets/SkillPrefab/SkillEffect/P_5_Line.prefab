@@ -57,8 +57,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4188708272258208}
   - component: {fileID: 114179423407797296}
+  - component: {fileID: 114018484221814746}
   m_Layer: 0
-  m_Name: P_1_Line
+  m_Name: P_5_Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,6 +106,18 @@ Transform:
   m_Father: {fileID: 4188708272258208}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114018484221814746
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1866702462976764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23618e2cedb93a4d86960776f387b51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Color: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &114073792021678316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -191,7 +204,7 @@ MonoBehaviour:
   skillEffectType: 2
   speed: 40
   destroyTime: 5
-  collisionEffect: {fileID: 1498814140757584, guid: d81a41ba6815c614bbf1e79d6c23bd89,
+  collisionEffect: {fileID: 1498814140757584, guid: 756604e3280d9784b9e804777b020100,
     type: 2}
   collisionDestroyTime: 3
   delayCollisionTime: 0

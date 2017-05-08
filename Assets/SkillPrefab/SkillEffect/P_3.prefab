@@ -20,9 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4441772619453288}
   - component: {fileID: 114812969905639320}
-  - component: {fileID: 114369730617812944}
+  - component: {fileID: 114133379038815770}
   m_Layer: 0
-  m_Name: P_2
+  m_Name: P_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,7 +250,7 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &114369730617812944
+--- !u!114 &114133379038815770
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b23618e2cedb93a4d86960776f387b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Color: {r: 1, g: 0.7732252, b: 0.2352941, a: 1}
+  Color: {r: 0.19117647, g: 1, b: 0.66531444, a: 1}
 --- !u!114 &114726261980918288
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -449,7 +449,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1367730691
+  randomSeed: 0
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -616,7 +616,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 0
     startSizeY:
-      minMaxState: 1
+      minMaxState: 0
       scalar: 1
       maxCurve:
         serializedVersion: 2
@@ -627,9 +627,15 @@ ParticleSystem:
           inSlope: 0
           outSlope: 0
           tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
-        m_RotationOrder: 0
+        m_RotationOrder: 4
       minCurve:
         serializedVersion: 2
         m_Curve:
@@ -649,7 +655,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     startSizeZ:
-      minMaxState: 1
+      minMaxState: 0
       scalar: 1
       maxCurve:
         serializedVersion: 2
@@ -660,9 +666,15 @@ ParticleSystem:
           inSlope: 0
           outSlope: 0
           tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
-        m_RotationOrder: 0
+        m_RotationOrder: 4
       minCurve:
         serializedVersion: 2
         m_Curve:
@@ -3274,7 +3286,7 @@ ParticleSystemRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_SelectedEditorRenderState: 0
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89

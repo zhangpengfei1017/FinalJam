@@ -57,8 +57,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4188708272258208}
   - component: {fileID: 114179423407797296}
+  - component: {fileID: 114767541018316420}
   m_Layer: 0
-  m_Name: P_1_Line
+  m_Name: P_3_Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -191,7 +192,7 @@ MonoBehaviour:
   skillEffectType: 2
   speed: 40
   destroyTime: 5
-  collisionEffect: {fileID: 1498814140757584, guid: d81a41ba6815c614bbf1e79d6c23bd89,
+  collisionEffect: {fileID: 1498814140757584, guid: cb77ce0874628fd438c0aa6c6870d471,
     type: 2}
   collisionDestroyTime: 3
   delayCollisionTime: 0
@@ -277,6 +278,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LightIntencityMultiplayer: 0.5
   Shadows: 0
+--- !u!114 &114767541018316420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1866702462976764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23618e2cedb93a4d86960776f387b51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Color: {r: 0.19117647, g: 1, b: 0.66531444, a: 1}
 --- !u!198 &198054911418602872
 ParticleSystem:
   m_ObjectHideFlags: 1

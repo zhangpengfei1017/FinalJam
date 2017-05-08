@@ -57,8 +57,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4188708272258208}
   - component: {fileID: 114179423407797296}
+  - component: {fileID: 114463888325301278}
   m_Layer: 0
-  m_Name: P_1_Line
+  m_Name: P_4_Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -191,7 +192,7 @@ MonoBehaviour:
   skillEffectType: 2
   speed: 40
   destroyTime: 5
-  collisionEffect: {fileID: 1498814140757584, guid: d81a41ba6815c614bbf1e79d6c23bd89,
+  collisionEffect: {fileID: 1498814140757584, guid: 947cdac56cd19744eab4e28cf75d7579,
     type: 2}
   collisionDestroyTime: 3
   delayCollisionTime: 0
@@ -199,6 +200,18 @@ MonoBehaviour:
   keepToCharacter: {fileID: 0}
   useOffsetForKeptEffect: 0
   isGround: 0
+--- !u!114 &114463888325301278
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1866702462976764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23618e2cedb93a4d86960776f387b51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Color: {r: 0.16911763, g: 0.8280931, b: 1, a: 1}
 --- !u!114 &114485097670941268
 MonoBehaviour:
   m_ObjectHideFlags: 1
