@@ -72,6 +72,14 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         }
     }
 
+    public bool isBusy
+    {
+        get
+        {
+            return globalCDTime != 0 || isCasting || isChanneling || isFreezed;
+        }
+    }
+
     private bool isRestricted;
 
     private bool isCasting;
@@ -136,7 +144,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     [SerializeField]
     private Skill[] skillPrefabs;
 
-    private List<Skill> skills;
+    public List<Skill> skills;
 
     private Skill curCastSkill;
 
@@ -165,6 +173,11 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         get
         {
             return curHP;
+        }
+
+        set
+        {
+            curHP = value;
         }
     }
 
@@ -525,6 +538,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     {
         buff.onExit(this);
         buffs.Remove(buff);
+        Destroy(buff.gameObject);
     }
 
     public Buff GetBuff(string buffName)
