@@ -9,6 +9,10 @@ public class NewPlayerController : MonoBehaviour
     public float moveSpeed = 1.0f;
     public float mouseSensitive = 1.0f;
 
+    public NewSkillEffect[] skillEffects;
+
+    public Transform debugTarget;
+
     private Animator anim;
 
     private int speedFwdHash = 0;
@@ -17,11 +21,13 @@ public class NewPlayerController : MonoBehaviour
     private int isMovingHash = 0;
     private int dieHash = 0;
 
+    private int curSkillId = -1;
+    private int curEventId = 0;
 
-    Vector3 focusPoint {  get { return transform.position + Vector3.up; } }
+    private Vector3 focusPoint {  get { return transform.position + Vector3.up; } }
 
-    Vector3 lookDir = Vector3.zero;
-    float lookDistance = 0;
+    private Vector3 lookDir = Vector3.zero;
+    private float lookDistance = 0;
 
 
     // Use this for initialization
@@ -79,28 +85,44 @@ public class NewPlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            anim.SetInteger(skillIdxHash, 1);
+            StartSkill(0, debugTarget);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            anim.SetInteger(skillIdxHash, 2);
+            StartSkill(1, debugTarget);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            anim.SetInteger(skillIdxHash, 3);
+            StartSkill(2, debugTarget);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            anim.SetInteger(skillIdxHash, 4);
+            StartSkill(3, debugTarget);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            anim.SetInteger(skillIdxHash, 5);
+            StartSkill(4, debugTarget);
         }
+    }
+
+    public void StartSkill(int skillId, Transform target)
+    {
+        if (skillId >= skillEffects.Length || skillId < 0)
+            return;
+
+        curSkillId = skillId;
+        anim.SetInteger(skillIdxHash, skillId + 1);
+        curEventId = 0;
+        skillEffects[curSkillId].Target = target;
+        skillEffects[curSkillId].enabled = true;
     }
 
     void CreateSkillEffect()
     {
+        print("Animation Event: skillid = " + curSkillId + " , eventid =  " + curEventId);
         anim.SetInteger(skillIdxHash, 0);
+        if (curSkillId >= 0 && curSkillId < skillEffects.Length)
+            skillEffects[curSkillId].OnEventTriggered(curEventId++);
     }
+
 }

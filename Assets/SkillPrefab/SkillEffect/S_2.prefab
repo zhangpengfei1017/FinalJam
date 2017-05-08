@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bcb7dda0bab7cd43bf4b7851409c8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 1.5, z: 0}
+  offset: {x: 0, y: 0, z: 0}
   skillEffectType: 3
   speed: 0
   destroyTime: 3
@@ -529,6 +529,8 @@ MonoBehaviour:
     type: 2}
   collisionDestroyTime: 10
   delayCollisionTime: 0
+  keepToCharacter: {fileID: 0}
+  useOffsetForKeptEffect: 0
   isGround: 1
 --- !u!114 &114379890174398040
 MonoBehaviour:

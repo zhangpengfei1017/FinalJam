@@ -41,7 +41,6 @@ public class SkillEffect : MonoBehaviour
 
     //ray
     private float distance;
-
     
     //void Start()
     //{
@@ -79,54 +78,80 @@ public class SkillEffect : MonoBehaviour
 
                 break;
             case SkillEffectType.move:
-                //point to point 
-                Vector3 target;
-                if (isGround)
                 {
-                    target = to.transform.position;
-                }
-                else
-                {
-                    target = to.GetComponent<GameCharacter>().characterCenter.position;
-                }
-
-                Vector3 dir = (target - transform.position).normalized;
-                transform.position += dir * speed * Time.deltaTime;
-                if (Vector3.Distance(transform.position, target) <= 1f)
-                {
-                    if (collisionEffect != null) {
-                        GameObject col = Instantiate(collisionEffect, transform.position, transform.rotation) as GameObject;
-                        autoDestroy ad = col.AddComponent<autoDestroy>();
-                        ad.destroyTime = collisionDestroyTime;
-                    }                    
-                    Destroy(gameObject);
-                }
-                break;
-            case SkillEffectType.ray:
-                transform.LookAt(to.GetComponent<GameCharacter>().characterCenter.position);
-                if (timer >= delayCollisionTime && !delayEffect)
-                {
-                    Vector3 tar;
+                    //point to point 
+                    Vector3 target;
                     if (isGround)
                     {
-                        tar = to.transform.position;
+                        target = to.transform.position;
                     }
                     else
                     {
-                        tar = to.GetComponent<GameCharacter>().characterCenter.position;
+                        GameCharacter gameChar = to.GetComponent<GameCharacter>();
+                        if (null != gameChar)
+                        {
+                            target = gameChar.characterCenter.position;
+                        }
+                        else
+                        {
+                            target = to.GetComponent<Collider>().bounds.center;
+                        }
                     }
-                    if (collisionEffect != null) {
-                        GameObject col = Instantiate(collisionEffect, tar, transform.rotation) as GameObject;
-                        Transform colt = col.GetComponent<Transform>();
-                        colt.forward = transform.forward;
-                        autoDestroy ad = col.AddComponent<autoDestroy>();
-                        ad.destroyTime = collisionDestroyTime;
-                        delayEffect = true;
-                    }                  
+
+                    Vector3 dir = (target - transform.position).normalized;
+                    transform.position += dir * speed * Time.deltaTime;
+                    if (Vector3.Distance(transform.position, target) <= 1f)
+                    {
+                        if (collisionEffect != null)
+                        {
+                            GameObject col = Instantiate(collisionEffect, transform.position, transform.rotation) as GameObject;
+                            autoDestroy ad = col.AddComponent<autoDestroy>();
+                            ad.destroyTime = collisionDestroyTime;
+                        }
+                        Destroy(gameObject);
+                    }
                 }
+                break;
+            case SkillEffectType.ray:
+                AdjustRayDirection();
                 break;
         }
     }
+
+    private void AdjustRayDirection()
+    {
+        Vector3 target;
+        if (isGround)
+        {
+            target = to.transform.position;
+        }
+        else
+        {
+            GameCharacter gameChar = to.GetComponent<GameCharacter>();
+            if (null != gameChar)
+            {
+                target = gameChar.characterCenter.position;
+            }
+            else
+            {
+                target = to.GetComponent<Collider>().bounds.center;
+            }
+        }
+        transform.LookAt(target);
+        if (timer >= delayCollisionTime && !delayEffect)
+        {
+            if (collisionEffect != null)
+            {
+                GameObject col = Instantiate(collisionEffect, target, transform.rotation) as GameObject;
+                Transform colt = col.GetComponent<Transform>();
+                colt.forward = transform.forward;
+                autoDestroy ad = col.AddComponent<autoDestroy>();
+                ad.destroyTime = collisionDestroyTime;
+                delayEffect = true;
+            }
+        }
+    }
+
     public void SetLine(GameObject from, GameObject to)
     {
         this.from = from;
@@ -138,8 +163,43 @@ public class SkillEffect : MonoBehaviour
             keepToCharacter.rotation = from.transform.rotation;
         }
     }
+
+    public void SetTarget(Transform target)
+    {
+        from = gameObject;
+        to = target.gameObject;
+
+        if (skillEffectType == SkillEffectType.ray)
+        {
+            AdjustRayDirection();
+        }
+
+        if (null != keepToCharacter)
+        {
+            keepToCharacter.position = from.transform.position + (useOffsetForKeptEffect ? offset : Vector3.zero);
+            keepToCharacter.rotation = from.transform.rotation;
+        }
+    }
+
     public float GetRayLength()
     {
-        return Vector3.Distance(transform.position, to.GetComponent<GameCharacter>().characterCenter.position);
+        Vector3 target;
+        if (isGround)
+        {
+            target = to.transform.position;
+        }
+        else
+        {
+            GameCharacter gameChar = to.GetComponent<GameCharacter>();
+            if (null != gameChar)
+            {
+                target = gameChar.characterCenter.position;
+            }
+            else
+            {
+                target = to.GetComponent<Collider>().bounds.center;
+            }
+        }
+        return Vector3.Distance(transform.position, target);
     }
 }
