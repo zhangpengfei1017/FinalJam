@@ -21,14 +21,12 @@ public class NewPlayerController : MonoBehaviour
     private int isMovingHash = 0;
     private int dieHash = 0;
 
+    private int stateLocomotionHash = 0;
+    private int stateNoControlHash = 0;
+
+    private NewSkillEffect curFx = null;
     private int curSkillId = -1;
     private int curEventId = 0;
-
-    private Vector3 focusPoint { get { return transform.position + Vector3.up; } }
-
-    private Vector3 lookDir = Vector3.zero;
-    private float lookDistance = 0;
-
 
     // Use this for initialization
     void Start()
@@ -41,68 +39,56 @@ public class NewPlayerController : MonoBehaviour
         isMovingHash = Animator.StringToHash("IsMoving");
         dieHash = Animator.StringToHash("Die");
 
+        stateLocomotionHash = Animator.StringToHash("Locomotion");
+        stateNoControlHash = Animator.StringToHash("NoControl");
+
         if (null == cam)
         {
             cam = Camera.main;
         }
-        lookDir = cam.transform.position - focusPoint;
         //AdjustCamera(0, 0);
     }
-
-    //void AdjustCamera(float deltaUp, float deltaRight)
-    //{
-    //    Vector3 focus = focusPoint;
-    //    lookDir = Quaternion.Euler(-deltaUp, deltaRight, 0) * lookDir;
-    //    cam.transform.position = focus + lookDir;
-    //    cam.transform.LookAt(focus);
-    //}
 
     // Update is called once per frame
     void Update()
     {
-        //float moveFwd = Input.GetAxis("Vertical");
-        //float moveRt = Input.GetAxis("Horizontal");
-        //float lookUp = Input.GetAxis("Mouse Y") * mouseSensitive;
-        //float lookRt = Input.GetAxis("Mouse X") * mouseSensitive;
+        if (curSkillId != -1)
+        {
+            if (null == curFx)
+            {
+                curSkillId = -1;
+            }
+        }
 
-        //Vector3 moveDelta = new Vector3(moveRt, 0, Mathf.Clamp(moveFwd, -0.5f, 1.0f));
-        //Quaternion camRotY = Quaternion.Euler(0, cam.transform.rotation.eulerAngles.y, 0);
-        //transform.rotation = camRotY;
-
-        ////transform.transform.Translate(moveDelta * Time.deltaTime * moveSpeed, Space.Self);
-        //charCtrl.SimpleMove(moveDelta * Time.deltaTime * moveSpeed);
-
-        //if (Input.GetMouseButton(1))
-        //{
-        //    AdjustCamera(lookUp, lookRt);
-        //}
-        //else
-        //{
-        //    AdjustCamera(0, 0);
-        //}
-
-        //anim.SetBool(isMovingHash, moveDelta.sqrMagnitude > 0.01f);
-        //anim.SetFloat(speedFwdHash, moveFwd);
-        //anim.SetFloat(speedRtHash, moveRt);
-
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            CancelSkill();
+        }
     }
+
     public void Move(float moveFwd, float moveRt)
     {
         Vector3 moveDelta = new Vector3(moveRt, 0, Mathf.Clamp(moveFwd, -0.5f, 1.0f));
         Quaternion camRotY = Quaternion.Euler(0, cam.transform.rotation.eulerAngles.y, 0);
         transform.rotation = camRotY;
-
-        //transform.transform.Translate(moveDelta * Time.deltaTime * moveSpeed, Space.Self);
+        
         charCtrl.SimpleMove(camRotY * moveDelta * Time.deltaTime * moveSpeed);
-
-
+        
         anim.SetBool(isMovingHash, moveDelta.sqrMagnitude > 0.01f);
         anim.SetFloat(speedFwdHash, moveFwd);
         anim.SetFloat(speedRtHash, moveRt);
     }
 
-    public void Move(Vector3 direction,float rotation) {
+    public void Move(Vector3 direction, float rotation)
+    {
+        Quaternion rot = Quaternion.Euler(0, rotation, 0);
+        transform.rotation = rot;
+        
+        charCtrl.SimpleMove(direction * Time.deltaTime * moveSpeed);
 
+        float speed = direction.magnitude;
+        anim.SetBool(isMovingHash, speed > 0.01f);
+        anim.SetFloat(speedFwdHash, speed);
     }
 
     public void StartSkill(int skillId, Transform target)
@@ -113,31 +99,44 @@ public class NewPlayerController : MonoBehaviour
         curSkillId = skillId;
         anim.SetInteger(skillIdxHash, skillId + 1);
         curEventId = 0;
-        skillEffects[curSkillId].Target = target;
-        skillEffects[curSkillId].enabled = true;
+
+        if (null != skillEffects[curSkillId])
+        {
+            var fx = Instantiate(skillEffects[curSkillId], transform);
+            fx.Target = target;
+            fx.gameObject.SetActive(true);
+            curFx = fx;
+        }
     }
 
     void CreateSkillEffect()
     {
         print("Animation Event: skillid = " + curSkillId + " , eventid =  " + curEventId);
         anim.SetInteger(skillIdxHash, 0);
-        if (curSkillId >= 0 && curSkillId < skillEffects.Length)
-            skillEffects[curSkillId].OnEventTriggered(curEventId++);
+        if (null != curFx)
+            curFx.OnEventTriggered(curEventId++);
     }
 
     public void CancelSkill()
     {
-
+        anim.SetInteger(skillIdxHash, 0);
+        anim.Play(stateLocomotionHash, 0);
+        anim.Play(stateNoControlHash, 1);
+        if (null != curFx)
+        {
+            Destroy(curFx.gameObject);
+        }
     }
 
     public void Die()
     {
-
+        CancelSkill();
+        anim.SetTrigger(dieHash);
     }
 
     public void SetAnimationSpeed(float speed)
     {
-
+        anim.speed = speed;
     }
 
 }

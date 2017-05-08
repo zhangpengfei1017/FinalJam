@@ -122,7 +122,7 @@ public class MonsterController : MonoBehaviour
     void Update()
     {
         if (!GetComponent<PhotonView>().isMine) {
-            return;
+            //return;
         }
         CheckHealth();
         CheckTarget();

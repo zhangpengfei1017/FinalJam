@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NewSkillEffect : MonoBehaviour
 {
+    public float timeAlive;
+
     [System.Serializable]
     public class EffectSpawner
     {
@@ -24,11 +26,15 @@ public class NewSkillEffect : MonoBehaviour
     private List<IEnumerator> coroutines;
     private Dictionary<int, HashSet<int>> eventTable;
 
+    private List<GameObject> spawnedObjs;
+
     // Use this for initialization
     void Start()
     {
         coroutines = new List<IEnumerator>();
         eventTable = new Dictionary<int, HashSet<int>>();
+
+        spawnedObjs = new List<GameObject>();
 
         for (int i = 0; i < spawners.Length; i++)
         {
@@ -47,6 +53,18 @@ public class NewSkillEffect : MonoBehaviour
                 coroutines.Add(cr);
             }
         }
+
+        {
+            var cr = DestroyAfterSeconds(timeAlive);
+            StartCoroutine(cr);
+            coroutines.Add(cr);
+        }
+    }
+
+    IEnumerator DestroyAfterSeconds(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        Destroy(gameObject);
     }
 
     IEnumerator SpawnAfterSeconds(EffectSpawner spawner)
@@ -58,6 +76,7 @@ public class NewSkillEffect : MonoBehaviour
     void Spawn(EffectSpawner spawner)
     {
         var go = Instantiate(spawner.prefab);
+        spawnedObjs.Add(go);
 
         Transform spawnTrans = spawner.target;
 
@@ -88,11 +107,19 @@ public class NewSkillEffect : MonoBehaviour
     void OnDisable()
     {
         Target = null;
+
         foreach (var c in coroutines)
         {
             StopCoroutine(c);
         }
         coroutines.Clear();
+
+
+        foreach (var go in spawnedObjs)
+        {
+            Destroy(go);
+        }
+        spawnedObjs.Clear();
     }
 
     public void OnEventTriggered(int eventId)

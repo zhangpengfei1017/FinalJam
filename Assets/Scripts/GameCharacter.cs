@@ -896,11 +896,11 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
             }
             if (isFreezed)
             {
-                //SetAnimatorSpeed(0);
+                SetAnimatorSpeed(0);
             }
             else
             {
-                //SetAnimatorSpeed(1);
+                SetAnimatorSpeed(1);
             }
         }
     }

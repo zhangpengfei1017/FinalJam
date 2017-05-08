@@ -26,7 +26,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1013840224957726
 GameObject:
   m_ObjectHideFlags: 1
@@ -1129,7 +1129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1657844969021048
 GameObject:
   m_ObjectHideFlags: 1
@@ -1460,7 +1460,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1927048975339350
 GameObject:
   m_ObjectHideFlags: 1
@@ -1491,7 +1491,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1930953944029846
 GameObject:
   m_ObjectHideFlags: 1
@@ -1612,7 +1612,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1985151486251954
 GameObject:
   m_ObjectHideFlags: 1
@@ -3222,6 +3222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a7d33a143f976428a852989b701e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeAlive: 4.5
   spawners:
   - prefab: {fileID: 1735267909248974, guid: daae819d7951e9d43b2b1f1d98000be7, type: 2}
     target: {fileID: 4857027388299098}
@@ -3296,6 +3297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a7d33a143f976428a852989b701e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeAlive: 3.5
   spawners:
   - prefab: {fileID: 1069239251428974, guid: f55cdad74a924304a904434c28dd5c85, type: 2}
     target: {fileID: 4857027388299098}
@@ -3334,6 +3336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a7d33a143f976428a852989b701e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeAlive: 5
   spawners:
   - prefab: {fileID: 1762522841323190, guid: 866a7c8f375a2914291e31b92a1cd931, type: 2}
     target: {fileID: 0}
@@ -3354,6 +3357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a7d33a143f976428a852989b701e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeAlive: 6.5
   spawners:
   - prefab: {fileID: 1947130078202594, guid: d4373bed2ba519d48b7b10c0ed4a2612, type: 2}
     target: {fileID: 4357826670247920}
@@ -3418,6 +3422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2a7d33a143f976428a852989b701e28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeAlive: 3.5
   spawners:
   - prefab: {fileID: 1818434554411180, guid: 04836177858b64f48b604bdc25e1cf1e, type: 2}
     target: {fileID: 4857027388299098}
