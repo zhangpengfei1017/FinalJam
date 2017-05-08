@@ -200,7 +200,7 @@ public class BossController : MonoBehaviour
 
         // FIXME: Double quaternion in game character
         Quaternion q = Quaternion.LookRotation(direction);
-        character.Move(direction, q.eulerAngles.y, 1, 1);
+        character.Move(direction, q.eulerAngles.y);
     }
 
     void Chasing()
@@ -244,7 +244,7 @@ public class BossController : MonoBehaviour
     {
         Vector3 direction = (target.transform.position - transform.position).normalized;
         Quaternion q = Quaternion.LookRotation(direction);
-        character.Move(Vector3.zero, q.eulerAngles.y, 0, 0);
+        character.Move(Vector3.zero, q.eulerAngles.y);
 
         character.Attack(index);
     }

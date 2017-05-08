@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoginObject: {fileID: 545770283}
   RoomListObj: {fileID: 1341699632}
-  roomPrefab: {fileID: 1504967747748242, guid: 103d1af99ee57ec438b2476a592337dc, type: 2}
+  roomPrefab: {fileID: 1330869846800190, guid: e753fdc6f21091c419f73f6532768250, type: 2}
   roomList: {fileID: 1522125302}
   CreateRoomPopup: {fileID: 0}
 --- !u!1 &214369219
