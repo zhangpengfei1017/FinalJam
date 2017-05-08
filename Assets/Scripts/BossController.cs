@@ -22,18 +22,6 @@ public class BossController : MonoBehaviour
 
     List<BossSkill> skills = new List<BossSkill>();
 
-    public enum MonsterType
-    {
-        Trash,
-        Boss
-    };
-
-    [SerializeField]
-    private string monsterName;
-
-    [SerializeField]
-    private MonsterType monsterType = MonsterType.Boss;
-
     private GameCharacter character;
 
     public enum EnemyState
@@ -102,9 +90,15 @@ public class BossController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (!GetComponent<PhotonView>().isMine) {
-        //    return;
-        //}
+        Debug.Log("?");
+
+        if (!GetComponent<PhotonView>().isMine)
+        {
+            return;
+        }
+
+        Debug.Log("Success");
+
         CheckHealth();
 
         foreach (BossSkill bs in skills)
@@ -142,6 +136,8 @@ public class BossController : MonoBehaviour
 
 
     public void TakeSkill(Skill.CastedSkillStruct scs) {
+        Debug.Log("Under attack!!");
+
         // TODO: if OT or Tank skill
         if (target == null) {
             PhotonView[] photonViews = GameObject.FindObjectsOfType<PhotonView>();
