@@ -15,7 +15,7 @@ public class GameController : Photon.PunBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
     [PunRPC]
     void OnPlayerJoinedGameplay()

@@ -53,7 +53,6 @@ public class RoomController : Photon.PunBehaviour
         myPlayer.GetComponent<RoomPlayer>().SetInfo(PlayerInfo.instance.playerName, PlayerInfo.instance.playerClass, false);
         photonView.RPC("OnPlayerListUpdate", PhotonTargets.AllViaServer, null);
         roomTitle.text = PhotonNetwork.room.Name;
-
     }
 
     // Update is called once per frame
@@ -102,6 +101,18 @@ public class RoomController : Photon.PunBehaviour
     void OnPlayerListUpdate()
     {
         allRoomPlayers = FindObjectsOfType<RoomPlayer>();
+        for (int i = 0; i < allRoomPlayers.Length - 1; i++)
+        {
+            for (int j = 0; j < allRoomPlayers.Length - 1 - i; j++)
+            {
+                if (allRoomPlayers[j].GetComponent<PhotonView>().ownerId > allRoomPlayers[j + 1].GetComponent<PhotonView>().ownerId)
+                {
+                    RoomPlayer temp = allRoomPlayers[j];
+                    allRoomPlayers[j] = allRoomPlayers[j + 1];
+                    allRoomPlayers[j + 1] = temp;
+                }
+            }
+        }
         foreach (Transform t in playerList.GetChildList())
         {
             playerList.RemoveChild(t);

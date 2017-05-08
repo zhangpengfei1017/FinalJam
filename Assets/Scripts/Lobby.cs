@@ -43,7 +43,7 @@ public class Lobby : PunBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        roomList.Reposition();
 	}
 
     public void setUserName(UILabel _uiText)
@@ -91,18 +91,7 @@ public class Lobby : PunBehaviour {
         if (!notLostRoom) {
             _selectedRoomName = "";
             currentClicked = null;
-        }
-           
-        
-        //foreach (var item in PhotonNetwork.GetRoomList())
-        //{
-        //    Vector3 tempPos = new Vector3(RoomPanel.transform.position.x, RoomPanel.transform.position.y - (i * 0.15f), RoomPanel.transform.position.z);
-        //    GameObject newObj = Instantiate(RoomPanel, tempPos, Quaternion.identity, RoomPanel.transform.parent);
-        //    newObj.transform.FindChild("Name").GetComponent<UILabel>().text = item.Name;
-        //    newObj.transform.FindChild("Players").GetComponent<UILabel>().text = "" + item.PlayerCount + " / " + item.MaxPlayers;
-        //    Debug.Log(newObj);
-        //    ++i;
-        //}
+        }           
     }
 
 
@@ -150,5 +139,9 @@ public class Lobby : PunBehaviour {
     public override void OnJoinedRoom() {
         base.OnJoinedRoom();
         PhotonNetwork.LoadLevel(1);
+    }
+
+    public void QuitGame() {
+        Application.Quit();
     }
 }

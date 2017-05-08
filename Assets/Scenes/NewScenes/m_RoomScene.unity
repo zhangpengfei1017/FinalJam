@@ -562,7 +562,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 374939204}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 273, z: 0}
+  m_LocalPosition: {x: -10, y: 273, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1847214095}
@@ -3016,12 +3016,52 @@ Prefab:
     - target: {fileID: 114511953289888442, guid: 9932df2501741bb4a86a5247038ebbd0,
         type: 2}
       propertyPath: mValue
-      value: 0.9090928
+      value: 0.90909153
       objectReference: {fileID: 0}
     - target: {fileID: 114511953289888442, guid: 9932df2501741bb4a86a5247038ebbd0,
         type: 2}
       propertyPath: mSize
-      value: 0.9450001
+      value: 0.94500005
+      objectReference: {fileID: 0}
+    - target: {fileID: 114788528210902326, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: activeTextColor.r
+      value: 0.8117647
+      objectReference: {fileID: 0}
+    - target: {fileID: 114788528210902326, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: activeTextColor.g
+      value: 0.7294118
+      objectReference: {fileID: 0}
+    - target: {fileID: 114788528210902326, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: activeTextColor.b
+      value: 0.6431373
+      objectReference: {fileID: 0}
+    - target: {fileID: 114605637151356086, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: mText
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114605637151356086, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: mApplyGradient
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114605637151356086, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: mColor.r
+      value: 0.8117647
+      objectReference: {fileID: 0}
+    - target: {fileID: 114605637151356086, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: mColor.g
+      value: 0.7294118
+      objectReference: {fileID: 0}
+    - target: {fileID: 114605637151356086, guid: 9932df2501741bb4a86a5247038ebbd0,
+        type: 2}
+      propertyPath: mColor.b
+      value: 0.6431373
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9932df2501741bb4a86a5247038ebbd0, type: 2}
