@@ -25,6 +25,8 @@ public class SkillEffect : MonoBehaviour
 
     public float delayCollisionTime;
 
+    public bool dontDestroyOnCollision;
+
     public Transform keepToCharacter;
 
     public bool useOffsetForKeptEffect;
@@ -41,7 +43,9 @@ public class SkillEffect : MonoBehaviour
 
     //ray
     private float distance;
-    
+
+    private bool collisionTriggerd = false;
+
     //void Start()
     //{
     //    var tm = GetComponentInChildren<RFX4_TransformMotion>(true);
@@ -100,15 +104,19 @@ public class SkillEffect : MonoBehaviour
 
                     Vector3 dir = (target - transform.position).normalized;
                     transform.position += dir * speed * Time.deltaTime;
-                    if (Vector3.Distance(transform.position, target) <= 1f)
+                    if (Vector3.Distance(transform.position, target) <= 0.2f && !collisionTriggerd)
                     {
+                        collisionTriggerd = true;
                         if (collisionEffect != null)
                         {
                             GameObject col = Instantiate(collisionEffect, transform.position, transform.rotation) as GameObject;
                             autoDestroy ad = col.AddComponent<autoDestroy>();
                             ad.destroyTime = collisionDestroyTime;
                         }
-                        Destroy(gameObject);
+                        if (!dontDestroyOnCollision)
+                        {
+                            Destroy(gameObject);
+                        }
                     }
                 }
                 break;

@@ -13,7 +13,7 @@ Prefab:
   m_IsPrefabParent: 1
 --- !u!1 &1366013919920666
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -31,7 +31,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1516840921623380
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -43,22 +43,6 @@ GameObject:
   - component: {fileID: 114550085174150182}
   m_Layer: 0
   m_Name: Light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1645433027287714
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4182919270106226}
-  - component: {fileID: 114206794539957014}
-  m_Layer: 0
-  m_Name: Collision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,21 +64,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4182919270106226
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1645433027287714}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4344735620707574}
-  - {fileID: 4740642206670938}
-  m_Father: {fileID: 4188708272258208}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4188708272258208
 Transform:
   m_ObjectHideFlags: 1
@@ -105,7 +74,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
-  - {fileID: 4182919270106226}
+  - {fileID: 4344735620707574}
+  - {fileID: 4740642206670938}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -18, z: 0}
@@ -115,11 +85,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1366013919920666}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4182919270106226}
+  m_Father: {fileID: 4188708272258208}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4740642206670938
@@ -128,11 +98,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1516840921623380}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 4182919270106226}
+  m_Father: {fileID: 4188708272258208}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &114073792021678316
@@ -141,7 +111,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1366013919920666}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9007e5d46dbcb7e41b9e272ffb37e53a, type: 3}
   m_Name: 
@@ -224,36 +194,10 @@ MonoBehaviour:
   collisionEffect: {fileID: 145962, guid: 0437f017df5f18f4892ec0d18663edd9, type: 2}
   collisionDestroyTime: 3
   delayCollisionTime: 0
+  dontDestroyOnCollision: 0
   keepToCharacter: {fileID: 0}
   useOffsetForKeptEffect: 0
   isGround: 0
---- !u!114 &114206794539957014
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1645433027287714}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12403b86450fee944b030460c52681a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Distance: 20
-  Speed: 80
-  Dampeen: 0
-  MinSpeed: 1
-  TimeDelay: 0
-  CollidesWith:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  EffectsOnCollision:
-  - {fileID: 145962, guid: 0437f017df5f18f4892ec0d18663edd9, type: 2}
-  CollisionOffset: 0
-  DestroyTimeDelay: 5
-  CollisionEffectInWorldSpace: 1
-  DeactivatedObjectsOnCollision: []
-  HUE: -1
-  CollidedInstances: []
 --- !u!114 &114485097670941268
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -387,7 +331,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 0
+  randomSeed: -2075382115
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3223,7 +3167,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 0
+  randomSeed: 128256081
   InitialModule:
     serializedVersion: 3
     enabled: 1
