@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 // This script is to take care of Lobby backend and is to be called by the UI.
 
 public class Lobby : PunBehaviour {
 
     public static Lobby _instance;
+
+    public GameObject LoginObject;
+    public GameObject RoomListObj;
+
     public GameObject RoomPanel;
+
+    public GameObject CreateRoomPopup;
 
     private string username;
     private string _selectedRoomName;
@@ -39,6 +46,8 @@ public class Lobby : PunBehaviour {
     public void setUserName(UILabel _uiText)
     {
         username = _uiText.text;
+        LoginObject.SetActive(false);
+        RoomListObj.SetActive(true);
     }
 
     public override void OnJoinedLobby()
@@ -72,19 +81,37 @@ public class Lobby : PunBehaviour {
 
     public void CreateRoomButton(UILabel _text)
     {
+
+        if ( PhotonNetwork.connectionState == ConnectionState.Disconnected)
+        {
+            PhotonNetwork.ConnectUsingSettings("1.0f");
+        }
+
         RoomOptions RO = new RoomOptions();
         RO.MaxPlayers = 5;
         bool check = PhotonNetwork.CreateRoom(_text.text, RO, TypedLobby.Default);
-        Debug.Log(check);
+        if (check)
+        {
+            SceneManager.LoadScene(1);
+        }
     }
 
     public void JoinRoom()
     {
+        bool check;
         if (null != _selectedRoomName)
         {
-            PhotonNetwork.JoinRoom(_selectedRoomName);
+            check = PhotonNetwork.JoinRoom(_selectedRoomName);
         }
         else
-            PhotonNetwork.JoinRandomRoom(); // Should we do this?
+            check = PhotonNetwork.JoinRandomRoom(); // Should we do this?
+
+        if (check) SceneManager.LoadScene(1);
+    }
+
+    public void OpenCreateRoomPopup()
+    {
+        RoomListObj.SetActive(false);
+        CreateRoomPopup.SetActive(true);
     }
 }
