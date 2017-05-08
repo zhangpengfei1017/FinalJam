@@ -2336,7 +2336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bcb7dda0bab7cd43bf4b7851409c8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 1.8, z: 0.8}
+  offset: {x: 0, y: 0, z: 0}
   skillEffectType: 3
   speed: 0
   destroyTime: 4
