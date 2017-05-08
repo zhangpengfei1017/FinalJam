@@ -155,6 +155,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4198335814697432}
   - component: {fileID: 95990680071785064}
+  - component: {fileID: 114350687092263628}
+  - component: {fileID: 143498496539535428}
+  - component: {fileID: 114148908637134396}
+  - component: {fileID: 114360424817488860}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -3207,6 +3211,64 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114148908637134396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1106339544548354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b631b6abbcbf844189bcf9644680f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterType: 2
+  characterName: Boss
+  maxHP: 999999
+  maxMP: 999999
+  attack: 999999
+  defense: 999999
+  moveSpeed: 100
+  globalCDTime: 0.5
+  freezedCount: 0
+  headPoint: {fileID: 0}
+  characterCenter: {fileID: 0}
+  skillPrefabs: []
+  skills: []
+--- !u!114 &114350687092263628
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1106339544548354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 057deed670b293f4dbe56b1ec03d544f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 0}
+  moveSpeed: 100
+  skillEffects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &114360424817488860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1106339544548354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b33b92606da999a47868cd7e95cce995, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterName: Boss
+  monsterType: 1
+  maxChaseDistance: 0
+  destroyTime: 0
 --- !u!137 &137541607775194332
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -3298,3 +3360,20 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.20448202, y: -0.12590748, z: -0.21213973}
     m_Extent: {x: 1.9955034, y: 2.0798936, z: 1.9327394}
   m_DirtyAABB: 0
+--- !u!143 &143498496539535428
+CharacterController:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1106339544548354}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 3.6
+  m_Radius: 1.2
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1.8, z: 0}
