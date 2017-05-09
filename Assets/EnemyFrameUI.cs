@@ -42,8 +42,12 @@ public class EnemyFrameUI : MonoBehaviour {
 
     }
     public void SetCast(string name,float value) {
+        castBar.SetActive(true);
         castName.text = name;
         castProgress.fillAmount = value;
+    }
+    public void SetCast(bool active) {
+        castBar.SetActive(active);
     }
 
 }

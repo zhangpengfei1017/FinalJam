@@ -18,7 +18,7 @@ public class HeroController : MonoBehaviour
     [SerializeField]
     private float threat = 1;
 
-    private GameCharacter character;
+    public GameCharacter character;
 
     [SerializeField]
     private string playerName;
@@ -36,15 +36,9 @@ public class HeroController : MonoBehaviour
 
 
 
-    private GameObject cam;
-
     //
 
-    private PlayerFrameUI frame;
-
-    private ActionBarUI actionBar;
-
-    private UIController uiCtrl;
+    private GameController gameController;
 
     //
 
@@ -54,23 +48,21 @@ public class HeroController : MonoBehaviour
     {
         character = GetComponent<GameCharacter>();
 
-        cam = GameObject.Find("MainCam");
-
+        gameController = GameController.instance;
         //pc = GetComponent<NewPlayerController>();
     }
 
     void Update()
     {
-        //if (!GetComponent<PhotonView>().isMine) {
-        //    return;
-        //}
+        if (!GetComponent<PhotonView>().isMine)
+        {
+            return;
+        }
         DetectAttack();
 
         DetectMove();
 
         DetectClick();
-
-        UpdateUI();
     }
 
 
@@ -79,56 +71,6 @@ public class HeroController : MonoBehaviour
         float moveFwd = Input.GetAxis("Vertical");
         float moveRt = Input.GetAxis("Horizontal");
         character.Move(moveFwd, moveRt);
-        //Vector3 dir = Vector3.zero;
-        //float ro = 0;
-        //int d = 0;
-        //float speed = 1; ;
-        //if (Input.GetKey(KeyCode.W))
-        //{
-        //    dir += transform.forward;
-        //    d = 1;
-        //}
-        //if (Input.GetKey(KeyCode.S))
-        //{
-        //    dir -= transform.forward;
-        //    d = -1;
-        //    speed = 0.4f;
-        //}
-        //if (Input.GetKey(KeyCode.A))
-        //{
-        //    if (Input.GetKey(KeyCode.W))
-        //    {
-        //        ro = -45;
-        //    }
-        //    else if (Input.GetKey(KeyCode.S))
-        //    {
-        //        ro = 45;
-        //    }
-        //    else
-        //    {
-        //        dir += transform.forward;
-        //        ro = -90;
-        //        d = 1;
-        //    }
-        //}
-        //if (Input.GetKey(KeyCode.D))
-        //{
-        //    if (Input.GetKey(KeyCode.W))
-        //    {
-        //        ro = 45;
-        //    }
-        //    else if (Input.GetKey(KeyCode.S))
-        //    {
-        //        ro = -45;
-        //    }
-        //    else
-        //    {
-        //        dir += transform.forward;
-        //        ro = 90;
-        //        d = 1;
-        //    }
-        //}
-        //character.Move(dir, cam.transform.rotation.eulerAngles.y + ro, d, speed);
     }
 
     void DetectAttack()
@@ -164,7 +106,7 @@ public class HeroController : MonoBehaviour
     void DetectClick() {
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = cam.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
+            Ray ray = Camera.main.GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
@@ -211,10 +153,6 @@ public class HeroController : MonoBehaviour
             character.SetTarget(null);
         }
         character.CancelCast(true);
-    }
-
-    void UpdateUI() {
-
     }
 
 

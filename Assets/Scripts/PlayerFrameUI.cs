@@ -14,11 +14,16 @@ public class PlayerFrameUI : MonoBehaviour
 
     public GameObject[] BuffPrefab;
 
+    public int OwnerID;
 
 
+    public void SetOwner(int id) {
+        OwnerID = id;
+    }
     public void SetPlayerName(string name) {
         playerName.text = name;
     }
+
     public void SetHpValue(float value) {
         hp.fillAmount = value;
     }

@@ -54,8 +54,9 @@ public class Lobby : PunBehaviour {
             LobbyMessage.instance.Msg("you need a name!");
             return;
         }
-        PhotonNetwork.JoinLobby();
         PhotonNetwork.ConnectUsingSettings("1.0f");
+        PhotonNetwork.autoJoinLobby = true;
+        
     }
 
     public override void OnJoinedLobby()

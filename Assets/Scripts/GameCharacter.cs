@@ -150,9 +150,6 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
 
     private int curSkillIndex;
 
-    private bool deleteCurSkill;
-
-    private float delayTimer;
 
     //BUFF or DEBUFF
 
@@ -194,6 +191,22 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
             return !isDead;
         }
     }
+    public int CurMP {
+        get {
+            return curMP;
+        }
+    }
+    public int MaxMP {
+        get {
+            return finalMaxMP;
+        }
+    }
+
+    public bool IsCasting {
+        get {
+            return (isCasting || isChanneling);
+        }
+    }
 
     #endregion
 
@@ -226,60 +239,57 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         channeledInterval = 0;
         channeledTimer = 0;
         instantTimer = 0;
-        delayTimer = 0;
-        deleteCurSkill = false;
         isDead = false;
     }
 
     void Update()
     {
 
-        //--------------------------------------
-        //--------------test code---------------
-        //--------------------------------------
-        if (characterType == CharacterType.Player && photonView.isMine)
-        {
-            GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
-            GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
-            GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
-            GameObject.Find("CD4").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(3) * 100).ToString() + "%";
-            GameObject.Find("CD5").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(4) * 100).ToString() + "%";
-            if (isCasting || isChanneling)
-            {
-                GameObject.Find("CastProgress").GetComponent<Text>().text = Mathf.FloorToInt(GetCastingProgress() * 100).ToString() + "%";
-            }
-            else
-            {
-                GameObject.Find("CastProgress").GetComponent<Text>().text = "";
-            }
-            GameObject.Find("HPBar").GetComponent<Text>().text = curHP.ToString() + "/" + finalMaxHP.ToString();
-            GameObject.Find("MPBar").GetComponent<Text>().text = curMP.ToString() + "/" + finalMaxMP.ToString();
-            Text targetName = GameObject.Find("TargetName").GetComponent<Text>();
-            Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
-            Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
-            if (target != null)
-            {
-                targetHp.text = target.GetComponent<GameCharacter>().curHP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxHP;
-                targetMp.text = target.GetComponent<GameCharacter>().curMP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxMP;
-                targetName.text = target.GetComponent<GameCharacter>().characterName;
-            }
-            else
-            {
-                targetHp.text = "";
-                targetMp.text = "";
-                targetName.text = "";
-            }
-        }
+        ////--------------------------------------
+        ////--------------test code---------------
+        ////--------------------------------------
+        //if (characterType == CharacterType.Player && photonView.isMine)
+        //{
+        //    GameObject.Find("CD1").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(0) * 100).ToString() + "%";
+        //    GameObject.Find("CD2").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(1) * 100).ToString() + "%";
+        //    GameObject.Find("CD3").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(2) * 100).ToString() + "%";
+        //    GameObject.Find("CD4").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(3) * 100).ToString() + "%";
+        //    GameObject.Find("CD5").GetComponent<Text>().text = Mathf.FloorToInt(GetCDProgress(4) * 100).ToString() + "%";
+        //    if (isCasting || isChanneling)
+        //    {
+        //        GameObject.Find("CastProgress").GetComponent<Text>().text = Mathf.FloorToInt(GetCastingProgress() * 100).ToString() + "%";
+        //    }
+        //    else
+        //    {
+        //        GameObject.Find("CastProgress").GetComponent<Text>().text = "";
+        //    }
+        //    GameObject.Find("HPBar").GetComponent<Text>().text = curHP.ToString() + "/" + finalMaxHP.ToString();
+        //    GameObject.Find("MPBar").GetComponent<Text>().text = curMP.ToString() + "/" + finalMaxMP.ToString();
+        //    Text targetName = GameObject.Find("TargetName").GetComponent<Text>();
+        //    Text targetHp = GameObject.Find("TargetHPBar").GetComponent<Text>();
+        //    Text targetMp = GameObject.Find("TargetMPBar").GetComponent<Text>();
+        //    if (target != null)
+        //    {
+        //        targetHp.text = target.GetComponent<GameCharacter>().curHP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxHP;
+        //        targetMp.text = target.GetComponent<GameCharacter>().curMP.ToString() + "/" + target.GetComponent<GameCharacter>().finalMaxMP;
+        //        targetName.text = target.GetComponent<GameCharacter>().characterName;
+        //    }
+        //    else
+        //    {
+        //        targetHp.text = "";
+        //        targetMp.text = "";
+        //        targetName.text = "";
+        //    }
+        //}
 
 
 
-        //--------------------------------------
-        //--------------test code---------------
-        //--------------------------------------
+        ////--------------------------------------
+        ////--------------test code---------------
+        ////--------------------------------------
         UpdateState();
         UpdateTarget();
         UpdateBuffs();
-        DelayDeleteCurSkill();
 
 
     }
@@ -301,7 +311,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     {
         curCastSkill = skill;
         isInstant = true;
-        deleteCurSkill = false;
+
     }
 
     void EndInstant()
@@ -309,8 +319,8 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
         curCastSkill.CDTimer = curCastSkill.CDTime;
         isInstant = false;
-        deleteCurSkill = true;
-        delayTimer = 0;
+        curCastSkill = null;
+
     }
 
     void UpdateCast()
@@ -333,7 +343,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     {
         isCasting = true;
         curCastSkill = skill;
-        deleteCurSkill = false;
+
     }
 
     void EndCasting(bool cd)
@@ -344,8 +354,8 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
             curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
         }
         isCasting = false;
-        deleteCurSkill = true;
-        delayTimer = 0;
+        curCastSkill = null;
+
     }
 
     void UpdateChanneled()
@@ -375,31 +385,17 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         curCastSkill = skill;
         curCastSkill.CDTimer = curCastSkill.CDTime;
         curMP = Mathf.Clamp(curMP - curCastSkill.mpCost, 0, finalMaxMP);
-        deleteCurSkill = false;
+
     }
 
     void EndChanneling()
     {
         isChanneling = false;
-        deleteCurSkill = true;
-        delayTimer = 0;
-    }
-
-    void DelayDeleteCurSkill()
-    {
-        if (deleteCurSkill)
-        {
-            delayTimer += Time.deltaTime;
-            if (delayTimer > 3 && curCastSkill != null)
-            {
-                curCastSkill = null;
-                curSkillIndex = -1;
-                delayTimer = 0;
-                deleteCurSkill = false;
-            }
-        }
+        curCastSkill = null;
 
     }
+
+
 
     #endregion
 
@@ -589,7 +585,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
 
         if (CheckTarget(skill.targetType, skill.distance) == TargetCheckResult.Available)
         {
-            if (curCastSkill != null && !deleteCurSkill)
+            if (curCastSkill != null)
             {
                 if (curCastSkill.skillType == Skill.SkillType.Channeled)
                 {
@@ -734,6 +730,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         this.target = target;
     }
 
+
     public GameCharacter GetTarget()
     {
         return target;
@@ -813,6 +810,16 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         return 0;
     }
 
+    public string GetCurSkillName() {
+        if (curCastSkill == null)
+        {
+            return "";
+        }
+        else {
+            return curCastSkill.skillName;
+        }
+    }
+
 
 
     #endregion
@@ -839,8 +846,6 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
             stream.SendNext(channeledInterval);
             stream.SendNext(channeledTimer);
             stream.SendNext(curSkillIndex);
-            stream.SendNext(deleteCurSkill);
-            stream.SendNext(delayTimer);
             for (int i = 0; i < skills.Count; i++)
             {
                 stream.SendNext(skills[i].CDTimer);
@@ -876,8 +881,6 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
             channeledInterval = (float)stream.ReceiveNext();
             channeledTimer = (float)stream.ReceiveNext();
             curSkillIndex = (int)stream.ReceiveNext();
-            deleteCurSkill = (bool)stream.ReceiveNext();
-            delayTimer = (float)stream.ReceiveNext();
             if (curSkillIndex == -1)
             {
                 curCastSkill = null;

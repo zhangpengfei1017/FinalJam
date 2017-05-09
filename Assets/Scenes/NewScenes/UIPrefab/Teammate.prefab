@@ -227,7 +227,7 @@ MonoBehaviour:
   aspectRatio: 10
   mType: 3
   mFillDirection: 0
-  mFillAmount: 1
+  mFillAmount: 0.114
   mInvert: 0
   mFlip: 0
   mApplyGradient: 0
@@ -302,7 +302,7 @@ MonoBehaviour:
   aspectRatio: 10.285714
   mType: 3
   mFillDirection: 0
-  mFillAmount: 1
+  mFillAmount: 0.531
   mInvert: 0
   mFlip: 0
   mApplyGradient: 0

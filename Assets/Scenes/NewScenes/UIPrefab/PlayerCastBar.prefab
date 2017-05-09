@@ -52,6 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4037617857779318}
   - component: {fileID: 114296517727828644}
+  - component: {fileID: 114159466692875718}
   m_Layer: 5
   m_Name: PlayerCastBar
   m_TagString: Untagged
@@ -168,6 +169,19 @@ MonoBehaviour:
   mMaxLineHeight: 0
   mLineWidth: 0
   mMultiline: 1
+--- !u!114 &114159466692875718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1752355634265996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1583d70c55ae964db69b6ba5397391a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progress: {fileID: 114296804780133330}
+  skillName: {fileID: 114153046824451482}
 --- !u!114 &114296517727828644
 MonoBehaviour:
   m_ObjectHideFlags: 1

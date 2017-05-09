@@ -93,8 +93,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_gray
-    x: 828
-    y: 333
+    x: 481
+    y: 202
     width: 346
     height: 130
     borderLeft: 0
@@ -106,8 +106,8 @@ MonoBehaviour:
     paddingTop: -5
     paddingBottom: -5
   - name: button_gray-HOVER
-    x: 828
-    y: 202
+    x: 481
+    y: 71
     width: 346
     height: 130
     borderLeft: 0
@@ -119,8 +119,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_gray-PUSH
-    x: 828
-    y: 71
+    x: 481
+    y: 464
     width: 346
     height: 130
     borderLeft: 0
@@ -132,8 +132,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_green
-    x: 0
-    y: 10
+    x: 828
+    y: 464
     width: 346
     height: 130
     borderLeft: 0
@@ -145,8 +145,8 @@ MonoBehaviour:
     paddingTop: -5
     paddingBottom: -5
   - name: button_green-HOVER
-    x: 828
-    y: 464
+    x: 481
+    y: 333
     width: 346
     height: 130
     borderLeft: 0
@@ -158,8 +158,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_green-PUSH
-    x: 481
-    y: 464
+    x: 828
+    y: 333
     width: 346
     height: 130
     borderLeft: 0
@@ -171,8 +171,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_orange
-    x: 481
-    y: 333
+    x: 828
+    y: 202
     width: 346
     height: 130
     borderLeft: 0
@@ -184,8 +184,8 @@ MonoBehaviour:
     paddingTop: -5
     paddingBottom: -5
   - name: button_orange-HOVER
-    x: 481
-    y: 202
+    x: 828
+    y: 71
     width: 346
     height: 130
     borderLeft: 0
@@ -197,8 +197,8 @@ MonoBehaviour:
     paddingTop: 0
     paddingBottom: 0
   - name: button_orange-PUSH
-    x: 481
-    y: 71
+    x: 0
+    y: 10
     width: 346
     height: 130
     borderLeft: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
     paddingBottom: -5
   - name: cc_char_options_arrow_left
     x: 2718
-    y: 2936
+    y: 2875
     width: 60
     height: 60
     borderLeft: 0
@@ -250,7 +250,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: cc_char_options_arrow_right
     x: 2718
-    y: 2875
+    y: 2936
     width: 60
     height: 60
     borderLeft: 0
@@ -393,7 +393,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: chat_tabs_btn
     x: 3806
-    y: 2813
+    y: 2908
     width: 234
     height: 94
     borderLeft: 0
@@ -406,7 +406,7 @@ MonoBehaviour:
     paddingBottom: 0
   - name: chat_tabs_btn-HOVER
     x: 3806
-    y: 2908
+    y: 2813
     width: 234
     height: 94
     borderLeft: 0

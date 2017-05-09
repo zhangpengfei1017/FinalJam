@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ActionBarUI : MonoBehaviour {
 
+    public UISprite[] cdfill;
+
+
 	// Use this for initialization
 	void Start () {
 		
@@ -13,4 +16,9 @@ public class ActionBarUI : MonoBehaviour {
 	void Update () {
 		
 	}
+    public void SetCD(int i,float value) {
+        cdfill[i].fillAmount = value;
+    }
+
+    
 }
