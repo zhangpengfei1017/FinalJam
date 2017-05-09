@@ -34,9 +34,25 @@ public class GameController : Photon.PunBehaviour
         {
             return;
         }
-        GameObject myPlayer = PhotonNetwork.Instantiate("New_Player_Sorceress", startPosition.position, Quaternion.identity, 0);
+        GameObject myPlayer;
+        switch (PlayerInfo.instance.playerClass) {
+            case HeroController.Class.Knight:
+                myPlayer = PhotonNetwork.Instantiate("New_Player_Knight", startPosition.position, Quaternion.identity, 0);
+                break;
+            case HeroController.Class.Priest:
+                myPlayer = PhotonNetwork.Instantiate("New_Player_Priest", startPosition.position, Quaternion.identity, 0);
+                break;
+            case HeroController.Class.Sorceress:
+                myPlayer = PhotonNetwork.Instantiate("New_Player_Sorceress", startPosition.position, Quaternion.identity, 0);
+                break;
+            default:
+                myPlayer = PhotonNetwork.Instantiate("New_Player_Knight", startPosition.position, Quaternion.identity, 0);
+                break;
+        }
+        localFrame.SetClass((int)PlayerInfo.instance.playerClass);
         localPlayer = myPlayer.GetComponent<GameCharacter>();
         localPlayer.characterName = PlayerInfo.instance.playerName;
+        CDBar.SetClass((int)PlayerInfo.instance.playerClass);
         photonView.RPC("OnPlayerJoinedGameplay", PhotonTargets.AllViaServer, null);
         Camera.main.GetComponent<AdvancedUtilities.Cameras.BasicCameraController>().Target.Target = myPlayer.transform;
     }
@@ -165,7 +181,7 @@ public class GameController : Photon.PunBehaviour
         //teamma                       
         for (int i = 0; i < teammateList.Count; i++)
         {
-            teamList.GetComponent<TeamListUI>().SetTeammateInfo(i, teammateList[i].characterName, (float)teammateList[i].CurHP / (float)teammateList[i].MaxHP, (float)teammateList[i].CurMP / (float)teammateList[i].MaxMP);
+            teamList.GetComponent<TeamListUI>().SetTeammateInfo(i, teammateList[i].characterName, (int)teammateList[i].myClass,(float)teammateList[i].CurHP / (float)teammateList[i].MaxHP, (float)teammateList[i].CurMP / (float)teammateList[i].MaxMP);
         }
 
     }

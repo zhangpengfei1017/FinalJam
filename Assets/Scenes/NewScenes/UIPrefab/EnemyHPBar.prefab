@@ -526,7 +526,7 @@ MonoBehaviour:
   updateAnchors: 1
   mColor: {r: 0.8117647, g: 0.7294118, b: 0.6431373, a: 1}
   mPivot: 4
-  mWidth: 46
+  mWidth: 48
   mHeight: 20
   mDepth: 3
   autoResizeBoxCollider: 0
@@ -601,8 +601,8 @@ MonoBehaviour:
   hideIfOffScreen: 0
   keepAspectRatio: 0
   aspectRatio: 27.714285
-  mType: 0
-  mFillDirection: 4
+  mType: 3
+  mFillDirection: 0
   mFillAmount: 1
   mInvert: 0
   mFlip: 0

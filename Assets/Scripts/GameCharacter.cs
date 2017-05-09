@@ -29,6 +29,8 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     [SerializeField]
     public CharacterType characterType = CharacterType.Monster;
 
+    public HeroController.Class myClass = HeroController.Class.Knight;
+
     [SerializeField]
     public string characterName;
 
@@ -403,6 +405,9 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
 
     public void Move(float moveFwd, float moveRt)
     {
+        if (moveFwd != 0 || moveRt != 0) {
+            photonView.RPC("CancelCast", PhotonTargets.All, true);
+        }
         pc.Move(moveFwd, moveRt);
     }
 
@@ -635,7 +640,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     [PunRPC]
     public void CancelCast(bool self)
     {
-        if ((isCasting || isChanneling) && !curCastSkill.isMovingCast)
+        if (isCasting || isChanneling && !curCastSkill.isMovingCast)
         {
             if (isCasting)
             {

@@ -14,10 +14,11 @@ public class TeamListUI : MonoBehaviour {
 	void Update () {
 		
 	}
-    public void SetTeammateInfo(int ID, string pName, float hp, float mp) {
+    public void SetTeammateInfo(int ID, string pName, int c, float hp, float mp) {
         PlayerFrameUI[] pui = GetComponentsInChildren<PlayerFrameUI>();
         pui[ID].SetPlayerName(pName);
         pui[ID].SetHpValue(hp);
         pui[ID].SetMpValue(mp);
+        pui[ID].SetClass(c);
     }
 }
