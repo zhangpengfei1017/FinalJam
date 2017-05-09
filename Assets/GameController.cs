@@ -79,7 +79,6 @@ public class GameController : Photon.MonoBehaviour
 
     void UpdatePlayerList()
     {
-        print("fuck");
         allPlayersArray = FindObjectsOfType<HeroController>();
         if (allPlayersArray.Length == PhotonNetwork.room.PlayerCount)
         {

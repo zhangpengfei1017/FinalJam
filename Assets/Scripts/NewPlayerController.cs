@@ -110,7 +110,6 @@ public class NewPlayerController : MonoBehaviour
 
     void CreateSkillEffect()
     {
-        print("Animation Event: skillid = " + curSkillId + " , eventid =  " + curEventId);
         anim.SetInteger(skillIdxHash, 0);
         if (null != curFx)
             curFx.OnEventTriggered(curEventId++);
