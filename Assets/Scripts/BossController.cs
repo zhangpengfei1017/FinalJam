@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
-    public delegate void SkillDel();
-
     [System.Serializable]
     public class BossSkill
     {
@@ -24,15 +22,20 @@ public class BossController : MonoBehaviour
     }
 
     [System.Serializable]
-    public class StageBossSkills
+    public class StageBoss
     {
-        public BossSkill[] stage1;
-        public BossSkill[] stage2;
-        public BossSkill[] stage3;
+        public BossSkill[] Stage1_Skills;
+        float Stage1_LifePercent;
+
+        public BossSkill[] Stage2_Skills;
+        float Stage2_LifePercent;
+
+        public BossSkill[] Stage3_Skills;
+        float Stage3_LifePercent;
     }
 
 
-    public StageBossSkills test;
+    public StageBoss StageBossParams;
 
     List<BossSkill> skills = new List<BossSkill>();
 
@@ -90,8 +93,6 @@ public class BossController : MonoBehaviour
 
     public float destroyTime;
     private float destroyTimer;
-
-
 
     // Use this for initialization
     void Start()
@@ -168,9 +169,6 @@ public class BossController : MonoBehaviour
                     break;
                 }
             }
-            //character.SetTarget(target.GetComponent<GameCharacter>());
-            //gotoChase = true;
-            //hasAttackTarget = true;
         }
     }
 
@@ -186,7 +184,24 @@ public class BossController : MonoBehaviour
     {
         if(target == null)
         {
-            // TODO: Find new target in view
+            // Find target in view;
+            // TODO: Within angle?
+
+            float view = 5;
+
+            foreach(HeroController hero in FindObjectsOfType<HeroController>())
+            {
+                if(hero.GetComponent<GameCharacter>().IsAlive)
+                {
+                    float d = Vector3.Distance(hero.transform.position, transform.position);
+
+                    if (d < view)
+                    {
+                        view = d;
+                        target = hero.gameObject;
+                    }
+                }
+            }
         }   
     }
 

@@ -2192,7 +2192,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 3.47
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -9015,6 +9015,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
+        type: 2}
+      propertyPath: test.stage1.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4198335814697432, guid: 23fa29bd88cb55046a30b7cc4c01bffb, type: 2}
       propertyPath: m_LocalPosition.x
       value: 52.97
