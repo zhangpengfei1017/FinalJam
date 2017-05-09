@@ -93,9 +93,9 @@ public class NewSkillEffect : MonoBehaviour
         }
         else
         {
-            go.transform.position = spawnTrans.position + spawner.positionOffset;
-            go.transform.rotation = Quaternion.Euler(spawner.rotationOffset) *
-                spawnTrans.rotation;
+            go.transform.position = spawnTrans.position;
+            go.transform.rotation = spawnTrans.rotation * Quaternion.Euler(spawner.rotationOffset);
+            go.transform.position += spawnTrans.rotation * Vector3.Scale(spawner.positionOffset, transform.lossyScale);
         }
         SkillEffect skillfx = go.GetComponent<SkillEffect>();
         if (null != skillfx)
