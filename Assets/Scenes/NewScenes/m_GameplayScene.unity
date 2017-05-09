@@ -25988,12 +25988,12 @@ Prefab:
     - target: {fileID: 114697477250200906, guid: 610592602c07d554d8df5174e4aa15ee,
         type: 2}
       propertyPath: mWidth
-      value: 48
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 114697477250200906, guid: 610592602c07d554d8df5174e4aa15ee,
         type: 2}
       propertyPath: aspectRatio
-      value: 2.4
+      value: 2.3
       objectReference: {fileID: 0}
     - target: {fileID: 1988593138201708, guid: 610592602c07d554d8df5174e4aa15ee, type: 2}
       propertyPath: m_Name

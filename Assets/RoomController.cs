@@ -76,8 +76,8 @@ public class RoomController : Photon.PunBehaviour
             {
                 if (isStarting)
                 {
-                    startTimer = 10;
-                    startingCount = 10;
+                    startTimer = 1;
+                    startingCount = 1;
                 }
                 isStarting = false;
                 break;

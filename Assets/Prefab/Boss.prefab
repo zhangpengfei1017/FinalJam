@@ -3470,8 +3470,8 @@ MonoBehaviour:
   characterName: Boss
   maxHP: 999999
   maxMP: 999999
-  attack: 999999
-  defense: 999999
+  attack: 10
+  defense: 10
   moveSpeed: 100
   globalCDTime: 0.5
   freezedCount: 0
@@ -3539,21 +3539,21 @@ MonoBehaviour:
     Stage2_LifePercent: 0.6
     Stage3_LifePercent: 0.3
     Stage1_Skills:
-    - skillIndex: 0
-      cooldown: 0
-      count: 0
-      nextAction: 0
     - skillIndex: 1
-      cooldown: 0
+      cooldown: 5
       count: 0
-      nextAction: 0
+      nextAction: 2
+    - skillIndex: 0
+      cooldown: 2
+      count: 0
+      nextAction: 1
     Stage2_Skills: []
     Stage3_Skills: []
   enemyState: 0
   _target: {fileID: 0}
   maxChaseDistance: 20
   distanceToTarget: 5
-  destroyTime: 0
+  destroyTime: 5
 --- !u!114 &114500395798007842
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -78,7 +78,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     {
         get
         {
-            return globalCDTime != 0 || isCasting || isChanneling || isFreezed;
+            return globalCDTimer != 0 || isCasting || isChanneling || isFreezed;
         }
     }
 
