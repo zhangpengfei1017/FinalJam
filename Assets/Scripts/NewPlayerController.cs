@@ -70,7 +70,8 @@ public class NewPlayerController : MonoBehaviour
         Vector3 moveDelta = new Vector3(moveRt, 0, Mathf.Clamp(moveFwd, -0.5f, 1.0f));
         Quaternion camRotY = Quaternion.Euler(0, cam.transform.rotation.eulerAngles.y, 0);
         transform.rotation = camRotY;
-        
+
+        print(camRotY * moveDelta * Time.deltaTime * moveSpeed);
         charCtrl.SimpleMove(camRotY * moveDelta * Time.deltaTime * moveSpeed);
         
         anim.SetBool(isMovingHash, moveDelta.sqrMagnitude > 0.01f);
