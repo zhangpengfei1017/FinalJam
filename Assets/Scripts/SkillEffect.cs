@@ -104,7 +104,7 @@ public class SkillEffect : MonoBehaviour
 
                     Vector3 dir = (target - transform.position).normalized;
                     transform.position += dir * speed * Time.deltaTime;
-                    if (Vector3.Distance(transform.position, target) <= 0.2f && !collisionTriggerd)
+                    if (Vector3.Distance(transform.position, target) <= 1.0f && !collisionTriggerd)
                     {
                         collisionTriggerd = true;
                         if (collisionEffect != null)

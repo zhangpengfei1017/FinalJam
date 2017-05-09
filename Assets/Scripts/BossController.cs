@@ -6,33 +6,37 @@ using UnityEngine;
 
 public class BossController : MonoBehaviour
 {
-    public delegate void SkillDel();
-
-    //[System.Serializable]
+    [System.Serializable]
     public class BossSkill
     {
-        public float cooldown;
-        public float count;
+        public int skillIndex = 0;
 
-        // How long to do the next action
-        public float nextAction;
+        [Tooltip("Skill cooldown")]
+        public float cooldown = 3.0f;
 
-        public int index;
+        [Tooltip("Cooldown for skill activate, set 15 if the skill can only be activated after 15 seconds of the fight!")]
+        public float count = 0.0f;
+
+        // TODO: Intergrade with global cd
+        [Tooltip("How long have to wait to do the next action.")]
+        public float nextAction = 1.0f;
     }
 
-    List<BossSkill> skills = new List<BossSkill>();
-
-    public enum MonsterType
+    [System.Serializable]
+    public class StageBoss
     {
-        Trash,
-        Boss
-    };
+        public float Stage2_LifePercent = 0.6f;
+        public float Stage3_LifePercent = 0.3f;
 
-    [SerializeField]
-    private string monsterName;
+        public BossSkill[] Stage1_Skills;
+        public BossSkill[] Stage2_Skills;
+        public BossSkill[] Stage3_Skills;
+    }
 
-    [SerializeField]
-    private MonsterType monsterType = MonsterType.Boss;
+
+    public StageBoss StageBossParams;
+
+    List<BossSkill> skills = new List<BossSkill>();
 
     private GameCharacter character;
 
@@ -47,10 +51,10 @@ public class BossController : MonoBehaviour
 
     //global parameters
 
-    private EnemyState enemyState;
+    public EnemyState enemyState;
     private Vector3 oriPos;
 
-    private GameObject _target;
+    public GameObject _target;
 
     public GameObject target
     {
@@ -61,7 +65,15 @@ public class BossController : MonoBehaviour
         set
         {
             _target = value;
-            character.SetTarget(value.GetComponent<GameCharacter>());
+
+            if (value == null)
+            {
+                character.SetTarget(null);
+            }
+            else
+            {
+                character.SetTarget(value.GetComponent<GameCharacter>());
+            }
         }
     }
 
@@ -70,6 +82,8 @@ public class BossController : MonoBehaviour
     private Vector3 chasePos;
     public float maxChaseDistance;
 
+    public float distanceToTarget;
+  
     // wait parameters
 
     private float waitTimer;
@@ -78,8 +92,6 @@ public class BossController : MonoBehaviour
 
     public float destroyTime;
     private float destroyTimer;
-
-
 
     // Use this for initialization
     void Start()
@@ -95,21 +107,23 @@ public class BossController : MonoBehaviour
         BossSkill b1 = new BossSkill();
         b1.cooldown = 1;
         b1.count = 0;
-        b1.index = 0;
+        b1.skillIndex = 0;
         skills.Add(b1);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (!GetComponent<PhotonView>().isMine) {
-        //    return;
-        //}
+        if (!GetComponent<PhotonView>().isMine)
+        {
+            return;
+        }
+
         CheckHealth();
 
         foreach (BossSkill bs in skills)
         {
-            bs.count += Time.deltaTime;
+            bs.count -= Time.deltaTime;
         }
 
         switch (enemyState)
@@ -142,6 +156,7 @@ public class BossController : MonoBehaviour
 
 
     public void TakeSkill(Skill.CastedSkillStruct scs) {
+
         // TODO: if OT or Tank skill
         if (target == null) {
             PhotonView[] photonViews = GameObject.FindObjectsOfType<PhotonView>();
@@ -153,9 +168,6 @@ public class BossController : MonoBehaviour
                     break;
                 }
             }
-            //character.SetTarget(target.GetComponent<GameCharacter>());
-            //gotoChase = true;
-            //hasAttackTarget = true;
         }
     }
 
@@ -171,7 +183,24 @@ public class BossController : MonoBehaviour
     {
         if(target == null)
         {
-            // TODO: Find new target in view
+            // Find target in view;
+            // TODO: Within angle?
+
+            float view = 5;
+
+            foreach(HeroController hero in FindObjectsOfType<HeroController>())
+            {
+                if(hero.GetComponent<GameCharacter>().IsAlive)
+                {
+                    float d = Vector3.Distance(hero.transform.position, transform.position);
+
+                    if (d < view)
+                    {
+                        view = d;
+                        target = hero.gameObject;
+                    }
+                }
+            }
         }   
     }
 
@@ -184,12 +213,15 @@ public class BossController : MonoBehaviour
             return;
         }
 
-        if (Vector3.Distance(transform.position, oriPos) < 2)
+        if (Vector3.Distance(transform.position, oriPos) > 2)
         {
             Move(oriPos);
-        } else
+        }
+        else
         {
+            MoveZero();
             character.CurHP += (int)(character.MaxHP * 0.02);
+            
             // TODO: Add mp too
         }
     }
@@ -201,6 +233,11 @@ public class BossController : MonoBehaviour
         // FIXME: Double quaternion in game character
         Quaternion q = Quaternion.LookRotation(direction);
         character.Move(direction, q.eulerAngles.y);
+    }
+
+    void MoveZero()
+    {
+        character.Move(Vector3.zero, transform.rotation.eulerAngles.y);
     }
 
     void Chasing()
@@ -218,26 +255,86 @@ public class BossController : MonoBehaviour
             return;
         }
 
-        float distance = Vector3.Distance(transform.position, target.transform.position);
-
         if (!character.isBusy)
         {
-            foreach (BossSkill bs in skills)
-            {
-                // FIXME: Allow miss attack?
-                if (bs.count <= 0 && distance <= character.skills[bs.index].distance)
-                {
-                    attack(bs.index);
-                    bs.count = bs.cooldown;
+            float distance = Vector3.Distance(transform.position, target.transform.position);
 
-                    enemyState = EnemyState.Wait;
-                    waitTimer = bs.nextAction;
+            //foreach (BossSkill bs in skills)
+            //{
+            //    // FIXME: Allow miss attack?
+            //    if (bs.count <= 0 && distance <= character.skills[bs.skillIndex].distance)
+            //    {
+            //        Debug.Log("Attack " + bs.skillIndex);
+
+
+            //        attack(bs.skillIndex);
+            //        bs.count = bs.cooldown;
+
+            //        enemyState = EnemyState.Wait;
+            //        waitTimer = bs.nextAction;
+            //        return;
+            //    }
+            //}
+
+            float lifePercent = character.CurHP / character.MaxHP;
+
+            if (lifePercent < StageBossParams.Stage3_LifePercent)
+            {
+                if (useSkill(StageBossParams.Stage3_Skills))
+                {
                     return;
                 }
             }
+            else if (lifePercent < StageBossParams.Stage2_LifePercent)
+            {
+                if (useSkill(StageBossParams.Stage2_Skills))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (useSkill(StageBossParams.Stage3_Skills))
+                {
+                    return;
+                }
+            }
+
+            if (distance > distanceToTarget)
+            {
+                Move(target.transform.position);
+            }
+            else
+            {
+                MoveZero();
+            }
+        }
+    }
+
+    bool useSkill(BossSkill[] skills)
+    {
+        if (skills == null)
+            return false;
+
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+
+        foreach (BossSkill bs in skills)
+        {
+            // FIXME: Allow miss attack?
+            if (bs.count <= 0 && distance <= character.skills[bs.skillIndex].distance)
+            {
+                Debug.Log("Attack " + bs.skillIndex);
+
+                attack(bs.skillIndex);
+                bs.count = bs.cooldown;
+
+                enemyState = EnemyState.Wait;
+                waitTimer = bs.nextAction;
+                return true;
+            }
         }
 
-        Move(target.transform.position);
+        return false;
     }
 
     void attack(int index)
@@ -259,7 +356,8 @@ public class BossController : MonoBehaviour
             UpdateTarget();
 
             enemyState = EnemyState.Chase;
-            chasePos = transform.position;
+
+            //chasePos = transform.position;
         }
     }
 

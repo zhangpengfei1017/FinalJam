@@ -191,7 +191,8 @@ MonoBehaviour:
   skillEffectType: 2
   speed: 40
   destroyTime: 5
-  collisionEffect: {fileID: 145962, guid: 0437f017df5f18f4892ec0d18663edd9, type: 2}
+  collisionEffect: {fileID: 1498814140757584, guid: d81a41ba6815c614bbf1e79d6c23bd89,
+    type: 2}
   collisionDestroyTime: 3
   delayCollisionTime: 0
   dontDestroyOnCollision: 0
