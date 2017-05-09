@@ -79,6 +79,7 @@ public class HeroController : MonoBehaviour
         float moveFwd = Input.GetAxis("Vertical");
         float moveRt = Input.GetAxis("Horizontal");
         character.Move(moveFwd, moveRt);
+
         //Vector3 dir = Vector3.zero;
         //float ro = 0;
         //int d = 0;
@@ -157,7 +158,6 @@ public class HeroController : MonoBehaviour
         if (attackIndex != -1)
         {
             character.Attack(attackIndex);
-
         }
     }
 
