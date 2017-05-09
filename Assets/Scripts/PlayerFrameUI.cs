@@ -14,11 +14,16 @@ public class PlayerFrameUI : MonoBehaviour
 
     public GameObject[] BuffPrefab;
 
+    public GameObject[] classIcon;
+
     public int OwnerID;
 
 
     public void SetOwner(int id) {
         OwnerID = id;
+    }
+    public void SetClass(int i) {
+        classIcon[i].SetActive(true);
     }
     public void SetPlayerName(string name) {
         playerName.text = name;

@@ -134,7 +134,7 @@ public class RoomController : Photon.PunBehaviour
 
     public void NextClass()
     {
-        myClass = (myClass + 1) % 4;
+        myClass = (myClass + 1) % 3;
         PlayerInfo.instance.playerClass = (HeroController.Class)myClass;
         SelectClass.text = PlayerInfo.instance.playerClass.ToString();
         myPlayer.GetComponent<RoomPlayer>().playerClass = PlayerInfo.instance.playerClass;
@@ -142,10 +142,10 @@ public class RoomController : Photon.PunBehaviour
     }
     public void PrevousClass()
     {
-        myClass = (myClass - 1) % 4;
+        myClass = (myClass - 1) % 3;
         if (myClass < 0)
         {
-            myClass = 3;
+            myClass = 2;
         }
         PlayerInfo.instance.playerClass = (HeroController.Class)myClass;
         SelectClass.text = PlayerInfo.instance.playerClass.ToString();
