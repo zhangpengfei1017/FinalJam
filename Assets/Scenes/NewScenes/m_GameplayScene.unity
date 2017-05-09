@@ -14163,12 +14163,12 @@ Prefab:
     - target: {fileID: 114697477250200906, guid: 610592602c07d554d8df5174e4aa15ee,
         type: 2}
       propertyPath: mWidth
-      value: 48
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 114697477250200906, guid: 610592602c07d554d8df5174e4aa15ee,
         type: 2}
       propertyPath: aspectRatio
-      value: 2.4
+      value: 2.3
       objectReference: {fileID: 0}
     - target: {fileID: 1988593138201708, guid: 610592602c07d554d8df5174e4aa15ee, type: 2}
       propertyPath: m_Name
@@ -14403,6 +14403,41 @@ Prefab:
         type: 2}
       propertyPath: instantiationId
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
+        type: 2}
+      propertyPath: StageBossParams.Stage1_Skills.Array.data[0].cooldown
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
+        type: 2}
+      propertyPath: StageBossParams.Stage1_Skills.Array.data[0].nextAction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
+        type: 2}
+      propertyPath: StageBossParams.Stage1_Skills.Array.data[1].cooldown
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
+        type: 2}
+      propertyPath: StageBossParams.Stage1_Skills.Array.data[1].nextAction
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
+        type: 2}
+      propertyPath: destroyTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114148908637134396, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
+        type: 2}
+      propertyPath: attack
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114148908637134396, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
+        type: 2}
+      propertyPath: defense
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 23fa29bd88cb55046a30b7cc4c01bffb, type: 2}

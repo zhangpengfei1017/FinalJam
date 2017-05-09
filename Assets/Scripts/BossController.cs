@@ -33,10 +33,7 @@ public class BossController : MonoBehaviour
         public BossSkill[] Stage3_Skills;
     }
 
-
     public StageBoss StageBossParams;
-
-    List<BossSkill> skills = new List<BossSkill>();
 
     private GameCharacter character;
 
@@ -103,12 +100,6 @@ public class BossController : MonoBehaviour
         oriPos = transform.position;
 
         destroyTimer = 0;
-
-        BossSkill b1 = new BossSkill();
-        b1.cooldown = 1;
-        b1.count = 0;
-        b1.skillIndex = 0;
-        skills.Add(b1);
     }
 
     // Update is called once per frame
@@ -119,12 +110,11 @@ public class BossController : MonoBehaviour
             return;
         }
 
+        //Debug.Log("Update");
+
         CheckHealth();
 
-        foreach (BossSkill bs in skills)
-        {
-            bs.count -= Time.deltaTime;
-        }
+        updateSkills();
 
         switch (enemyState)
         {
@@ -156,6 +146,8 @@ public class BossController : MonoBehaviour
 
 
     public void TakeSkill(Skill.CastedSkillStruct scs) {
+
+        //Debug.Log("Under attack");
 
         // TODO: if OT or Tank skill
         if (target == null) {
@@ -257,48 +249,12 @@ public class BossController : MonoBehaviour
 
         if (!character.isBusy)
         {
+            if (useSkill())
+            {
+                return;
+            }
+
             float distance = Vector3.Distance(transform.position, target.transform.position);
-
-            //foreach (BossSkill bs in skills)
-            //{
-            //    // FIXME: Allow miss attack?
-            //    if (bs.count <= 0 && distance <= character.skills[bs.skillIndex].distance)
-            //    {
-            //        Debug.Log("Attack " + bs.skillIndex);
-
-
-            //        attack(bs.skillIndex);
-            //        bs.count = bs.cooldown;
-
-            //        enemyState = EnemyState.Wait;
-            //        waitTimer = bs.nextAction;
-            //        return;
-            //    }
-            //}
-
-            float lifePercent = character.CurHP / character.MaxHP;
-
-            if (lifePercent < StageBossParams.Stage3_LifePercent)
-            {
-                if (useSkill(StageBossParams.Stage3_Skills))
-                {
-                    return;
-                }
-            }
-            else if (lifePercent < StageBossParams.Stage2_LifePercent)
-            {
-                if (useSkill(StageBossParams.Stage2_Skills))
-                {
-                    return;
-                }
-            }
-            else
-            {
-                if (useSkill(StageBossParams.Stage3_Skills))
-                {
-                    return;
-                }
-            }
 
             if (distance > distanceToTarget)
             {
@@ -311,8 +267,31 @@ public class BossController : MonoBehaviour
         }
     }
 
-    bool useSkill(BossSkill[] skills)
+    BossSkill[] getSkills()
     {
+        float lifePercent = (float)character.CurHP / character.MaxHP;
+
+        if (lifePercent < StageBossParams.Stage3_LifePercent)
+        {
+             Debug.Log("Stage3");
+             return StageBossParams.Stage3_Skills;
+            
+        }
+        else if (lifePercent < StageBossParams.Stage2_LifePercent)
+        {   Debug.Log("Stage2");
+            return StageBossParams.Stage2_Skills;
+        }
+        else
+        {
+             Debug.Log("Stage1");
+             return StageBossParams.Stage1_Skills;
+        }
+    }
+
+    bool useSkill()
+    {
+        BossSkill[] skills = getSkills();
+
         if (skills == null)
             return false;
 
@@ -320,6 +299,7 @@ public class BossController : MonoBehaviour
 
         foreach (BossSkill bs in skills)
         {
+            Debug.Log(bs.count);
             // FIXME: Allow miss attack?
             if (bs.count <= 0 && distance <= character.skills[bs.skillIndex].distance)
             {
@@ -335,6 +315,19 @@ public class BossController : MonoBehaviour
         }
 
         return false;
+    }
+
+    void updateSkills()
+    {
+        BossSkill[] skills = getSkills();
+
+        if (skills == null)
+            return;
+
+        foreach (BossSkill bs in skills)
+        {
+            bs.count -= Time.deltaTime;
+        }
     }
 
     void attack(int index)
