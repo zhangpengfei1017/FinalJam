@@ -71,7 +71,6 @@ public class NewPlayerController : MonoBehaviour
         Quaternion camRotY = Quaternion.Euler(0, cam.transform.rotation.eulerAngles.y, 0);
         transform.rotation = camRotY;
 
-        print(camRotY * moveDelta * Time.deltaTime * moveSpeed);
         charCtrl.SimpleMove(camRotY * moveDelta * Time.deltaTime * moveSpeed);
         
         anim.SetBool(isMovingHash, moveDelta.sqrMagnitude > 0.01f);

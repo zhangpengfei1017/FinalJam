@@ -7773,6 +7773,16 @@ Prefab:
       propertyPath: m_Center.y
       value: -6.60001
       objectReference: {fileID: 0}
+    - target: {fileID: 114584156077295924, guid: bf091f166c1f4e94e98fd69e1fd2bcb4,
+        type: 2}
+      propertyPath: mText
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114584156077295924, guid: bf091f166c1f4e94e98fd69e1fd2bcb4,
+        type: 2}
+      propertyPath: mOverflow
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bf091f166c1f4e94e98fd69e1fd2bcb4, type: 2}
   m_IsPrefabParent: 0
