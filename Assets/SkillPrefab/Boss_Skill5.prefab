@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4671536758136994}
   - component: {fileID: 114937449987161312}
   m_Layer: 0
-  m_Name: Sorceress_Skill1
+  m_Name: Boss_Skill5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,25 +51,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f4013eee91ae744a1015e9795bfc7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillName: Attack
+  skillName: BS2
   icon: {fileID: 0}
   animationIndex: 1
   targetType: 2
-  distance: 20
-  skillType: 0
-  instantDelayTime: 0.5
-  castTime: 0
+  distance: 5
+  skillType: 1
+  instantDelayTime: 0
+  castTime: 2
   channelTime: 0
   channelInterval: 0
   isMovingCast: 0
-  mpCost: 5
+  mpCost: 10
   CDTime: 0
   CDTimer: 0
   pctDamage: 1
-  fixedDamage: 300
+  fixedDamage: 500
   pctHealth: 0
   fixedHealth: 0
   fixedThreat: 0
   maxTargets: 0
   buffs: []
-  effect: {fileID: 1818434554411180, guid: 04836177858b64f48b604bdc25e1cf1e, type: 2}
+  effect: {fileID: 0}

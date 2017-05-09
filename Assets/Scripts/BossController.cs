@@ -220,8 +220,8 @@ public class BossController : MonoBehaviour
         else
         {
             MoveZero();
-            character.CurHP += (int)(character.MaxHP * 0.02);
-            
+            //character.CurHP += (int)(character.MaxHP * 0.02);
+            character.CurHP = Mathf.Clamp(character.CurHP + (int)(character.MaxHP * 0.02), 0, character.MaxHP);
             // TODO: Add mp too
         }
     }

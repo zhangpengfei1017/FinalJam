@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4671536758136994}
   - component: {fileID: 114937449987161312}
   m_Layer: 0
-  m_Name: Sorceress_Skill1
+  m_Name: Knight_Skill4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3f4013eee91ae744a1015e9795bfc7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillName: Attack
+  skillName: s1
   icon: {fileID: 0}
   animationIndex: 1
   targetType: 2
