@@ -3467,12 +3467,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 2
+  myClass: 0
   characterName: Boss
-  maxHP: 999999
-  maxMP: 999999
-  attack: 10
-  defense: 10
-  moveSpeed: 100
+  maxHP: 300000
+  maxMP: 200000
+  attack: 3000
+  defense: 2000
+  moveSpeed: 200
   globalCDTime: 0.5
   freezedCount: 0
   headPoint: {fileID: 4646667585682218}
@@ -3517,7 +3518,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 0}
-  moveSpeed: 100
+  moveSpeed: 200
   skillEffects:
   - {fileID: 114349409163201966}
   - {fileID: 114669862890945584}
@@ -3540,6 +3541,15 @@ MonoBehaviour:
     Stage3_LifePercent: 0.3
     Stage1_Skills:
     - skillIndex: 1
+      cooldown: 10
+      count: 0
+      nextAction: 2
+    - skillIndex: 0
+      cooldown: 2
+      count: 0
+      nextAction: 1
+    Stage2_Skills:
+    - skillIndex: 1
       cooldown: 5
       count: 0
       nextAction: 2
@@ -3547,11 +3557,18 @@ MonoBehaviour:
       cooldown: 2
       count: 0
       nextAction: 1
-    Stage2_Skills: []
-    Stage3_Skills: []
+    Stage3_Skills:
+    - skillIndex: 1
+      cooldown: 3
+      count: 0
+      nextAction: 2
+    - skillIndex: 0
+      cooldown: 2
+      count: 0
+      nextAction: 1
   enemyState: 0
   _target: {fileID: 0}
-  maxChaseDistance: 20
+  maxChaseDistance: 30
   distanceToTarget: 5
   destroyTime: 5
 --- !u!114 &114500395798007842

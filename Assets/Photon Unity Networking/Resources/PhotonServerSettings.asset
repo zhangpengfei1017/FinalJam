@@ -53,4 +53,5 @@ MonoBehaviour:
   - StartGame
   - OnPlayerJoinedGameplay
   - AllStartSkill
+  - OnDied
   DisableAutoOpenWizard: 1

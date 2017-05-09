@@ -62,13 +62,13 @@ MonoBehaviour:
   channelTime: 0
   channelInterval: 0
   isMovingCast: 0
-  mpCost: 10
+  mpCost: 20
   CDTime: 10
   CDTimer: 0
   pctDamage: 0
   fixedDamage: 0
   pctHealth: 0
-  fixedHealth: 1500
+  fixedHealth: 3000
   fixedThreat: 0
   maxTargets: 0
   buffs: []

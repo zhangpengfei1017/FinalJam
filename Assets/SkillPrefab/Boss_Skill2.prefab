@@ -65,8 +65,8 @@ MonoBehaviour:
   mpCost: 10
   CDTime: 0
   CDTimer: 0
-  pctDamage: 1
-  fixedDamage: 500
+  pctDamage: 2
+  fixedDamage: 2000
   pctHealth: 0
   fixedHealth: 0
   fixedThreat: 0

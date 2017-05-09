@@ -3430,9 +3430,9 @@ MonoBehaviour:
   characterType: 0
   myClass: 0
   characterName: 
-  maxHP: 15000
-  maxMP: 12000
-  attack: 1500
+  maxHP: 10000
+  maxMP: 8000
+  attack: 3000
   defense: 1500
   moveSpeed: 250
   globalCDTime: 1.5

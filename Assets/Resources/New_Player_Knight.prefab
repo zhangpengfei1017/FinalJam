@@ -3608,10 +3608,10 @@ MonoBehaviour:
   characterType: 0
   myClass: 0
   characterName: Knight
-  maxHP: 100
-  maxMP: 100
-  attack: 100
-  defense: 100
+  maxHP: 20000
+  maxMP: 8000
+  attack: 1500
+  defense: 4000
   moveSpeed: 250
   globalCDTime: 1.5
   freezedCount: 0

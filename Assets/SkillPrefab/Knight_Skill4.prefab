@@ -55,18 +55,18 @@ MonoBehaviour:
   icon: {fileID: 0}
   animationIndex: 1
   targetType: 2
-  distance: 20
-  skillType: 0
+  distance: 5
+  skillType: 1
   instantDelayTime: 0.5
-  castTime: 0
+  castTime: 2
   channelTime: 0
   channelInterval: 0
   isMovingCast: 0
   mpCost: 5
-  CDTime: 0
+  CDTime: 20
   CDTimer: 0
-  pctDamage: 1
-  fixedDamage: 300
+  pctDamage: 2
+  fixedDamage: 4000
   pctHealth: 0
   fixedHealth: 0
   fixedThreat: 0

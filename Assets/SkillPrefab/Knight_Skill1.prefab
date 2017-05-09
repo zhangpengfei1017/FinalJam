@@ -55,7 +55,7 @@ MonoBehaviour:
   icon: {fileID: 0}
   animationIndex: 1
   targetType: 2
-  distance: 20
+  distance: 5
   skillType: 0
   instantDelayTime: 0.5
   castTime: 0

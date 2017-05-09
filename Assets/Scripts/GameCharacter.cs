@@ -476,7 +476,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         if (curHP <= 0 && !isDead)
         {
             isDead = true;
-            OnDied();
+            photonView.RPC("OnDied", PhotonTargets.All, null);
         }
         if (isFreezed)
         {
@@ -488,7 +488,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         }
     }
 
-
+    [PunRPC]
     void OnDied()
     {
         pc.Die();
