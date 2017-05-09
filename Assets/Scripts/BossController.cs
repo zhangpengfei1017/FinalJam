@@ -299,7 +299,7 @@ public class BossController : MonoBehaviour
 
         foreach (BossSkill bs in skills)
         {
-            Debug.Log(bs.count);
+            //Debug.Log(bs.count);
             // FIXME: Allow miss attack?
             if (bs.count <= 0 && distance <= character.skills[bs.skillIndex].distance)
             {
