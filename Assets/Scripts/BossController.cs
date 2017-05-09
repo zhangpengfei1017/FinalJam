@@ -9,29 +9,28 @@ public class BossController : MonoBehaviour
     [System.Serializable]
     public class BossSkill
     {
-        public int skillIndex;
+        public int skillIndex = 0;
 
         [Tooltip("Skill cooldown")]
-        public float cooldown;
+        public float cooldown = 3.0f;
 
         [Tooltip("Cooldown for skill activate, set 15 if the skill can only be activated after 15 seconds of the fight!")]
-        public float count;
+        public float count = 0.0f;
 
+        // TODO: Intergrade with global cd
         [Tooltip("How long have to wait to do the next action.")]
-        public float nextAction;
+        public float nextAction = 1.0f;
     }
 
     [System.Serializable]
     public class StageBoss
     {
+        public float Stage2_LifePercent = 0.6f;
+        public float Stage3_LifePercent = 0.3f;
+
         public BossSkill[] Stage1_Skills;
-        float Stage1_LifePercent;
-
         public BossSkill[] Stage2_Skills;
-        float Stage2_LifePercent;
-
         public BossSkill[] Stage3_Skills;
-        float Stage3_LifePercent;
     }
 
 
@@ -277,6 +276,30 @@ public class BossController : MonoBehaviour
             //    }
             //}
 
+            float lifePercent = character.CurHP / character.MaxHP;
+
+            if (lifePercent < StageBossParams.Stage3_LifePercent)
+            {
+                if (useSkill(StageBossParams.Stage3_Skills))
+                {
+                    return;
+                }
+            }
+            else if (lifePercent < StageBossParams.Stage2_LifePercent)
+            {
+                if (useSkill(StageBossParams.Stage2_Skills))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (useSkill(StageBossParams.Stage3_Skills))
+                {
+                    return;
+                }
+            }
+
             if (distance > distanceToTarget)
             {
                 Move(target.transform.position);
@@ -286,6 +309,32 @@ public class BossController : MonoBehaviour
                 MoveZero();
             }
         }
+    }
+
+    bool useSkill(BossSkill[] skills)
+    {
+        if (skills == null)
+            return false;
+
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+
+        foreach (BossSkill bs in skills)
+        {
+            // FIXME: Allow miss attack?
+            if (bs.count <= 0 && distance <= character.skills[bs.skillIndex].distance)
+            {
+                Debug.Log("Attack " + bs.skillIndex);
+
+                attack(bs.skillIndex);
+                bs.count = bs.cooldown;
+
+                enemyState = EnemyState.Wait;
+                waitTimer = bs.nextAction;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     void attack(int index)
