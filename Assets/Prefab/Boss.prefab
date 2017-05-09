@@ -41,6 +41,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1032231704152928
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4814768580702102}
+  - component: {fileID: 114349409163201966}
+  m_Layer: 0
+  m_Name: SkillEffect1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
 --- !u!1 &1038320245028716
 GameObject:
   m_ObjectHideFlags: 1
@@ -1303,7 +1319,7 @@ GameObject:
   - component: {fileID: 4211680287845686}
   - component: {fileID: 114500395798007842}
   m_Layer: 0
-  m_Name: SkillEffect1
+  m_Name: SkillEffect3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2034,8 +2050,9 @@ Transform:
   - {fileID: 4791557165295912}
   - {fileID: 4024076461143520}
   - {fileID: 4381075243436020}
-  - {fileID: 4211680287845686}
+  - {fileID: 4814768580702102}
   - {fileID: 4305748156944058}
+  - {fileID: 4211680287845686}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2062,12 +2079,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1734068892289810}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4198335814697432}
-  m_RootOrder: 15
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4215042097230726
 Transform:
@@ -3059,6 +3076,19 @@ Transform:
   m_Father: {fileID: 4028079172474698}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4814768580702102
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1032231704152928}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4198335814697432}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4854948200467262
 Transform:
   m_ObjectHideFlags: 1
@@ -3295,6 +3325,27 @@ MonoBehaviour:
   characterCenter: {fileID: 0}
   skillPrefabs: []
   skills: []
+--- !u!114 &114349409163201966
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1032231704152928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2a7d33a143f976428a852989b701e28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeAlive: 3
+  spawners:
+  - prefab: {fileID: 1810443148593056, guid: f273a4064066f86478fc8f0e396948d2, type: 2}
+    target: {fileID: 4198335814697432}
+    positionOffset: {x: -0.41, y: 2.5, z: 3.75}
+    rotationOffset: {x: 0, y: 0, z: 25.08}
+    asChild: 0
+    triggeredByEvent: 1
+    eventId: 0
+    triggeredTime: 0
 --- !u!114 &114350687092263628
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3309,9 +3360,9 @@ MonoBehaviour:
   cam: {fileID: 0}
   moveSpeed: 100
   skillEffects:
-  - {fileID: 114500395798007842}
+  - {fileID: 114349409163201966}
   - {fileID: 114669862890945584}
-  - {fileID: 0}
+  - {fileID: 114500395798007842}
   - {fileID: 0}
   - {fileID: 0}
 --- !u!114 &114360424817488860
@@ -3342,13 +3393,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeAlive: 3
   spawners:
-  - prefab: {fileID: 1810443148593056, guid: f273a4064066f86478fc8f0e396948d2, type: 2}
+  - prefab: {fileID: 1859198718522502, guid: 66bc68d137a95a44c95d54a533f7ffaa, type: 2}
     target: {fileID: 4198335814697432}
-    positionOffset: {x: -0.41, y: 2.5, z: 3.75}
-    rotationOffset: {x: 0, y: 0, z: 25.08}
+    positionOffset: {x: 0, y: 0.01, z: 3.2}
+    rotationOffset: {x: 0, y: 0, z: 0}
     asChild: 0
     triggeredByEvent: 1
-    eventId: 0
+    eventId: 2
     triggeredTime: 0
 --- !u!114 &114669862890945584
 MonoBehaviour:

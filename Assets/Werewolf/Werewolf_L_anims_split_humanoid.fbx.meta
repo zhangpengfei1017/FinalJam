@@ -2477,7 +2477,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.55654764
+      - time: 0.53352135
         functionName: CreateSkillEffect
         data: 
         objectReferenceParameter: {instanceID: 0}
