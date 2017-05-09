@@ -80,7 +80,7 @@ public class BossController : MonoBehaviour
     public float maxChaseDistance;
 
     public float distanceToTarget;
-  
+
     // wait parameters
 
     private float waitTimer;
@@ -145,12 +145,14 @@ public class BossController : MonoBehaviour
     }
 
 
-    public void TakeSkill(Skill.CastedSkillStruct scs) {
+    public void TakeSkill(Skill.CastedSkillStruct scs)
+    {
 
         //Debug.Log("Under attack");
 
         // TODO: if OT or Tank skill
-        if (target == null) {
+        if (target == null)
+        {
             PhotonView[] photonViews = GameObject.FindObjectsOfType<PhotonView>();
             foreach (PhotonView p in photonViews)
             {
@@ -165,7 +167,7 @@ public class BossController : MonoBehaviour
 
     void CheckTarget()
     {
-        if(target != null && !target.GetComponent<GameCharacter>().IsAlive)
+        if (target != null && !target.GetComponent<GameCharacter>().IsAlive)
         {
             target = null;
         }
@@ -173,16 +175,16 @@ public class BossController : MonoBehaviour
 
     void UpdateTarget()
     {
-        if(target == null)
+        if (target == null)
         {
             // Find target in view;
             // TODO: Within angle?
 
             float view = 5;
 
-            foreach(HeroController hero in FindObjectsOfType<HeroController>())
+            foreach (HeroController hero in FindObjectsOfType<HeroController>())
             {
-                if(hero.GetComponent<GameCharacter>().IsAlive)
+                if (hero.GetComponent<GameCharacter>().IsAlive)
                 {
                     float d = Vector3.Distance(hero.transform.position, transform.position);
 
@@ -193,12 +195,12 @@ public class BossController : MonoBehaviour
                     }
                 }
             }
-        }   
+        }
     }
 
     void Camping()
     {
-        if(target != null)
+        if (target != null)
         {
             enemyState = EnemyState.Chase;
             chasePos = transform.position;
@@ -273,18 +275,17 @@ public class BossController : MonoBehaviour
 
         if (lifePercent < StageBossParams.Stage3_LifePercent)
         {
-             Debug.Log("Stage3");
-             return StageBossParams.Stage3_Skills;
-            
+
+            return StageBossParams.Stage3_Skills;
+
         }
         else if (lifePercent < StageBossParams.Stage2_LifePercent)
-        {   Debug.Log("Stage2");
+        {
             return StageBossParams.Stage2_Skills;
         }
         else
         {
-             Debug.Log("Stage1");
-             return StageBossParams.Stage1_Skills;
+            return StageBossParams.Stage1_Skills;
         }
     }
 
@@ -299,11 +300,9 @@ public class BossController : MonoBehaviour
 
         foreach (BossSkill bs in skills)
         {
-            Debug.Log(bs.count);
             // FIXME: Allow miss attack?
             if (bs.count <= 0 && distance <= character.skills[bs.skillIndex].distance)
             {
-                Debug.Log("Attack " + bs.skillIndex);
 
                 attack(bs.skillIndex);
                 bs.count = bs.cooldown;
@@ -343,7 +342,7 @@ public class BossController : MonoBehaviour
     {
         waitTimer -= Time.deltaTime;
 
-        if(waitTimer <= 0)
+        if (waitTimer <= 0)
         {
             CheckTarget();
             UpdateTarget();
@@ -354,9 +353,11 @@ public class BossController : MonoBehaviour
         }
     }
 
-    void Dying() {
+    void Dying()
+    {
         destroyTimer += Time.deltaTime;
-        if (destroyTimer >= destroyTime) {
+        if (destroyTimer >= destroyTime)
+        {
             PhotonNetwork.Destroy(gameObject);
         }
     }

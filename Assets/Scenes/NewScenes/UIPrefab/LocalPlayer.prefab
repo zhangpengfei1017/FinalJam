@@ -36,7 +36,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4592426655446182}
   - component: {fileID: 114821802675880832}
-  - component: {fileID: 114416492560600586}
   m_Layer: 5
   m_Name: MpBar
   m_TagString: Untagged
@@ -134,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4978701697545132}
   - component: {fileID: 114665878067705958}
-  - component: {fileID: 114658811008200628}
   m_Layer: 5
   m_Name: HPBar
   m_TagString: Untagged
@@ -599,28 +597,6 @@ MonoBehaviour:
   hideInactive: 0
   keepWithinPanel: 0
   sorted: 0
---- !u!114 &114416492560600586
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1232749706472670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c20815eb3063c24290a61b7020a1836, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  thumb: {fileID: 0}
-  mBG: {fileID: 0}
-  mFG: {fileID: 114821802675880832}
-  mValue: 1
-  mFill: 0
-  numberOfSteps: 0
-  onChange: []
-  foreground: {fileID: 0}
-  rawValue: 1
-  direction: 2
-  mInverted: 0
 --- !u!114 &114586069939828162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -686,7 +662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: {fileID: 114963552019684328}
-  hp: {fileID: 114821802675880832}
+  hp: {fileID: 114665878067705958}
   mp: {fileID: 114821802675880832}
   buffList: {fileID: 114403281138585952}
   BuffPrefab: []
@@ -696,28 +672,6 @@ MonoBehaviour:
   - {fileID: 1978398229253090}
   - {fileID: 1675011596644020}
   OwnerID: 0
---- !u!114 &114658811008200628
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1914691932963856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c20815eb3063c24290a61b7020a1836, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  thumb: {fileID: 0}
-  mBG: {fileID: 0}
-  mFG: {fileID: 114665878067705958}
-  mValue: 1
-  mFill: 0
-  numberOfSteps: 0
-  onChange: []
-  foreground: {fileID: 0}
-  rawValue: 1
-  direction: 2
-  mInverted: 0
 --- !u!114 &114665878067705958
 MonoBehaviour:
   m_ObjectHideFlags: 1

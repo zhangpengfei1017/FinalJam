@@ -14789,7 +14789,7 @@ MonoBehaviour:
     Enabled: 1
     LineOfSightLayers:
       serializedVersion: 2
-      m_Bits: 0
+      m_Bits: 1536
     IgnoreTheseGameObjects: []
     SamplingPoints:
     - {x: 0, y: 0, z: 0}
@@ -18576,6 +18576,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4472454192257800, guid: 101275ac51983e744af01f987ffe4974, type: 2}
       propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114821802675880832, guid: 101275ac51983e744af01f987ffe4974,
+        type: 2}
+      propertyPath: mFillAmount
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -25988,12 +25993,12 @@ Prefab:
     - target: {fileID: 114697477250200906, guid: 610592602c07d554d8df5174e4aa15ee,
         type: 2}
       propertyPath: mWidth
-      value: 46
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 114697477250200906, guid: 610592602c07d554d8df5174e4aa15ee,
         type: 2}
       propertyPath: aspectRatio
-      value: 2.3
+      value: 2.4
       objectReference: {fileID: 0}
     - target: {fileID: 1988593138201708, guid: 610592602c07d554d8df5174e4aa15ee, type: 2}
       propertyPath: m_Name

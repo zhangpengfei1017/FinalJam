@@ -52,4 +52,5 @@ MonoBehaviour:
   - ChatToAll
   - StartGame
   - OnPlayerJoinedGameplay
+  - AllStartSkill
   DisableAutoOpenWizard: 1

@@ -978,7 +978,7 @@ MonoBehaviour:
   bottomType: 1
   topType: 1
   mAtlas: {fileID: 114814122932023706, guid: 70ab69f55611a82439a0c4b647bf0ca5, type: 2}
-  mSpriteName: P_S4
+  mSpriteName: P_S3
   mFillCenter: 1
 --- !u!114 &114130372883585194
 MonoBehaviour:

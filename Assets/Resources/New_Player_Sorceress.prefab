@@ -696,6 +696,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1424089094810694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4569456213688954}
+  m_Layer: 10
+  m_Name: CenterPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1429014406773654
 GameObject:
   m_ObjectHideFlags: 1
@@ -2242,7 +2257,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1187646135355114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 29.814495, y: 100, z: 63.44338}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 4819722375847700}
@@ -2253,6 +2268,7 @@ Transform:
   - {fileID: 4223623384018264}
   - {fileID: 4505022999992008}
   - {fileID: 4929161204432902}
+  - {fileID: 4569456213688954}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2489,6 +2505,19 @@ Transform:
   - {fileID: 4655649951897810}
   m_Father: {fileID: 4836432444452742}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4569456213688954
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1424089094810694}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.04, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4357826670247920}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4571575176690746
 Transform:
@@ -3399,6 +3428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterType: 0
+  myClass: 0
   characterName: 
   maxHP: 15000
   maxMP: 12000
@@ -3407,8 +3437,8 @@ MonoBehaviour:
   moveSpeed: 250
   globalCDTime: 1.5
   freezedCount: 0
-  headPoint: {fileID: 0}
-  characterCenter: {fileID: 0}
+  headPoint: {fileID: 4929161204432902}
+  characterCenter: {fileID: 4569456213688954}
   skillPrefabs:
   - {fileID: 114937449987161312, guid: 3a3c99f0a1b2a76469a99b1815304f88, type: 2}
   - {fileID: 114133971954640074, guid: dec77763f8152bb4897a6c179d5126d2, type: 2}
@@ -3532,9 +3562,9 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: Die
   m_SynchronizeLayers:
-  - SynchronizeType: 0
+  - SynchronizeType: 1
     LayerIndex: 0
-  - SynchronizeType: 0
+  - SynchronizeType: 1
     LayerIndex: 1
 --- !u!137 &137688895262966486
 SkinnedMeshRenderer:

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameController : Photon.PunBehaviour
+public class GameController : Photon.MonoBehaviour
 {
     public static GameController instance;
 
@@ -52,9 +52,10 @@ public class GameController : Photon.PunBehaviour
         localFrame.SetClass((int)PlayerInfo.instance.playerClass);
         localPlayer = myPlayer.GetComponent<GameCharacter>();
         localPlayer.characterName = PlayerInfo.instance.playerName;
+        localPlayer.myClass = PlayerInfo.instance.playerClass;
         CDBar.SetClass((int)PlayerInfo.instance.playerClass);
         photonView.RPC("OnPlayerJoinedGameplay", PhotonTargets.AllViaServer, null);
-        Camera.main.GetComponent<AdvancedUtilities.Cameras.BasicCameraController>().Target.Target = myPlayer.transform;
+        Camera.main.GetComponent<AdvancedUtilities.Cameras.BasicCameraController>().Target.Target = myPlayer.GetComponent<GameCharacter>().headPoint;
     }
 
     // Update is called once per frame
@@ -78,9 +79,11 @@ public class GameController : Photon.PunBehaviour
 
     void UpdatePlayerList()
     {
+        print("fuck");
         allPlayersArray = FindObjectsOfType<HeroController>();
         if (allPlayersArray.Length == PhotonNetwork.room.PlayerCount)
         {
+            teammateList.Clear();
             foreach (HeroController h in allPlayersArray)
             {
                 if (!h.GetComponent<PhotonView>().isMine) {
@@ -124,19 +127,16 @@ public class GameController : Photon.PunBehaviour
         ready = true;
     }
 
-    public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
-    {
-        base.OnPhotonPlayerDisconnected(otherPlayer);
-        foreach (GameCharacter g in teammateList)
-        {
-            if (g.GetComponent<PhotonView>().ownerId == otherPlayer.ID)
-            {
-                teammateList.Remove(g);
-            }
+    public void ChooseTargetOnUI(PlayerFrameUI ui) {
+        if (ui.playerName.text != "LostPlayer") {
+            foreach (GameCharacter g in teammateList) {
+                if (g.characterName == ui.playerName.text) {
+                    localPlayer.GetComponent<HeroController>().ChooseTarget(g.gameObject);
+                    return;
+                }
+            }           
         }
-        CreateTeammateFrame();
     }
-
 
     void UpdateUI()
     {
@@ -181,7 +181,13 @@ public class GameController : Photon.PunBehaviour
         //teamma                       
         for (int i = 0; i < teammateList.Count; i++)
         {
-            teamList.GetComponent<TeamListUI>().SetTeammateInfo(i, teammateList[i].characterName, (int)teammateList[i].myClass,(float)teammateList[i].CurHP / (float)teammateList[i].MaxHP, (float)teammateList[i].CurMP / (float)teammateList[i].MaxMP);
+            if (teammateList[i] != null)
+            {
+                teamList.GetComponent<TeamListUI>().SetTeammateInfo(i, teammateList[i].characterName, (int)teammateList[i].myClass, (float)teammateList[i].CurHP / (float)teammateList[i].MaxHP, (float)teammateList[i].CurMP / (float)teammateList[i].MaxMP);
+            }
+            else{
+                teamList.GetComponent<TeamListUI>().SetTeammateInfo(i, "LostPlayer", (int)teammateList[i].myClass, 0, 0);
+            }
         }
 
     }

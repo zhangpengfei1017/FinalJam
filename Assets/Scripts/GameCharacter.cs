@@ -134,7 +134,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
     private CharacterController charCtrl;
 
     [SerializeField]
-    private Transform headPoint;
+    public Transform headPoint;
 
     public Transform characterCenter;
 
@@ -405,14 +405,21 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
 
     public void Move(float moveFwd, float moveRt)
     {
-        if (moveFwd != 0 || moveRt != 0) {
-            photonView.RPC("CancelCast", PhotonTargets.All, true);
+        if (!isDead && !isFreezed && !isRestricted)
+        {
+            if (moveFwd != 0 || moveRt != 0)
+            {
+                photonView.RPC("CancelCast", PhotonTargets.All, true);
+            }
+            pc.Move(moveFwd, moveRt);
         }
-        pc.Move(moveFwd, moveRt);
     }
 
     public void Move(Vector3 direction, float rotation) {
-        pc.Move(direction, rotation);
+        if (!isDead && !isFreezed && !isRestricted)
+        {
+            pc.Move(direction, rotation);
+        }
     }
 
 
@@ -484,7 +491,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
 
     void OnDied()
     {
-
+        pc.Die();
     }
 
     #endregion
@@ -618,7 +625,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
                         curSkillIndex = i;
                         break;
                 }
-                pc.StartSkill(i, target.transform);
+                photonView.RPC("AllStartSkill", PhotonTargets.All, i);
                 globalCDTimer = globalCDTime;
             }
             else
@@ -632,9 +639,16 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         }
     }
 
+    [PunRPC]
+    public void AllStartSkill(int i) {
+        pc.StartSkill(i, target.transform);
+    }
+
     void CastSkill(Skill skill)
     {
-        target.photonView.RPC("TakeSkillMessage", PhotonTargets.All, skill.skillName, attack, photonView.viewID);
+        if (photonView.isMine) {
+            target.photonView.RPC("TakeSkillMessage", PhotonTargets.All, skill.skillName, attack, photonView.viewID);
+        }       
     }
 
     [PunRPC]
@@ -835,6 +849,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         if (stream.isWriting)
         {
             stream.SendNext(characterName);
+            stream.SendNext(myClass);
             stream.SendNext(curHP);
             stream.SendNext(curMP);
             stream.SendNext(finalAttack);
@@ -870,6 +885,7 @@ public class GameCharacter : Photon.MonoBehaviour, IPunObservable
         else
         {
             characterName = (string)stream.ReceiveNext();
+            myClass = (HeroController.Class)stream.ReceiveNext();
             curHP = (int)stream.ReceiveNext();
             curMP = (int)stream.ReceiveNext();
             finalAttack = (int)stream.ReceiveNext();
