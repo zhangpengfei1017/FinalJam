@@ -3435,7 +3435,7 @@ MonoBehaviour:
   attack: 3000
   defense: 1500
   moveSpeed: 250
-  globalCDTime: 1.5
+  globalCDTime: 1.2
   freezedCount: 0
   headPoint: {fileID: 4929161204432902}
   characterCenter: {fileID: 4569456213688954}

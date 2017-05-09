@@ -63,7 +63,7 @@ MonoBehaviour:
   channelInterval: 0
   isMovingCast: 0
   mpCost: 5
-  CDTime: 5
+  CDTime: 4
   CDTimer: 0
   pctDamage: 1.5
   fixedDamage: 400

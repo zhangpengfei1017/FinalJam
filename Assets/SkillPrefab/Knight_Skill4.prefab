@@ -56,7 +56,7 @@ MonoBehaviour:
   animationIndex: 1
   targetType: 2
   distance: 5
-  skillType: 1
+  skillType: 0
   instantDelayTime: 0.5
   castTime: 2
   channelTime: 0
