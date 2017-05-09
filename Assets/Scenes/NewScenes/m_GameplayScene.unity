@@ -14404,41 +14404,6 @@ Prefab:
       propertyPath: instantiationId
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
-        type: 2}
-      propertyPath: StageBossParams.Stage1_Skills.Array.data[0].cooldown
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
-        type: 2}
-      propertyPath: StageBossParams.Stage1_Skills.Array.data[0].nextAction
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
-        type: 2}
-      propertyPath: StageBossParams.Stage1_Skills.Array.data[1].cooldown
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
-        type: 2}
-      propertyPath: StageBossParams.Stage1_Skills.Array.data[1].nextAction
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114360424817488860, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
-        type: 2}
-      propertyPath: destroyTime
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 114148908637134396, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
-        type: 2}
-      propertyPath: attack
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 114148908637134396, guid: 23fa29bd88cb55046a30b7cc4c01bffb,
-        type: 2}
-      propertyPath: defense
-      value: 10
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 23fa29bd88cb55046a30b7cc4c01bffb, type: 2}
   m_IsPrefabParent: 0
